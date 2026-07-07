@@ -1,0 +1,14 @@
+{
+  "daily_csv_sha256": "68ffc9215b8cb78ef0dbdfb7c343f76e50f4ced79881c108c3de8b6e2b86bba2",
+  "monthly_csv_sha256": "e88923e3f80e7ef510536233ca679ffa2729df22b7225fbdb941b87c8c1674ff",
+  "pending_days": 0,
+  "private_manifest_sha256": "99ecd5b3c5a9b61de9cbb23b4f8e4c11bbaf7094959b6b4e51e56c8f1adb83fd",
+  "public_commit": "76184b096c7ed42b9ebc511887bc75b2a717c885",
+  "record_end": "2026-07-06",
+  "record_start": "2026-03-01",
+  "schema": "ptp-public-private-anchor-v1",
+  "settled_days": 128,
+  "source_artifact_sha256": "9f7e95b26112c5ff8722277389e1253e66efe8676ac902c0f58cb795a705ca6a",
+  "summary_csv_sha256": "257c9235d0a430b8bf7b5cdfb47968963a39fabd3d8470b38c5eae97d1f038a3",
+  "weekly_csv_sha256": "64818cda9e6ea6f43fc9a8da34b01ab8d7a641d5134f31d3f44cb1994fbb7f72"
+}
