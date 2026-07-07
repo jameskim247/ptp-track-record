@@ -2,7 +2,7 @@
 
 A simple public track record for the PTP Trader.
 
-Current public range: **2026-03-01 to 2026-07-06**. The current record basis is **model_backfill**.
+Current public range: **2026-03-01 to 2026-07-07**. The current record basis is **model_backfill**.
 
 ## Files
 
