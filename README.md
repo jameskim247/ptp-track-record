@@ -2,7 +2,7 @@
 
 A simple public track record for the PTP Trader.
 
-Current public range: **2026-03-01 to 2026-07-06**. Settled rows are published through **2026-07-02**; **4** later rows are marked `pending` until settlement/model rerun data is complete.
+Current public range: **2026-03-01 to 2026-07-06**. Settled rows are published through **2026-07-06**; there are **0** pending rows.
 
 ## Files
 
