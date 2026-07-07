@@ -1,0 +1,22 @@
+{
+  "schema": "ptp-track-record-source-v1",
+  "generated_at_utc": "2026-07-07T10:29:42+00:00",
+  "record_start": "2026-03-01",
+  "record_end": "2026-07-06",
+  "settled_through": "2026-07-02",
+  "pending_dates": [
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06"
+  ],
+  "methodology_id": "ptp-trader-backfill-v2026-07-07",
+  "source_name": "PTP Trader backfill financial artifact",
+  "source_tag": "baseline_alias_extension_active_20250523_20260702_s42",
+  "source_artifact_sha256": "90a07eb738ebc52e7034adc8ad2bdd739c6d8cb8c2501b0ecef732be08799749",
+  "source_daily_rows": 405,
+  "published_daily_rows": 128,
+  "published_settled_rows": 124,
+  "published_pending_rows": 4,
+  "private_source_policy": "Raw model, signal, position, checkpoint, and lake artifacts are intentionally excluded from this public repo."
+}

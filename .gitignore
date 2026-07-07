@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+/private/
+/_private/
+/vault/
+/raw/
+/tmp/
+*.parquet
+*.pkl
+*.pickle
+*.key
+*.pem
+*.env
+*.sqlite
+*.db
