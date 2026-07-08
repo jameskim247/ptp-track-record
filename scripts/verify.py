@@ -17,6 +17,8 @@ from typing import Any
 DAILY_COLUMNS = ['date','signal_date','status','basis','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
 PERIOD_COLUMNS = ['period_start','period_end','status','basis_mix','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
 SUMMARY_COLUMNS = ['basis','start_date','end_date','n_days','total_pnl','mean_day_pnl','median_day_pnl','daily_stdev','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','var_5','es_5','tail_ratio_worst_to_mean','tail_ratio_es5_to_mean','max_drawdown','max_drawdown_duration_days','top_1_day_share','top_5_day_share','top_10_day_share','largest_month','largest_month_pnl','largest_month_share','sharpe_daily','sortino_daily','proof_id']
+BACKFILL_BASIS = 'model_backfill'
+PROSPECTIVE_BASIS = 'prospective'
 ANCHOR_KEYS = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','public_commit','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
@@ -202,6 +204,8 @@ def expected_periods(rows: list[dict[str, str]], kind: str) -> list[dict[str, st
 
 def expected_summary(rows: list[dict[str, str]]) -> dict[str, str]:
     values = [parse_money(r['realized_pnl']) for r in rows if r['status'] == 'settled']
+    basis_counts = Counter(r['basis'] for r in rows if r['status'] == 'settled')
+    summary_basis = '|'.join(k for k in sorted(basis_counts)) if len(basis_counts) > 1 else next(iter(basis_counts), BACKFILL_BASIS)
     m = metrics(values)
     total = sum(values)
     _dds, _durations, max_dd, max_duration = drawdown(values)
@@ -215,9 +219,9 @@ def expected_summary(rows: list[dict[str, str]]) -> dict[str, str]:
             month_totals[row['date'][:7]] += parse_money(row['realized_pnl'])
     largest_month, largest_month_pnl = max(month_totals.items(), key=lambda kv: kv[1])
     downside = math.sqrt(sum(min(0.0, x) ** 2 for x in values) / len(values)) if values else 0.0
-    payload = {'basis': 'model_backfill', 'start_date': rows[0]['date'], 'end_date': rows[-1]['date'], 'n_days': len(values), 'total_pnl': money(total)}
+    payload = {'basis': summary_basis, 'start_date': rows[0]['date'], 'end_date': rows[-1]['date'], 'n_days': len(values), 'total_pnl': money(total)}
     return {
-        'basis': 'model_backfill',
+        'basis': summary_basis,
         'start_date': rows[0]['date'],
         'end_date': rows[-1]['date'],
         'n_days': str(len(values)),
@@ -353,8 +357,10 @@ def verify(root: Path) -> list[str]:
     for idx, row in enumerate(daily):
         if row['status'] not in ('settled', 'pending'):
             errors.append(f'invalid daily status for {row["date"]}: {row["status"]}')
-        if row['basis'] != 'model_backfill':
-            errors.append(f'daily basis must be model_backfill for current record: {row["date"]}')
+        if row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_BASIS):
+            errors.append(f'invalid daily basis for {row["date"]}: {row["basis"]}')
+        if row['status'] == 'pending' and row['basis'] != PROSPECTIVE_BASIS:
+            errors.append(f'pending row must use prospective basis: {row["date"]}')
         pnl = parse_money(row['realized_pnl'])
         values.append(pnl)
         cumulative += pnl

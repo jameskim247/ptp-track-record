@@ -2,7 +2,7 @@
 
 The public files publish settled realized dollar PnL and deterministic aggregations only.
 
-The current record basis is `model_backfill`. Public rows must not imply live trading.
+Settled historical rows through 2026-07-06 use `model_backfill`. Pending prospective rows use `prospective` until a settled realized result is available.
 
 `data/weekly.csv`, `data/monthly.csv`, and `data/summary.csv` are recomputable from `data/daily.csv`. Public proof files expose opaque hashes only.
 

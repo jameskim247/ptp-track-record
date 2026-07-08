@@ -1,14 +1,14 @@
 {
-  "daily_csv_sha256": "5feb9fbf9ee22d8b3bc870d340ba02699721cea0dec4ff00a43a791e575ab46f",
-  "monthly_csv_sha256": "500742167c10fe002d3083b369bc92da479c0722aa24587d0154cc5af24fce2e",
+  "daily_csv_sha256": "f1bacf42572a460df4fe066072bfad556818026eaa5021d3206ac8a08a91ee02",
+  "monthly_csv_sha256": "b055601b0f6cf064f8f9c00d17c400d613e6d9592388e5fd24c5e44c3deedcbe",
   "pending_days": 1,
-  "private_manifest_sha256": "6345b88953c3fa93b674ea85581b49563f3a21965a12b987ca954f9522ecbf0a",
-  "public_commit": "17046628464df89662b40f0244b153ac2e1e97b1",
+  "private_manifest_sha256": "928ef2376a253649693eaf9b63b9aa8a202848140a81ba7345b69d8de9a7ed98",
+  "public_commit": "aafa6c91d70754e3fc1aeaf6eb587dd2ee264d4c",
   "record_end": "2026-07-07",
   "record_start": "2026-03-01",
   "schema": "ptp-public-private-anchor-v1",
   "settled_days": 128,
   "source_artifact_sha256": "9f7e95b26112c5ff8722277389e1253e66efe8676ac902c0f58cb795a705ca6a",
   "summary_csv_sha256": "0cac4ad9931d121969c047f25ed481fc6ac5e6116647342f9c1e1b1e36b8db1a",
-  "weekly_csv_sha256": "4f13ef4492a7009ed36edcd6834de4c7789d973c1d559c029e38dceec2f1613c"
+  "weekly_csv_sha256": "255ac4de8ca8525be2c835db86172e19f95d4ed3f6a1e26e743b76e29ee06796"
 }
