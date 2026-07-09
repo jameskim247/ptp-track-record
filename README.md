@@ -2,7 +2,7 @@
 
 A simple public track record for the PTP Trader.
 
-Current public range: **2026-03-01 to 2026-07-07**. Settled backfill rows use **model_backfill**; pending prospective rows use **prospective**.
+Current public range: **2026-03-01 to 2026-07-09**. Settled backfill rows use **model_backfill**; pending prospective rows use **prospective**.
 
 ## Files
 
