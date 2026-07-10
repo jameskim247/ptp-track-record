@@ -2,12 +2,12 @@
   "daily_csv_sha256": "a22ebbea13d16e50e1c27dca0b82df166e27895da9bcd029ce4a1ac68d86b283",
   "monthly_csv_sha256": "f5c4c896a8eff036bfc9bfc6e0ced1ba393d4b53c596bd5933333f74926f8d27",
   "pending_days": 1,
-  "private_manifest_sha256": "2f88be15d7efcb6ef62b2ff84c75d551b2c7d988ab1e020d3bf5cc4f263f8b6d",
+  "private_manifest_sha256": "eb1c92aceeedad5fbdd85ed75b1e7cbf8ac7dd3782c76e82ee09fbde4e7102b9",
   "record_end": "2026-07-09",
   "record_start": "2026-03-01",
   "schema": "ptp-public-private-anchor-v1",
   "settled_days": 130,
-  "source_artifact_sha256": "4c05c75c63c6771596ca983ea79bdbed61e5ef79c0645d0817a5ef5a02d52d06",
+  "source_artifact_sha256": "cfba80fd8905ef566e0af8dc66a4f5cf4a4b6592977a9a2ac700136fbe5351cf",
   "summary_csv_sha256": "41ae6f45f0272dfb7c4038c972c37bd43b3946201f28290a3865bb1cc24fcbb3",
   "weekly_csv_sha256": "a45c792a009bce5acaeac684cbe2ffcc5b5280ecd4b27d56e610c58a9c830662"
 }
