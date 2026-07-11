@@ -3,7 +3,7 @@
 Generated: 2026-07-10T00:00:00Z
 
 - Range: 2026-03-01 to 2026-07-10
-- Basis: settled=model_backfill; pending=prospective
+- Basis: settled=model_backfill|prospective_settled; pending=prospective
 - Daily rows: 132
 - Settled rows: 130
 - Pending rows: 2

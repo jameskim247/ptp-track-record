@@ -2,7 +2,7 @@
 
 The public files publish settled realized dollar PnL and deterministic aggregations only. This record is a pre-settlement declaration ledger: each delivery date receives a public row, and the row's realized PnL is filled in once settled.
 
-All settled rows use `model_backfill`: realized PnL comes from the pinned walk-forward model replay valued against realized delivery-day DA/RT prices, and settlement lags delivery by at least one day. Pending rows use `prospective` until a settled realized result is available.
+Settled realized PnL always comes from the pinned walk-forward model replay valued against realized delivery-day DA/RT prices, and settlement lags delivery by at least one day. The `basis` column records each row's lifecycle: `prospective_settled` rows were publicly declared as pending `prospective` rows first and later settled by the live pipeline; `model_backfill` rows were constructed retroactively at the 2026-07-07 reset without a prior public declaration. Pending rows use `prospective` until a settled realized result is available.
 
 `prospective` identifies a row publicly declared before its realized result was settled. It does not assert that a trading signal or advisory was generated, archived, or published before the applicable auction deadline.
 

@@ -1,13 +1,13 @@
 {
-  "daily_csv_sha256": "932d469b976b996a9a817e6d61019b37e5e9bf7dbbc9cbcb94dbf97f1f5f1738",
-  "monthly_csv_sha256": "426bbd7297f987875fb3ef64ebce3e611236e54634e2b4324a50751b207e50d1",
+  "daily_csv_sha256": "f29bcf8564453c26768ff3773aaea8c06592d4f2a71c204a3de65c5b0fc349dd",
+  "monthly_csv_sha256": "789eb9737f43b173e42996ea7893b9a159a34d087e0e4b8b88b016d843160cee",
   "pending_days": 2,
-  "private_manifest_sha256": "59bf553de8736b3fad3947ad74ca01fcd5b3aaffa1eb6873e4a818542b4d0a70",
+  "private_manifest_sha256": "0ced7f01c8de2d00a844bc78926cc8bb1ae91b8e44ddd312b46358a035d7aebc",
   "record_end": "2026-07-10",
   "record_start": "2026-03-01",
   "schema": "ptp-public-private-anchor-v1",
   "settled_days": 130,
   "source_artifact_sha256": "cfba80fd8905ef566e0af8dc66a4f5cf4a4b6592977a9a2ac700136fbe5351cf",
-  "summary_csv_sha256": "f64c69198e55e8574f62c996b670e1169d66cdb4915d788b7fbce130e75bc991",
-  "weekly_csv_sha256": "e8a227a0690439cd83fcaf12a720b082606bdb65dc20e0976d48ebd5fcefef87"
+  "summary_csv_sha256": "a01c5d552a905842f4eaf1d961a8781ef712d6c96655762fcd6afdf975371825",
+  "weekly_csv_sha256": "eb916058da75cff79fa40b6a045fa8f34bca80185dfe03046654ed00c2143fd8"
 }
