@@ -1,12 +1,12 @@
 # Status
 
-Generated: 2026-07-10T00:00:00Z
+Generated: 2026-07-11T00:00:00Z
 
-- Range: 2026-03-01 to 2026-07-10
+- Range: 2026-03-01 to 2026-07-11
 - Basis: settled=model_backfill|prospective_settled; pending=prospective
-- Daily rows: 132
+- Daily rows: 133
 - Settled rows: 130
-- Pending rows: 2
+- Pending rows: 3
 - Settled realized PnL: 834201.33
 - Win rate: 0.7462
 - Profit factor: 6.7003
