@@ -15,12 +15,15 @@ from pathlib import Path
 from typing import Any
 
 DAILY_COLUMNS = ['date','signal_date','status','basis','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
+VALUATION_COLUMNS = ['date','revision','valuation_status','rt_coverage_min','missing_intervals','affected_positions','affected_mw','estimate_method','pnl_sensitivity_per_rt_spread_dollar','source_artifact_sha256','supersedes_revision']
 PERIOD_COLUMNS = ['period_start','period_end','status','basis_mix','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
 SUMMARY_COLUMNS = ['basis','start_date','end_date','n_days','total_pnl','mean_day_pnl','median_day_pnl','daily_stdev','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','var_5','es_5','tail_ratio_worst_to_mean','tail_ratio_es5_to_mean','max_drawdown','max_drawdown_duration_days','top_1_day_share','top_5_day_share','top_10_day_share','largest_month','largest_month_pnl','largest_month_share','sharpe_daily','sortino_daily','proof_id']
 BACKFILL_BASIS = 'model_backfill'
 PROSPECTIVE_BASIS = 'prospective'
 PROSPECTIVE_SETTLED_BASIS = 'prospective_settled'
-ANCHOR_KEYS = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
+PROSPECTIVE_PROVISIONAL_BASIS = 'prospective_provisional'
+ANCHOR_KEYS_V1 = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
+ANCHOR_KEYS_V2 = sorted(ANCHOR_KEYS_V1 + ['provisional_days','valuation_provenance_csv_sha256'])
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
 FORBIDDEN_TEXT = tuple(
@@ -178,10 +181,10 @@ def expected_periods(rows: list[dict[str, str]], kind: str) -> list[dict[str, st
         out.append({
             'period_start': period_start.isoformat(),
             'period_end': period_end.isoformat(),
-            'status': 'pending' if any(r['status'] == 'pending' for r in chunk) else 'settled',
+            'status': 'pending' if any(r['status'] != 'settled' for r in chunk) else 'settled',
             'basis_mix': basis_mix,
             'settled_days': str(len(pnl)),
-            'pending_days': str(sum(1 for r in chunk if r['status'] == 'pending')),
+            'pending_days': str(sum(1 for r in chunk if r['status'] != 'settled')),
             'total_days': str(len(chunk)),
             'realized_pnl': money(total),
             'cumulative_pnl': chunk[-1]['cumulative_pnl'],
@@ -306,6 +309,44 @@ def verify_leaks(root: Path) -> list[str]:
     return errors
 
 
+def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str, str]]) -> list[str]:
+    errors = []
+    daily_by_date = {row['date']: row for row in daily}
+    by_date: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        if row['date'] not in daily_by_date:
+            errors.append(f'valuation provenance date outside daily.csv: {row["date"]}')
+            continue
+        by_date[row['date']].append(row)
+        if row['valuation_status'] not in ('provisional', 'observed_complete'):
+            errors.append(f'invalid valuation status for {row["date"]}: {row["valuation_status"]}')
+        sha = row['source_artifact_sha256']
+        if len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha):
+            errors.append(f'valuation source artifact is not sha256 for {row["date"]} revision {row["revision"]}')
+        if row['valuation_status'] == 'provisional':
+            if row['rt_coverage_min'] != '3/4' or not row['missing_intervals']:
+                errors.append(f'provisional valuation lacks 3/4 missing-interval disclosure for {row["date"]}')
+            if row['estimate_method'] != 'mean_observed_rt_intervals':
+                errors.append(f'unsupported provisional estimate method for {row["date"]}')
+    for delivery, revisions in by_date.items():
+        revisions.sort(key=lambda row: int(row['revision']))
+        expected = list(range(1, len(revisions) + 1))
+        actual = [int(row['revision']) for row in revisions]
+        if actual != expected:
+            errors.append(f'non-contiguous valuation revisions for {delivery}: {actual}')
+        for idx, row in enumerate(revisions):
+            expected_parent = '' if idx == 0 else str(idx)
+            if row['supersedes_revision'] != expected_parent:
+                errors.append(f'bad supersedes_revision for {delivery} revision {row["revision"]}')
+        latest = revisions[-1]['valuation_status']
+        public_status = daily_by_date[delivery]['status']
+        if public_status == 'provisional' and latest != 'provisional':
+            errors.append(f'provisional daily row lacks latest provisional provenance: {delivery}')
+        if public_status == 'settled' and latest != 'observed_complete':
+            errors.append(f'settled revised row lacks latest observed provenance: {delivery}')
+    return errors
+
+
 def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str, str]], monthly: list[dict[str, str]], summary: list[dict[str, str]]) -> list[str]:
     errors = []
     anchor_path = root / 'proof/private_anchor.json'
@@ -313,9 +354,11 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         anchor = json.loads(anchor_path.read_text(encoding='utf-8'))
     except Exception as exc:
         return [f'could not read proof/private_anchor.json: {exc}']
-    if sorted(anchor.keys()) != ANCHOR_KEYS:
+    schema = anchor.get('schema')
+    expected_keys = ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1
+    if sorted(anchor.keys()) != expected_keys:
         errors.append(f'private anchor keys mismatch: {sorted(anchor.keys())}')
-    if anchor.get('schema') != 'ptp-public-private-anchor-v1':
+    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2'):
         errors.append('private anchor schema mismatch')
     if anchor.get('record_start') != daily[0]['date'] or anchor.get('record_end') != daily[-1]['date']:
         errors.append('private anchor record range mismatch')
@@ -323,12 +366,18 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     pending = sum(1 for r in daily if r['status'] == 'pending')
     if anchor.get('settled_days') != settled or anchor.get('pending_days') != pending:
         errors.append('private anchor settled/pending counts mismatch')
+    if schema == 'ptp-public-private-anchor-v2':
+        provisional = sum(1 for r in daily if r['status'] == 'provisional')
+        if anchor.get('provisional_days') != provisional:
+            errors.append('private anchor provisional count mismatch')
     expected_hashes = {
         'daily_csv_sha256': sha256_file(root / 'data/daily.csv'),
         'weekly_csv_sha256': sha256_file(root / 'data/weekly.csv'),
         'monthly_csv_sha256': sha256_file(root / 'data/monthly.csv'),
         'summary_csv_sha256': sha256_file(root / 'data/summary.csv'),
     }
+    if schema == 'ptp-public-private-anchor-v2':
+        expected_hashes['valuation_provenance_csv_sha256'] = sha256_file(root / 'data/valuation_provenance.csv')
     for key, expected in expected_hashes.items():
         if anchor.get(key) != expected:
             errors.append(f'private anchor {key} mismatch')
@@ -342,6 +391,8 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
 def verify(root: Path) -> list[str]:
     errors = []
     daily = read_csv(root / 'data/daily.csv', DAILY_COLUMNS)
+    valuation_path = root / 'data/valuation_provenance.csv'
+    valuation = read_csv(valuation_path, VALUATION_COLUMNS) if valuation_path.is_file() else []
     weekly = read_csv(root / 'data/weekly.csv', PERIOD_COLUMNS)
     monthly = read_csv(root / 'data/monthly.csv', PERIOD_COLUMNS)
     summary = read_csv(root / 'data/summary.csv', SUMMARY_COLUMNS)
@@ -356,14 +407,16 @@ def verify(root: Path) -> list[str]:
     expected_dds = []
     expected_durations = []
     for idx, row in enumerate(daily):
-        if row['status'] not in ('settled', 'pending'):
+        if row['status'] not in ('settled', 'pending', 'provisional'):
             errors.append(f'invalid daily status for {row["date"]}: {row["status"]}')
-        if row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_BASIS, PROSPECTIVE_SETTLED_BASIS):
+        if row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_BASIS, PROSPECTIVE_SETTLED_BASIS, PROSPECTIVE_PROVISIONAL_BASIS):
             errors.append(f'invalid daily basis for {row["date"]}: {row["basis"]}')
         if row['status'] == 'pending' and row['basis'] != PROSPECTIVE_BASIS:
             errors.append(f'pending row must use prospective basis: {row["date"]}')
         if row['status'] == 'settled' and row['basis'] == PROSPECTIVE_BASIS:
             errors.append(f'settled row must use a settled basis: {row["date"]}')
+        if row['status'] == 'provisional' and row['basis'] != PROSPECTIVE_PROVISIONAL_BASIS:
+            errors.append(f'provisional row must use provisional basis: {row["date"]}')
         pnl = parse_money(row['realized_pnl'])
         values.append(pnl)
         cumulative += pnl
@@ -381,6 +434,7 @@ def verify(root: Path) -> list[str]:
         errors.append('monthly.csv is not derived from daily.csv')
     if summary and summary[0] != expected_summary(daily):
         errors.append('summary.csv is not derived from daily.csv')
+    errors.extend(verify_valuation_provenance(daily, valuation))
     errors.extend(verify_anchor(root, daily, weekly, monthly, summary))
     errors.extend(verify_hashes(root))
     errors.extend(verify_leaks(root))
