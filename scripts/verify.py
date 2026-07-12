@@ -354,6 +354,9 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
                 and row['depends_on_provisional_date']
             ):
                 errors.append(f'provisional dependency valuation contract mismatch for {row["date"]}')
+        if row['valuation_version'] == ERCOT_HE24_Q4_V2 and row['valuation_status'] == 'observed_complete':
+            if row['rt_coverage_min'] != '4/4' or row['missing_intervals'] or row['estimate_method'] != 'none':
+                errors.append(f'observed canonical v2 valuation lacks complete quarter evidence for {row["date"]}')
     for delivery, revisions in by_date.items():
         revisions.sort(key=lambda row: int(row['revision']))
         expected = list(range(1, len(revisions) + 1))
