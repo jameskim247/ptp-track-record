@@ -22,7 +22,7 @@ BACKFILL_BASIS = 'model_backfill'
 PROSPECTIVE_BASIS = 'prospective'
 PROSPECTIVE_SETTLED_BASIS = 'prospective_settled'
 PROSPECTIVE_PROVISIONAL_BASIS = 'prospective_provisional'
-ERCOT_HE24_INTERVAL_V2 = 'ercot_he24_interval_v2'
+ERCOT_HE24_Q4_V2 = 'ercot_he24_q4_v2'
 LEGACY_HE24_V1 = 'legacy_he24_v1'
 ANCHOR_KEYS_V1 = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
 ANCHOR_KEYS_V2 = sorted(ANCHOR_KEYS_V1 + ['provisional_days','valuation_provenance_csv_sha256'])
@@ -337,7 +337,7 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
             errors.append(f'valuation provenance date outside daily.csv: {row["date"]}')
             continue
         by_date[row['date']].append(row)
-        if row['valuation_version'] not in (LEGACY_HE24_V1, ERCOT_HE24_INTERVAL_V2):
+        if row['valuation_version'] not in (LEGACY_HE24_V1, ERCOT_HE24_Q4_V2):
             errors.append(f'invalid valuation version for {row["date"]}: {row["valuation_version"]}')
         if row['valuation_status'] not in ('legacy_carried', 'provisional', 'observed_complete'):
             errors.append(f'invalid valuation status for {row["date"]}: {row["valuation_status"]}')
@@ -421,7 +421,7 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         expected_hashes['valuation_provenance_csv_sha256'] = sha256_file(root / 'data/valuation_provenance.csv')
     if schema == 'ptp-public-private-anchor-v3':
         expected_hashes['legacy_daily_csv_sha256'] = sha256_file(root / 'data/archive/daily_legacy_he24_v1.csv')
-        if anchor.get('canonical_valuation_version') != ERCOT_HE24_INTERVAL_V2:
+        if anchor.get('canonical_valuation_version') != ERCOT_HE24_Q4_V2:
             errors.append('private anchor canonical valuation version mismatch')
     for key, expected in expected_hashes.items():
         if anchor.get(key) != expected:
@@ -466,7 +466,7 @@ def verify(root: Path) -> list[str]:
             if row['valuation_version'] or row['valuation_revision']:
                 errors.append(f'pending row must not claim a valuation contract: {row["date"]}')
         else:
-            if row['valuation_version'] != ERCOT_HE24_INTERVAL_V2:
+            if row['valuation_version'] != ERCOT_HE24_Q4_V2:
                 errors.append(f'valued row is not canonical v2: {row["date"]}')
             if not row['valuation_revision'].isdigit() or int(row['valuation_revision']) < 1:
                 errors.append(f'valued row lacks a positive valuation revision: {row["date"]}')

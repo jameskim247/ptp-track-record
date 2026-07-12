@@ -1,6 +1,6 @@
 # Methodology
 
-The canonical public files publish one valuation convention: `ercot_he24_interval_v2`. Midnight-ending ERCOT RT intervals map to HE24, quarter identity is retained, and completeness is evaluated against held source/sink/hour exposure. Superseded pre-fix values remain immutable in `data/archive/daily_legacy_he24_v1.csv`; they are not included in canonical statistics.
+The canonical public files publish one valuation convention: `ercot_he24_q4_v2`. Midnight-ending ERCOT RT intervals map to HE24, quarter identity is retained, and completeness is evaluated against held source/sink/hour exposure. Superseded pre-fix values remain immutable in `data/archive/daily_legacy_he24_v1.csv`; they are not included in canonical statistics.
 
 `basis` records how a row entered the record, independently of valuation convention. `prospective_settled` rows were publicly declared as pending `prospective` rows and later valued by the live pipeline. `model_backfill` rows are a new current-lake corrected-HE24 replay and remain explicitly retroactive. They supersede, but do not claim to reproduce, the irreproducible two-lake reset backfill.
 
