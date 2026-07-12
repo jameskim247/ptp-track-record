@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 DAILY_COLUMNS = ['date','signal_date','status','basis','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
-VALUATION_COLUMNS = ['date','revision','valuation_status','rt_coverage_min','missing_intervals','affected_positions','affected_mw','estimate_method','pnl_sensitivity_per_rt_spread_dollar','source_artifact_sha256','supersedes_revision']
+VALUATION_COLUMNS = ['date','revision','valuation_status','rt_coverage_min','missing_intervals','affected_positions','affected_mw','estimate_method','pnl_sensitivity_per_rt_spread_dollar','depends_on_provisional_date','source_artifact_sha256','supersedes_revision']
 PERIOD_COLUMNS = ['period_start','period_end','status','basis_mix','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
 SUMMARY_COLUMNS = ['basis','start_date','end_date','n_days','total_pnl','mean_day_pnl','median_day_pnl','daily_stdev','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','var_5','es_5','tail_ratio_worst_to_mean','tail_ratio_es5_to_mean','max_drawdown','max_drawdown_duration_days','top_1_day_share','top_5_day_share','top_10_day_share','largest_month','largest_month_pnl','largest_month_share','sharpe_daily','sortino_daily','proof_id']
 BACKFILL_BASIS = 'model_backfill'
@@ -324,10 +324,15 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
         if len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha):
             errors.append(f'valuation source artifact is not sha256 for {row["date"]} revision {row["revision"]}')
         if row['valuation_status'] == 'provisional':
-            if row['rt_coverage_min'] != '3/4' or not row['missing_intervals']:
-                errors.append(f'provisional valuation lacks 3/4 missing-interval disclosure for {row["date"]}')
-            if row['estimate_method'] != 'mean_observed_rt_intervals':
-                errors.append(f'unsupported provisional estimate method for {row["date"]}')
+            if row['missing_intervals']:
+                if row['rt_coverage_min'] != '3/4' or row['estimate_method'] != 'mean_observed_rt_intervals':
+                    errors.append(f'provisional missing-input valuation contract mismatch for {row["date"]}')
+            elif not (
+                row['rt_coverage_min'] == '4/4'
+                and row['estimate_method'] == 'none'
+                and row['depends_on_provisional_date']
+            ):
+                errors.append(f'provisional dependency valuation contract mismatch for {row["date"]}')
     for delivery, revisions in by_date.items():
         revisions.sort(key=lambda row: int(row['revision']))
         expected = list(range(1, len(revisions) + 1))
