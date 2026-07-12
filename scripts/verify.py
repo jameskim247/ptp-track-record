@@ -23,8 +23,10 @@ PROSPECTIVE_BASIS = 'prospective'
 PROSPECTIVE_SETTLED_BASIS = 'prospective_settled'
 PROSPECTIVE_PROVISIONAL_BASIS = 'prospective_provisional'
 ERCOT_HE24_INTERVAL_V2 = 'ercot_he24_interval_v2'
+LEGACY_HE24_V1 = 'legacy_he24_v1'
 ANCHOR_KEYS_V1 = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
 ANCHOR_KEYS_V2 = sorted(ANCHOR_KEYS_V1 + ['provisional_days','valuation_provenance_csv_sha256'])
+ANCHOR_KEYS_V3 = sorted(ANCHOR_KEYS_V2 + ['canonical_valuation_version','legacy_daily_csv_sha256'])
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
 FORBIDDEN_TEXT = tuple(
@@ -335,11 +337,9 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
             errors.append(f'valuation provenance date outside daily.csv: {row["date"]}')
             continue
         by_date[row['date']].append(row)
-        if row['valuation_version'] != ERCOT_HE24_INTERVAL_V2:
-            errors.append(f'non-canonical valuation version for {row["date"]}: {row["valuation_version"]}')
-        if row['realized_pnl'] != daily_by_date[row['date']]['realized_pnl']:
-            errors.append(f'valuation PnL differs from daily.csv for {row["date"]} revision {row["revision"]}')
-        if row['valuation_status'] not in ('provisional', 'observed_complete'):
+        if row['valuation_version'] not in (LEGACY_HE24_V1, ERCOT_HE24_INTERVAL_V2):
+            errors.append(f'invalid valuation version for {row["date"]}: {row["valuation_version"]}')
+        if row['valuation_status'] not in ('legacy_carried', 'provisional', 'observed_complete'):
             errors.append(f'invalid valuation status for {row["date"]}: {row["valuation_status"]}')
         sha = row['source_artifact_sha256']
         if len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha):
@@ -368,6 +368,8 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
         latest = latest_row['valuation_status']
         public_row = daily_by_date[delivery]
         public_status = public_row['status']
+        if latest_row['realized_pnl'] != public_row['realized_pnl']:
+            errors.append(f'latest valuation PnL differs from daily.csv: {delivery}')
         if public_row['valuation_version'] != latest_row['valuation_version']:
             errors.append(f'daily valuation version differs from latest provenance: {delivery}')
         if public_row['valuation_revision'] != latest_row['revision']:
@@ -390,10 +392,14 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     except Exception as exc:
         return [f'could not read proof/private_anchor.json: {exc}']
     schema = anchor.get('schema')
-    expected_keys = ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1
+    expected_keys = (
+        ANCHOR_KEYS_V3
+        if schema == 'ptp-public-private-anchor-v3'
+        else (ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1)
+    )
     if sorted(anchor.keys()) != expected_keys:
         errors.append(f'private anchor keys mismatch: {sorted(anchor.keys())}')
-    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2'):
+    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
         errors.append('private anchor schema mismatch')
     if anchor.get('record_start') != daily[0]['date'] or anchor.get('record_end') != daily[-1]['date']:
         errors.append('private anchor record range mismatch')
@@ -401,7 +407,7 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     pending = sum(1 for r in daily if r['status'] == 'pending')
     if anchor.get('settled_days') != settled or anchor.get('pending_days') != pending:
         errors.append('private anchor settled/pending counts mismatch')
-    if schema == 'ptp-public-private-anchor-v2':
+    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
         provisional = sum(1 for r in daily if r['status'] == 'provisional')
         if anchor.get('provisional_days') != provisional:
             errors.append('private anchor provisional count mismatch')
@@ -411,8 +417,12 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         'monthly_csv_sha256': sha256_file(root / 'data/monthly.csv'),
         'summary_csv_sha256': sha256_file(root / 'data/summary.csv'),
     }
-    if schema == 'ptp-public-private-anchor-v2':
+    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
         expected_hashes['valuation_provenance_csv_sha256'] = sha256_file(root / 'data/valuation_provenance.csv')
+    if schema == 'ptp-public-private-anchor-v3':
+        expected_hashes['legacy_daily_csv_sha256'] = sha256_file(root / 'data/archive/daily_legacy_he24_v1.csv')
+        if anchor.get('canonical_valuation_version') != ERCOT_HE24_INTERVAL_V2:
+            errors.append('private anchor canonical valuation version mismatch')
     for key, expected in expected_hashes.items():
         if anchor.get(key) != expected:
             errors.append(f'private anchor {key} mismatch')
