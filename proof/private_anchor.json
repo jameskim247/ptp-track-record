@@ -1,15 +1,17 @@
 {
-  "daily_csv_sha256": "76396b98840c0ed7967863e44733e96a09818baf9b1fff0d47f799b14c71b58c",
-  "monthly_csv_sha256": "8a856c895a79cfc0e312ff086a22d8cdaf9df32759e026a17468ce05359f4418",
+  "canonical_valuation_version": "ercot_he24_q4_v2",
+  "daily_csv_sha256": "d10cde37941b9e871e8a0c6703b433950b7786e2e1356a8d2383a564c4f7ad7e",
+  "monthly_csv_sha256": "51b110ed4bcf62e713bf6dbf452bcd5ab08ea8a6785e4a691f31fe730a6a85ca",
   "pending_days": 1,
-  "private_manifest_sha256": "f4652f52f0fe3e81b9536bef2bcfcfd89a398cf2607d264e6bb79f0b1fa3aed9",
+  "pre_v2_daily_csv_sha256": "76396b98840c0ed7967863e44733e96a09818baf9b1fff0d47f799b14c71b58c",
+  "private_manifest_sha256": "d1babd7a85ba0279bf2c6391fe2b2884cbfe2d96f53563d80107f17fa81e09e8",
   "provisional_days": 1,
   "record_end": "2026-07-12",
   "record_start": "2026-03-01",
-  "schema": "ptp-public-private-anchor-v2",
+  "schema": "ptp-public-private-anchor-v3",
   "settled_days": 132,
-  "source_artifact_sha256": "f8bbe93a4a7449b9cc68a48de5d0c959bb5f5dfc811f74f438729f94fce6f16b",
-  "summary_csv_sha256": "99a60ab93458863b3d1c1fb8cc2da2d8adcaacfc4f98d7375bb4e86225734dbc",
-  "valuation_provenance_csv_sha256": "fe7814b878fdc287a15cd4cec8415e019f58120fe78610a5d40135b3a7cccdc1",
-  "weekly_csv_sha256": "599518638f5c290762fb420a65952ba19b1f8f995b1a5285d7a1c991580ecfb5"
+  "source_artifact_sha256": "7c600b8eb397a3139bb00024654d928847d33f9f667a5a4cb87cfe1b6e9ff5a2",
+  "summary_csv_sha256": "a3f7fe7f3c051640b8d6eb66efe3ab840ad4992002990721622dab90f1e19c37",
+  "valuation_provenance_csv_sha256": "f1d0359cffa377bc59d5ab57e3ba45c8b491c589e28f3c5c712873f8146b193c",
+  "weekly_csv_sha256": "1f513e9d077ece4f9b0fc65417dc021191cfab698a40cbc2383201ca144a8534"
 }
