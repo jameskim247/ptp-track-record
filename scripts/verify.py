@@ -379,8 +379,10 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
             errors.append(f'daily valuation revision differs from latest provenance: {delivery}')
         if public_status == 'provisional' and latest != 'provisional':
             errors.append(f'provisional daily row lacks latest provisional provenance: {delivery}')
-        if public_status == 'settled' and latest != 'observed_complete':
-            errors.append(f'settled revised row lacks latest observed provenance: {delivery}')
+        if public_status == 'settled':
+            expected_latest = 'legacy_carried' if latest_row['valuation_version'] == LEGACY_HE24_V1 else 'observed_complete'
+            if latest != expected_latest:
+                errors.append(f'settled row has incompatible latest valuation provenance: {delivery}')
     for row in daily:
         if row['status'] != 'pending' and row['date'] not in by_date:
             errors.append(f'valued daily row lacks valuation provenance: {row["date"]}')
@@ -469,8 +471,9 @@ def verify(root: Path) -> list[str]:
             if row['valuation_version'] or row['valuation_revision']:
                 errors.append(f'pending row must not claim a valuation contract: {row["date"]}')
         else:
-            if row['valuation_version'] != ERCOT_HE24_Q4_V2:
-                errors.append(f'valued row is not canonical v2: {row["date"]}')
+            expected_version = LEGACY_HE24_V1 if row['basis'] == BACKFILL_BASIS else ERCOT_HE24_Q4_V2
+            if row['valuation_version'] != expected_version:
+                errors.append(f'valued row has wrong valuation version for its basis: {row["date"]}')
             if not row['valuation_revision'].isdigit() or int(row['valuation_revision']) < 1:
                 errors.append(f'valued row lacks a positive valuation revision: {row["date"]}')
         if row['proof_id'] != daily_proof_id(row):
