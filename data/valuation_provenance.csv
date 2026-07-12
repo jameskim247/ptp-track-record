@@ -2,3 +2,4 @@ date,revision,valuation_status,rt_coverage_min,missing_intervals,affected_positi
 2026-07-09,1,provisional,3/4,15:45,8,8,mean_observed_rt_intervals,2.0,,0a566a39b096fabda46e1cc13d6d56fc04006e0d6c7a60b743907dec4fa8c066,
 2026-07-10,1,provisional,4/4,,0,0,none,0.0,2026-07-09,0a566a39b096fabda46e1cc13d6d56fc04006e0d6c7a60b743907dec4fa8c066,
 2026-07-10,2,observed_complete,4/4,,0,0,none,0.0,2026-07-09,51fe554407a9adaf9892c2926cf691bc645458fbe7cb951f7dee4e5cdc9389fe,1
+2026-07-11,1,observed_complete,4/4,,0,0,none,0.0,2026-07-09,f8bbe93a4a7449b9cc68a48de5d0c959bb5f5dfc811f74f438729f94fce6f16b,
