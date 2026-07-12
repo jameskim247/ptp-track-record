@@ -10,6 +10,8 @@ The canonical public files publish one valuation convention: `ercot_he24_q4_v2`.
 
 `prospective` identifies a row publicly declared before its realized result was settled. It does not assert that a trading signal or advisory was generated, archived, or published before the applicable auction deadline.
 
+All PnL is hypothetical must-clear model-replay PnL against public DA/RT prices. It is not actual auction-award, bid-execution, settlement-statement, invoice, or cash-account PnL.
+
 `source_artifact_sha256` in `proof/private_anchor.json` is a carried-forward validation/source anchor. It is not a per-row signal commitment.
 
 `data/weekly.csv`, `data/monthly.csv`, and `data/summary.csv` are recomputable from `data/daily.csv`. Public proof files expose opaque hashes only.
