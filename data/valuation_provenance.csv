@@ -1,0 +1,3 @@
+date,revision,valuation_status,rt_coverage_min,missing_intervals,affected_positions,affected_mw,estimate_method,pnl_sensitivity_per_rt_spread_dollar,depends_on_provisional_date,source_artifact_sha256,supersedes_revision
+2026-07-09,1,provisional,3/4,15:45,8,8,mean_observed_rt_intervals,2.0,,0a566a39b096fabda46e1cc13d6d56fc04006e0d6c7a60b743907dec4fa8c066,
+2026-07-10,1,provisional,4/4,,0,0,none,0.0,2026-07-09,0a566a39b096fabda46e1cc13d6d56fc04006e0d6c7a60b743907dec4fa8c066,
