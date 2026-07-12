@@ -3,7 +3,8 @@
 Generated: 2026-07-12T00:00:00Z
 
 - Range: 2026-03-01 to 2026-07-12
-- Canonical valuation: ercot_he24_q4_v2
+- Prospective valuation: ercot_he24_q4_v2
+- Backfill valuation: legacy_he24_v1
 - Basis: settled=model_backfill|prospective_settled; pending=prospective; provisional=prospective_provisional
 - Daily rows: 134
 - Settled rows: 132
