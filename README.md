@@ -2,7 +2,7 @@
 
 A simple public track record for the PTP Trader.
 
-Current public range: **2026-03-01 to 2026-07-11**. Pending rows use basis **prospective** (publicly declared before the realized result was settled). Settled rows use **prospective_settled** when the pending declaration was later settled by the live pipeline, or **model_backfill** for history constructed retroactively at the 2026-07-07 reset. Provisional rows use **prospective_provisional** and carry explicit coverage evidence in `data/valuation_provenance.csv` (see METHODOLOGY.md).
+Current public range: **2026-03-01 to 2026-07-12**. Pending rows use basis **prospective** (publicly declared before the realized result was settled). Settled rows use **prospective_settled** when the pending declaration was later settled by the live pipeline, or **model_backfill** for history constructed retroactively at the 2026-07-07 reset. Provisional rows use **prospective_provisional** and carry explicit coverage evidence in `data/valuation_provenance.csv` (see METHODOLOGY.md).
 
 ## Files
 

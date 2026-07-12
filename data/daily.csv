@@ -132,3 +132,4 @@ date,signal_date,status,basis,realized_pnl,cumulative_pnl,drawdown,days_since_eq
 2026-07-09,2026-07-08,provisional,prospective_provisional,-254.33,833947.00,-16104.45,2,b6469bb55b2c24d1e5e67f1159a2b8c798da96aa4285043bbf06da3d6bbcc43b
 2026-07-10,2026-07-09,settled,prospective_settled,1600.19,835547.19,-14504.26,3,4b047860fbf773d1ba9b81c16e553a0cf3fd8c9519b2ce2abd9b64d462caa272
 2026-07-11,2026-07-10,pending,prospective,0.00,835547.19,-14504.26,4,91381dfbcbf76a0c9540e145ed641384e11c6c8a353ff9dfb31a7152d60f6860
+2026-07-12,2026-07-11,pending,prospective,0.00,835547.19,-14504.26,5,46415469b3cbc1cec8de3cc2b468d76d220cabc26ac5cdb3e91a170b2c3e9cfd
