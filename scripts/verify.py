@@ -460,8 +460,8 @@ def verify(root: Path) -> list[str]:
             errors.append(f'pending row must use prospective basis: {row["date"]}')
         if row['status'] == 'settled' and row['basis'] == PROSPECTIVE_BASIS:
             errors.append(f'settled row must use a settled basis: {row["date"]}')
-        if row['status'] == 'provisional' and row['basis'] != PROSPECTIVE_PROVISIONAL_BASIS:
-            errors.append(f'provisional row must use provisional basis: {row["date"]}')
+        if row['status'] == 'provisional' and row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_PROVISIONAL_BASIS):
+            errors.append(f'provisional row must use a compatible basis: {row["date"]}')
         if row['status'] == 'pending':
             if row['valuation_version'] or row['valuation_revision']:
                 errors.append(f'pending row must not claim a valuation contract: {row["date"]}')
