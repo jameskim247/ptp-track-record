@@ -26,7 +26,7 @@ ERCOT_HE24_Q4_V2 = 'ercot_he24_q4_v2'
 LEGACY_HE24_V1 = 'legacy_he24_v1'
 ANCHOR_KEYS_V1 = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
 ANCHOR_KEYS_V2 = sorted(ANCHOR_KEYS_V1 + ['provisional_days','valuation_provenance_csv_sha256'])
-ANCHOR_KEYS_V3 = sorted(ANCHOR_KEYS_V2 + ['canonical_valuation_version','legacy_daily_csv_sha256'])
+ANCHOR_KEYS_V3 = sorted(ANCHOR_KEYS_V2 + ['canonical_valuation_version','pre_v2_daily_csv_sha256'])
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
 FORBIDDEN_TEXT = tuple(
@@ -423,7 +423,7 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
         expected_hashes['valuation_provenance_csv_sha256'] = sha256_file(root / 'data/valuation_provenance.csv')
     if schema == 'ptp-public-private-anchor-v3':
-        expected_hashes['legacy_daily_csv_sha256'] = sha256_file(root / 'data/archive/daily_legacy_he24_v1.csv')
+        expected_hashes['pre_v2_daily_csv_sha256'] = sha256_file(root / 'data/archive/daily_pre_valuation_v2.csv')
         if anchor.get('canonical_valuation_version') != ERCOT_HE24_Q4_V2:
             errors.append('private anchor canonical valuation version mismatch')
     for key, expected in expected_hashes.items():
