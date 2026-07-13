@@ -38,6 +38,12 @@ ANCHOR_KEYS_V4 = sorted(
     [key for key in ANCHOR_KEYS_V3 if key != 'canonical_valuation_version']
     + ['canonical_history_policy','retrospective_q4_replay_csv_sha256']
 )
+ANCHOR_KEYS_V5 = sorted(ANCHOR_KEYS_V1 + ['provisional_days'])
+FORBIDDEN_TRACKED_EXACT = {
+    'METHODOLOGY.md',
+    'data/retrospective_q4_replay.csv',
+    'data/valuation_provenance.csv',
+}
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
 FORBIDDEN_TEXT = tuple(
@@ -295,7 +301,11 @@ def verify_hashes(root: Path) -> list[str]:
         actual = sha256_file(target)
         if actual != row['sha256']:
             errors.append(f'hash mismatch for {row["path"]}: {actual} != {row["sha256"]}')
-    required = {'data/daily.csv','data/archive/daily_pre_valuation_v2.csv','data/retrospective_q4_replay.csv','data/valuation_provenance.csv','data/weekly.csv','data/monthly.csv','data/summary.csv','proof/private_anchor.json','README.md','STATUS.md','METHODOLOGY.md','VERIFY.md','scripts/verify.py'}
+    anchor = json.loads((root / 'proof/private_anchor.json').read_text(encoding='utf-8'))
+    if anchor.get('schema') == 'ptp-public-private-anchor-v5':
+        required = {'data/daily.csv','data/weekly.csv','data/monthly.csv','data/summary.csv','proof/private_anchor.json','README.md','STATUS.md','VERIFY.md','scripts/verify.py'}
+    else:
+        required = {'data/daily.csv','data/archive/daily_pre_valuation_v2.csv','data/retrospective_q4_replay.csv','data/valuation_provenance.csv','data/weekly.csv','data/monthly.csv','data/summary.csv','proof/private_anchor.json','README.md','STATUS.md','METHODOLOGY.md','VERIFY.md','scripts/verify.py'}
     missing = sorted(required - seen)
     if missing:
         errors.append(f'records.sha256 missing required paths: {missing}')
@@ -313,6 +323,8 @@ def verify_leaks(root: Path) -> list[str]:
     errors = []
     for rel in tracked_files(root):
         low = rel.lower()
+        if rel in FORBIDDEN_TRACKED_EXACT or rel.startswith('data/archive/'):
+            errors.append(f'private support artifact is publicly tracked: {rel}')
         if low.startswith(FORBIDDEN_TRACKED_PREFIXES):
             errors.append(f'forbidden private/raw tracked path: {rel}')
         if low.endswith(FORBIDDEN_SUFFIXES):
@@ -467,17 +479,21 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         return [f'could not read proof/private_anchor.json: {exc}']
     schema = anchor.get('schema')
     expected_keys = (
-        ANCHOR_KEYS_V4
-        if schema == 'ptp-public-private-anchor-v4'
+        ANCHOR_KEYS_V5
+        if schema == 'ptp-public-private-anchor-v5'
         else (
-            ANCHOR_KEYS_V3
-            if schema == 'ptp-public-private-anchor-v3'
-            else (ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1)
+            ANCHOR_KEYS_V4
+            if schema == 'ptp-public-private-anchor-v4'
+            else (
+                ANCHOR_KEYS_V3
+                if schema == 'ptp-public-private-anchor-v3'
+                else (ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1)
+            )
         )
     )
     if sorted(anchor.keys()) != expected_keys:
         errors.append(f'private anchor keys mismatch: {sorted(anchor.keys())}')
-    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
+    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4', 'ptp-public-private-anchor-v5'):
         errors.append('private anchor schema mismatch')
     if anchor.get('record_start') != daily[0]['date'] or anchor.get('record_end') != daily[-1]['date']:
         errors.append('private anchor record range mismatch')
@@ -485,7 +501,7 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     pending = sum(1 for r in daily if r['status'] == 'pending')
     if anchor.get('settled_days') != settled or anchor.get('pending_days') != pending:
         errors.append('private anchor settled/pending counts mismatch')
-    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
+    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4', 'ptp-public-private-anchor-v5'):
         provisional = sum(1 for r in daily if r['status'] == 'provisional')
         if anchor.get('provisional_days') != provisional:
             errors.append('private anchor provisional count mismatch')
@@ -521,7 +537,13 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
 def verify(root: Path) -> list[str]:
     errors = []
     anchor = json.loads((root / 'proof/private_anchor.json').read_text(encoding='utf-8'))
-    live_lineage_policy = anchor.get('schema') == 'ptp-public-private-anchor-v4'
+    schema = anchor.get('schema')
+    live_lineage_policy = schema == 'ptp-public-private-anchor-v4'
+    public_support_contract = schema in {
+        'ptp-public-private-anchor-v2',
+        'ptp-public-private-anchor-v3',
+        'ptp-public-private-anchor-v4',
+    }
     daily = read_csv(root / 'data/daily.csv', DAILY_COLUMNS)
     valuation_path = root / 'data/valuation_provenance.csv'
     valuation = read_csv(valuation_path, VALUATION_COLUMNS) if valuation_path.is_file() else []
@@ -560,13 +582,14 @@ def verify(root: Path) -> list[str]:
         errors.append('monthly.csv is not derived from daily.csv')
     if summary and summary[0] != expected_summary(daily):
         errors.append('summary.csv is not derived from daily.csv')
-    errors.extend(
-        verify_valuation_provenance(
-            daily,
-            valuation,
-            live_lineage_policy=live_lineage_policy,
+    if public_support_contract:
+        errors.extend(
+            verify_valuation_provenance(
+                daily,
+                valuation,
+                live_lineage_policy=live_lineage_policy,
+            )
         )
-    )
     if live_lineage_policy:
         errors.extend(verify_retrospective_q4(root, valuation))
     errors.extend(verify_anchor(root, daily, weekly, monthly, summary))

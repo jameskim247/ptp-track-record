@@ -3,7 +3,6 @@
 Generated: 2026-07-13T00:00:00Z
 
 - Range: 2026-03-01 to 2026-07-12
-- Canonical history policy: live_lineage_canonical_v3
 - Daily outcome label: settled
 - Daily rows: 134
 - Settled rows: 132

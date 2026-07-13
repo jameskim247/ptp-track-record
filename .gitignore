@@ -6,6 +6,10 @@ __pycache__/
 /vault/
 /raw/
 /tmp/
+/data/archive/
+/data/retrospective_q4_replay.csv
+/data/valuation_provenance.csv
+/METHODOLOGY.md
 *.parquet
 *.pkl
 *.pickle
