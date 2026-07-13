@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 DAILY_COLUMNS = ['date','signal_date','status','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
+RETROSPECTIVE_Q4_COLUMNS = ['date','signal_date','realized_pnl','cumulative_pnl']
 VALUATION_COLUMNS = ['date','revision','realized_pnl','valuation_version','valuation_status','rt_coverage_min','missing_intervals','affected_positions','affected_mw','estimate_method','pnl_sensitivity_per_rt_spread_dollar','depends_on_provisional_date','revision_reason','decision_lineage_id','decision_state_dependency','source_artifact_sha256','supersedes_revision']
 PERIOD_COLUMNS = ['period_start','period_end','status','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
 SUMMARY_COLUMNS = ['basis','start_date','end_date','n_days','total_pnl','mean_day_pnl','median_day_pnl','daily_stdev','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','var_5','es_5','tail_ratio_worst_to_mean','tail_ratio_es5_to_mean','max_drawdown','max_drawdown_duration_days','top_1_day_share','top_5_day_share','top_10_day_share','largest_month','largest_month_pnl','largest_month_share','sharpe_daily','sortino_daily','proof_id']
@@ -24,9 +25,19 @@ PROSPECTIVE_SETTLED_BASIS = 'prospective_settled'
 PROSPECTIVE_PROVISIONAL_BASIS = 'prospective_provisional'
 ERCOT_HE24_Q4_V2 = 'ercot_he24_q4_v2'
 LEGACY_HE24_V1 = 'legacy_he24_v1'
+LIVE_LINEAGE_CANONICAL_V3 = 'live_lineage_canonical_v3'
+BACKFILL_START = '2026-03-01'
+BACKFILL_END = '2026-07-06'
+EXPECTED_HISTORY_DAYS = 128
+EXPECTED_RETROSPECTIVE_Q4_TOTAL = '114559.82'
+RESTORE_REVISION_REASON = 'restore_live_lineage_continuity'
 ANCHOR_KEYS_V1 = ['daily_csv_sha256','monthly_csv_sha256','pending_days','private_manifest_sha256','record_end','record_start','schema','settled_days','source_artifact_sha256','summary_csv_sha256','weekly_csv_sha256']
 ANCHOR_KEYS_V2 = sorted(ANCHOR_KEYS_V1 + ['provisional_days','valuation_provenance_csv_sha256'])
 ANCHOR_KEYS_V3 = sorted(ANCHOR_KEYS_V2 + ['canonical_valuation_version','pre_v2_daily_csv_sha256'])
+ANCHOR_KEYS_V4 = sorted(
+    [key for key in ANCHOR_KEYS_V3 if key != 'canonical_valuation_version']
+    + ['canonical_history_policy','retrospective_q4_replay_csv_sha256']
+)
 FORBIDDEN_TRACKED_PREFIXES = ('private/', '_private/', 'vault/', 'raw/', 'tmp/')
 FORBIDDEN_SUFFIXES = ('.parquet', '.pkl', '.pickle', '.key', '.pem', '.env', '.sqlite', '.db')
 FORBIDDEN_TEXT = tuple(
@@ -284,7 +295,7 @@ def verify_hashes(root: Path) -> list[str]:
         actual = sha256_file(target)
         if actual != row['sha256']:
             errors.append(f'hash mismatch for {row["path"]}: {actual} != {row["sha256"]}')
-    required = {'data/daily.csv','data/weekly.csv','data/monthly.csv','data/summary.csv','proof/private_anchor.json','README.md','STATUS.md','METHODOLOGY.md','VERIFY.md','scripts/verify.py'}
+    required = {'data/daily.csv','data/archive/daily_pre_valuation_v2.csv','data/retrospective_q4_replay.csv','data/valuation_provenance.csv','data/weekly.csv','data/monthly.csv','data/summary.csv','proof/private_anchor.json','README.md','STATUS.md','METHODOLOGY.md','VERIFY.md','scripts/verify.py'}
     missing = sorted(required - seen)
     if missing:
         errors.append(f'records.sha256 missing required paths: {missing}')
@@ -320,7 +331,12 @@ def verify_leaks(root: Path) -> list[str]:
     return errors
 
 
-def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str, str]]) -> list[str]:
+def verify_valuation_provenance(
+    daily: list[dict[str, str]],
+    rows: list[dict[str, str]],
+    *,
+    live_lineage_policy: bool,
+) -> list[str]:
     errors = []
     daily_by_date = {row['date']: row for row in daily}
     by_date: dict[str, list[dict[str, str]]] = defaultdict(list)
@@ -386,16 +402,59 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
         public_status = public_row['status']
         if latest_row['realized_pnl'] != public_row['realized_pnl']:
             errors.append(f'latest valuation PnL differs from daily.csv: {delivery}')
-        if public_status != 'pending' and latest_row['valuation_version'] != ERCOT_HE24_Q4_V2:
+        is_restored_history = live_lineage_policy and BACKFILL_START <= delivery <= BACKFILL_END
+        if is_restored_history:
+            if not (
+                latest_row['valuation_version'] == LEGACY_HE24_V1
+                and latest_row['valuation_status'] == 'legacy_carried'
+                and latest_row['revision_reason'] == RESTORE_REVISION_REASON
+            ):
+                errors.append(f'restored live-lineage provenance contract mismatch: {delivery}')
+        elif public_status != 'pending' and latest_row['valuation_version'] != ERCOT_HE24_Q4_V2:
             errors.append(f'valued row latest valuation is not canonical q4: {delivery}')
         if public_status == 'provisional' and latest != 'provisional':
             errors.append(f'provisional daily row lacks latest provisional provenance: {delivery}')
         if public_status == 'settled':
-            if latest not in ('observed_complete', 'historical_estimate'):
+            allowed = ('legacy_carried',) if is_restored_history else ('observed_complete', 'historical_estimate')
+            if latest not in allowed:
                 errors.append(f'settled row has incompatible latest valuation provenance: {delivery}')
     for row in daily:
         if row['status'] != 'pending' and row['date'] not in by_date:
             errors.append(f'valued daily row lacks valuation provenance: {row["date"]}')
+    return errors
+
+
+def verify_retrospective_q4(
+    root: Path,
+    provenance: list[dict[str, str]],
+) -> list[str]:
+    errors = []
+    rows = read_csv(root / 'data/retrospective_q4_replay.csv', RETROSPECTIVE_Q4_COLUMNS)
+    expected_dates = date_range(date.fromisoformat(BACKFILL_START), date.fromisoformat(BACKFILL_END))
+    if len(rows) != EXPECTED_HISTORY_DAYS or [row['date'] for row in rows] != expected_dates:
+        errors.append('retrospective q4 replay does not contain the exact 128-day research window')
+        return errors
+    cumulative = 0.0
+    revision_two = {
+        row['date']: row
+        for row in provenance
+        if row['revision'] == '2' and row['valuation_version'] == ERCOT_HE24_Q4_V2
+    }
+    for row in rows:
+        expected_signal = (date.fromisoformat(row['date']) - timedelta(days=1)).isoformat()
+        if row['signal_date'] != expected_signal:
+            errors.append(f'retrospective q4 signal date mismatch: {row["date"]}')
+        cumulative += parse_money(row['realized_pnl'])
+        if row['cumulative_pnl'] != money(cumulative):
+            errors.append(f'retrospective q4 cumulative PnL mismatch: {row["date"]}')
+        source = revision_two.get(row['date'])
+        if source is None or source['realized_pnl'] != row['realized_pnl']:
+            errors.append(f'retrospective q4 replay differs from retained revision 2: {row["date"]}')
+    if rows[-1]['cumulative_pnl'] != EXPECTED_RETROSPECTIVE_Q4_TOTAL:
+        errors.append(
+            'retrospective q4 total mismatch: '
+            f'{rows[-1]["cumulative_pnl"]} != {EXPECTED_RETROSPECTIVE_Q4_TOTAL}'
+        )
     return errors
 
 
@@ -408,13 +467,17 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         return [f'could not read proof/private_anchor.json: {exc}']
     schema = anchor.get('schema')
     expected_keys = (
-        ANCHOR_KEYS_V3
-        if schema == 'ptp-public-private-anchor-v3'
-        else (ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1)
+        ANCHOR_KEYS_V4
+        if schema == 'ptp-public-private-anchor-v4'
+        else (
+            ANCHOR_KEYS_V3
+            if schema == 'ptp-public-private-anchor-v3'
+            else (ANCHOR_KEYS_V2 if schema == 'ptp-public-private-anchor-v2' else ANCHOR_KEYS_V1)
+        )
     )
     if sorted(anchor.keys()) != expected_keys:
         errors.append(f'private anchor keys mismatch: {sorted(anchor.keys())}')
-    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
+    if schema not in ('ptp-public-private-anchor-v1', 'ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
         errors.append('private anchor schema mismatch')
     if anchor.get('record_start') != daily[0]['date'] or anchor.get('record_end') != daily[-1]['date']:
         errors.append('private anchor record range mismatch')
@@ -422,7 +485,7 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
     pending = sum(1 for r in daily if r['status'] == 'pending')
     if anchor.get('settled_days') != settled or anchor.get('pending_days') != pending:
         errors.append('private anchor settled/pending counts mismatch')
-    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
+    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
         provisional = sum(1 for r in daily if r['status'] == 'provisional')
         if anchor.get('provisional_days') != provisional:
             errors.append('private anchor provisional count mismatch')
@@ -432,12 +495,19 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
         'monthly_csv_sha256': sha256_file(root / 'data/monthly.csv'),
         'summary_csv_sha256': sha256_file(root / 'data/summary.csv'),
     }
-    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3'):
+    if schema in ('ptp-public-private-anchor-v2', 'ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
         expected_hashes['valuation_provenance_csv_sha256'] = sha256_file(root / 'data/valuation_provenance.csv')
-    if schema == 'ptp-public-private-anchor-v3':
+    if schema in ('ptp-public-private-anchor-v3', 'ptp-public-private-anchor-v4'):
         expected_hashes['pre_v2_daily_csv_sha256'] = sha256_file(root / 'data/archive/daily_pre_valuation_v2.csv')
+    if schema == 'ptp-public-private-anchor-v3':
         if anchor.get('canonical_valuation_version') != ERCOT_HE24_Q4_V2:
             errors.append('private anchor canonical valuation version mismatch')
+    if schema == 'ptp-public-private-anchor-v4':
+        expected_hashes['retrospective_q4_replay_csv_sha256'] = sha256_file(
+            root / 'data/retrospective_q4_replay.csv'
+        )
+        if anchor.get('canonical_history_policy') != LIVE_LINEAGE_CANONICAL_V3:
+            errors.append('private anchor canonical history policy mismatch')
     for key, expected in expected_hashes.items():
         if anchor.get(key) != expected:
             errors.append(f'private anchor {key} mismatch')
@@ -450,6 +520,8 @@ def verify_anchor(root: Path, daily: list[dict[str, str]], weekly: list[dict[str
 
 def verify(root: Path) -> list[str]:
     errors = []
+    anchor = json.loads((root / 'proof/private_anchor.json').read_text(encoding='utf-8'))
+    live_lineage_policy = anchor.get('schema') == 'ptp-public-private-anchor-v4'
     daily = read_csv(root / 'data/daily.csv', DAILY_COLUMNS)
     valuation_path = root / 'data/valuation_provenance.csv'
     valuation = read_csv(valuation_path, VALUATION_COLUMNS) if valuation_path.is_file() else []
@@ -488,7 +560,15 @@ def verify(root: Path) -> list[str]:
         errors.append('monthly.csv is not derived from daily.csv')
     if summary and summary[0] != expected_summary(daily):
         errors.append('summary.csv is not derived from daily.csv')
-    errors.extend(verify_valuation_provenance(daily, valuation))
+    errors.extend(
+        verify_valuation_provenance(
+            daily,
+            valuation,
+            live_lineage_policy=live_lineage_policy,
+        )
+    )
+    if live_lineage_policy:
+        errors.extend(verify_retrospective_q4(root, valuation))
     errors.extend(verify_anchor(root, daily, weekly, monthly, summary))
     errors.extend(verify_hashes(root))
     errors.extend(verify_leaks(root))
