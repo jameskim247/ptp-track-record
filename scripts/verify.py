@@ -9,14 +9,14 @@ import math
 import statistics
 import subprocess
 import sys
-from collections import Counter, defaultdict
+from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
-DAILY_COLUMNS = ['date','signal_date','status','basis','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','valuation_version','valuation_revision','proof_id']
+DAILY_COLUMNS = ['date','signal_date','status','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
 VALUATION_COLUMNS = ['date','revision','realized_pnl','valuation_version','valuation_status','rt_coverage_min','missing_intervals','affected_positions','affected_mw','estimate_method','pnl_sensitivity_per_rt_spread_dollar','depends_on_provisional_date','revision_reason','decision_lineage_id','decision_state_dependency','source_artifact_sha256','supersedes_revision']
-PERIOD_COLUMNS = ['period_start','period_end','status','basis_mix','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
+PERIOD_COLUMNS = ['period_start','period_end','status','settled_days','pending_days','total_days','realized_pnl','cumulative_pnl','mean_day_pnl','median_day_pnl','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','period_max_drawdown','top_day_share','proof_id']
 SUMMARY_COLUMNS = ['basis','start_date','end_date','n_days','total_pnl','mean_day_pnl','median_day_pnl','daily_stdev','win_days','loss_days','win_rate','avg_win','avg_loss','payoff_ratio','profit_factor','best_day_pnl','worst_day_pnl','var_5','es_5','tail_ratio_worst_to_mean','tail_ratio_es5_to_mean','max_drawdown','max_drawdown_duration_days','top_1_day_share','top_5_day_share','top_10_day_share','largest_month','largest_month_pnl','largest_month_share','sharpe_daily','sortino_daily','proof_id']
 BACKFILL_BASIS = 'model_backfill'
 PROSPECTIVE_BASIS = 'prospective'
@@ -98,13 +98,10 @@ def daily_proof_id(row: dict[str, str]) -> str:
             'date',
             'signal_date',
             'status',
-            'basis',
             'realized_pnl',
-            'valuation_version',
-            'valuation_revision',
         )
     }
-    return row_hash('daily-v2', payload)
+    return row_hash('daily-v3', payload)
 
 
 def date_range(start: date, end: date) -> list[str]:
@@ -187,21 +184,17 @@ def expected_periods(rows: list[dict[str, str]], kind: str) -> list[dict[str, st
         pnl = [parse_money(r['realized_pnl']) for r in chunk if r['status'] == 'settled']
         m = metrics(pnl)
         total = sum(pnl)
-        bases = Counter(r['basis'] for r in chunk)
-        basis_mix = '|'.join(f'{k}:{bases[k]}' for k in sorted(bases))
         proof_payload = {
             'period_start': period_start.isoformat(),
             'period_end': period_end.isoformat(),
             'total_days': len(chunk),
             'settled_days': len(pnl),
             'realized_pnl': money(total),
-            'basis_mix': basis_mix,
         }
         out.append({
             'period_start': period_start.isoformat(),
             'period_end': period_end.isoformat(),
             'status': 'pending' if any(r['status'] != 'settled' for r in chunk) else 'settled',
-            'basis_mix': basis_mix,
             'settled_days': str(len(pnl)),
             'pending_days': str(sum(1 for r in chunk if r['status'] != 'settled')),
             'total_days': str(len(chunk)),
@@ -227,8 +220,7 @@ def expected_periods(rows: list[dict[str, str]], kind: str) -> list[dict[str, st
 
 def expected_summary(rows: list[dict[str, str]]) -> dict[str, str]:
     values = [parse_money(r['realized_pnl']) for r in rows if r['status'] == 'settled']
-    basis_counts = Counter(r['basis'] for r in rows if r['status'] == 'settled')
-    summary_basis = '|'.join(k for k in sorted(basis_counts)) if len(basis_counts) > 1 else next(iter(basis_counts), BACKFILL_BASIS)
+    summary_basis = 'settled'
     m = metrics(values)
     total = sum(values)
     _dds, _durations, max_dd, max_duration = drawdown(values)
@@ -339,7 +331,7 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
         by_date[row['date']].append(row)
         if row['valuation_version'] not in (LEGACY_HE24_V1, ERCOT_HE24_Q4_V2):
             errors.append(f'invalid valuation version for {row["date"]}: {row["valuation_version"]}')
-        if row['valuation_status'] not in ('legacy_carried', 'provisional', 'observed_complete'):
+        if row['valuation_status'] not in ('legacy_carried', 'provisional', 'observed_complete', 'historical_estimate'):
             errors.append(f'invalid valuation status for {row["date"]}: {row["valuation_status"]}')
         sha = row['source_artifact_sha256']
         if len(sha) != 64 or any(c not in '0123456789abcdef' for c in sha):
@@ -354,6 +346,27 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
                 and row['depends_on_provisional_date']
             ):
                 errors.append(f'provisional dependency valuation contract mismatch for {row["date"]}')
+        if row['valuation_status'] == 'historical_estimate':
+            try:
+                observed, expected = (int(part) for part in row['rt_coverage_min'].split('/', 1))
+            except (TypeError, ValueError):
+                observed, expected = 0, 0
+            valid_observed_mean = (
+                expected == 4
+                and 1 <= observed <= 3
+                and row['missing_intervals']
+                and row['estimate_method'] == 'mean_observed_rt_intervals'
+            )
+            valid_zero_proxy = (
+                row['rt_coverage_min'] == '0/4'
+                and bool(row['missing_intervals'])
+                and row['estimate_method'] in {
+                    'da_proxy_then_nearest_pair_hour',
+                    'da_proxy_then_same_day_or_prior_pair_hour',
+                }
+            )
+            if not (valid_observed_mean or valid_zero_proxy):
+                errors.append(f'historical estimate valuation contract mismatch for {row["date"]}')
         if row['valuation_version'] == ERCOT_HE24_Q4_V2 and row['valuation_status'] == 'observed_complete':
             if row['rt_coverage_min'] != '4/4' or row['missing_intervals'] or row['estimate_method'] != 'none':
                 errors.append(f'observed canonical v2 valuation lacks complete quarter evidence for {row["date"]}')
@@ -373,15 +386,12 @@ def verify_valuation_provenance(daily: list[dict[str, str]], rows: list[dict[str
         public_status = public_row['status']
         if latest_row['realized_pnl'] != public_row['realized_pnl']:
             errors.append(f'latest valuation PnL differs from daily.csv: {delivery}')
-        if public_row['valuation_version'] != latest_row['valuation_version']:
-            errors.append(f'daily valuation version differs from latest provenance: {delivery}')
-        if public_row['valuation_revision'] != latest_row['revision']:
-            errors.append(f'daily valuation revision differs from latest provenance: {delivery}')
+        if public_status != 'pending' and latest_row['valuation_version'] != ERCOT_HE24_Q4_V2:
+            errors.append(f'valued row latest valuation is not canonical q4: {delivery}')
         if public_status == 'provisional' and latest != 'provisional':
             errors.append(f'provisional daily row lacks latest provisional provenance: {delivery}')
         if public_status == 'settled':
-            expected_latest = 'legacy_carried' if latest_row['valuation_version'] == LEGACY_HE24_V1 else 'observed_complete'
-            if latest != expected_latest:
+            if latest not in ('observed_complete', 'historical_estimate'):
                 errors.append(f'settled row has incompatible latest valuation provenance: {delivery}')
     for row in daily:
         if row['status'] != 'pending' and row['date'] not in by_date:
@@ -459,23 +469,6 @@ def verify(root: Path) -> list[str]:
     for idx, row in enumerate(daily):
         if row['status'] not in ('settled', 'pending', 'provisional'):
             errors.append(f'invalid daily status for {row["date"]}: {row["status"]}')
-        if row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_BASIS, PROSPECTIVE_SETTLED_BASIS, PROSPECTIVE_PROVISIONAL_BASIS):
-            errors.append(f'invalid daily basis for {row["date"]}: {row["basis"]}')
-        if row['status'] == 'pending' and row['basis'] != PROSPECTIVE_BASIS:
-            errors.append(f'pending row must use prospective basis: {row["date"]}')
-        if row['status'] == 'settled' and row['basis'] == PROSPECTIVE_BASIS:
-            errors.append(f'settled row must use a settled basis: {row["date"]}')
-        if row['status'] == 'provisional' and row['basis'] not in (BACKFILL_BASIS, PROSPECTIVE_PROVISIONAL_BASIS):
-            errors.append(f'provisional row must use a compatible basis: {row["date"]}')
-        if row['status'] == 'pending':
-            if row['valuation_version'] or row['valuation_revision']:
-                errors.append(f'pending row must not claim a valuation contract: {row["date"]}')
-        else:
-            expected_version = LEGACY_HE24_V1 if row['basis'] == BACKFILL_BASIS else ERCOT_HE24_Q4_V2
-            if row['valuation_version'] != expected_version:
-                errors.append(f'valued row has wrong valuation version for its basis: {row["date"]}')
-            if not row['valuation_revision'].isdigit() or int(row['valuation_revision']) < 1:
-                errors.append(f'valued row lacks a positive valuation revision: {row["date"]}')
         if row['proof_id'] != daily_proof_id(row):
             errors.append(f'daily proof_id mismatch for {row["date"]}')
         pnl = parse_money(row['realized_pnl'])

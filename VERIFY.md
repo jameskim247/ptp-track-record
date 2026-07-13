@@ -6,4 +6,4 @@ Run:
 python3 scripts/verify.py --public-repo .
 ```
 
-The verifier checks CSV schemas, `legacy_he24_v1`/`ercot_he24_q4_v2` basis-compatible labeling, daily proof binding to valuation revision, date coverage, daily drawdown, weekly/monthly/summary aggregation, complete append-only valuation provenance, provisional coverage disclosures, the pre-v2 archive hash, public file hashes, the opaque validation anchor, and public-boundary leak guards.
+The verifier checks the minimal daily and rollup schemas, visible-field daily proofs, contiguous dates, cumulative PnL and drawdown, weekly/monthly/summary aggregation, canonical q4 latest provenance for every valued row, append-only revision ancestry, observed/provisional/historical-estimate coverage contracts, the pre-migration archive hash, public file hashes, the opaque validation anchor, and public-boundary leak guards.
