@@ -2,7 +2,7 @@
 
 A simple public track record for the PTP Trader.
 
-Current public range: **2026-03-01 to 2026-07-14**. `data/daily.csv` is the minimal outcome ledger: delivery date, signal date, status, realized and cumulative PnL, drawdown, duration, and proof ID. Detailed valuation methodology, source coverage, revision evidence, and retrospective research are retained privately and can be supplied for diligence; they are not part of the public performance series.
+Current public range: **2026-03-01 to 2026-07-15**. `data/daily.csv` is the minimal outcome ledger: delivery date, signal date, status, realized and cumulative PnL, drawdown, duration, and proof ID. Detailed valuation methodology, source coverage, revision evidence, and retrospective research are retained privately and can be supplied for diligence; they are not part of the public performance series.
 
 ## Files
 

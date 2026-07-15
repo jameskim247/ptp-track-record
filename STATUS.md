@@ -1,12 +1,12 @@
 # Status
 
-Generated: 2026-07-14T00:00:00Z
+Generated: 2026-07-15T00:00:00Z
 
-- Range: 2026-03-01 to 2026-07-14
+- Range: 2026-03-01 to 2026-07-15
 - Daily outcome label: settled
-- Daily rows: 136
+- Daily rows: 137
 - Settled rows: 132
-- Pending rows: 3
+- Pending rows: 4
 - Provisional rows: 1
 - Settled realized PnL: 836852.51
 - Win rate: 0.7500
