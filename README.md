@@ -7,4 +7,4 @@ realized trading performance.
 `data/daily.csv` is the public outcome ledger. `weekly.csv`, `monthly.csv`, and
 `summary.csv` are deterministic aggregates. Integrity hashes are in `proof/`.
 
-Current settled rows: 182.
+Current settled rows: 194.
