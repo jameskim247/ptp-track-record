@@ -4,13 +4,13 @@ from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DAILY = ['date','signal_date','status','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
+DAILY = ['date','signal_date','status','modeled_net_pnl','cumulative_modeled_net_pnl','modeled_drawdown','days_since_equity_high','proof_id']
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def proof(row):
-    payload = {'kind':'daily-v3','values':{key:row[key] for key in ('date','signal_date','status','realized_pnl')}}
+    payload = {'kind':'daily-v4-modeled','values':{key:row[key] for key in ('date','signal_date','status','modeled_net_pnl')}}
     return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 def main():
@@ -31,9 +31,11 @@ def main():
         while current<=end: expected_dates.append(current.isoformat()); current+=timedelta(days=1)
         if [row['date'] for row in rows]!=expected_dates: errors.append('daily.csv is not calendar-contiguous')
         for row in rows:
-            if row['status'] not in ('settled','pending','provisional'): errors.append('bad status: '+row['date'])
+            if row['status'] not in ('settled','pending','provisional','unavailable'): errors.append('bad status: '+row['date'])
             if row['proof_id']!=proof(row): errors.append('daily proof mismatch: '+row['date'])
     anchor=json.loads((ROOT/'proof/private_anchor.json').read_text())
+    if anchor.get('publication_mode')!='frozen_development_study': errors.append('repository is not frozen')
+    if anchor.get('selection',{}).get('candidate_arm_count')!=15: errors.append('selection disclosure missing')
     for key,name in (('daily_csv_sha256','data/daily.csv'),('weekly_csv_sha256','data/weekly.csv'),('monthly_csv_sha256','data/monthly.csv'),('summary_csv_sha256','data/summary.csv')):
         if anchor.get(key)!=sha(ROOT/name): errors.append('anchor mismatch: '+name)
     print(json.dumps({'ok':not errors,'errors':errors},indent=2))
