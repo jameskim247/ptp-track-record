@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import csv, hashlib, json, sys
-from datetime import date, timedelta
+import argparse, csv, hashlib, json, sys
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 DAILY = ['date','signal_date','status','realized_pnl','cumulative_pnl','drawdown','days_since_equity_high','proof_id']
@@ -13,7 +14,28 @@ def proof(row):
     payload = {'kind':'daily-v5','values':{key:row[key] for key in DAILY if key!='proof_id'}}
     return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
-def main():
+def freshness_errors(rows, timezone, not_before):
+    """Opt-in currency check.  Off by default so historical clones stay verifiable."""
+    now = datetime.now(ZoneInfo(timezone))
+    hour, minute = (int(part) for part in not_before.split(':'))
+    expected_as_of = now.date() if now.time() >= time(hour, minute) else now.date()-timedelta(days=1)
+    expected_settled = expected_as_of - timedelta(days=1)
+    errors=[]
+    latest = max(row['date'] for row in rows)
+    if latest < expected_as_of.isoformat():
+        errors.append('record ends %s, expected through %s' % (latest, expected_as_of))
+    settled = [row['date'] for row in rows if row['status']=='settled']
+    last_settled = max(settled) if settled else None
+    if not last_settled or last_settled < expected_settled.isoformat():
+        errors.append('settled through %s, expected through %s' % (last_settled, expected_settled))
+    return errors
+
+def main(argv=None):
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--require-current',action='store_true')
+    parser.add_argument('--timezone',default='America/Chicago')
+    parser.add_argument('--not-before',default='08:30')
+    args=parser.parse_args(argv)
     errors=[]
     expected={}
     for line in (ROOT/'proof/records.sha256').read_text().splitlines():
@@ -36,6 +58,8 @@ def main():
     anchor=json.loads((ROOT/'proof/private_anchor.json').read_text())
     for key,name in (('daily_csv_sha256','data/daily.csv'),('weekly_csv_sha256','data/weekly.csv'),('monthly_csv_sha256','data/monthly.csv'),('summary_csv_sha256','data/summary.csv')):
         if anchor.get(key)!=sha(ROOT/name): errors.append('anchor mismatch: '+name)
+    if args.require_current and rows:
+        errors.extend(freshness_errors(rows,args.timezone,args.not_before))
     print(json.dumps({'ok':not errors,'errors':errors},indent=2))
     return 1 if errors else 0
 
