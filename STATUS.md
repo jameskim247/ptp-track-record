@@ -1,4 +1,4 @@
 # Status
 
-- Range: 2026-02-01 through 2026-08-21
-- Settled: 201
+- Range: 2026-02-01 through 2026-08-22
+- Settled: 202
