@@ -5,7 +5,7 @@
 > or evidence of live realized trading performance. It does not, by itself, establish
 > executable returns, capacity, slippage, or allocator-level performance.
 
-Public range: **2026-02-01 through 2026-08-29**. Every dollar figure in this
+Public range: **2026-02-01 through 2026-08-30**. Every dollar figure in this
 repository is **modeled P&L**. No defensible capital denominator has been established,
 so no return or conventional return-based risk ratio is presented.
 
@@ -18,4 +18,4 @@ See [`2026-08-28_diligence-package.md`](2026-08-28_diligence-package.md) for the
 buyer note, methodology, July 22–23 incident analysis, change history, limitations,
 and a ready-to-send message.
 
-Current settled rows: 209.
+Current settled rows: 210.
