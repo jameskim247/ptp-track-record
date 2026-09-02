@@ -22,11 +22,19 @@ def main():
     anchor = json.loads((ROOT / "proof" / "private_anchor.json").read_text())
     if digest(manifest) != anchor.get("records_sha256"):
         errors.append("records manifest hash mismatch")
+    daily = {}
     for series_id in ("series-01", "series-02", "series-03"):
         path = ROOT / "data" / series_id / "daily.csv"
         rows = list(csv.DictReader(path.open(newline="", encoding="utf-8")))
+        daily[series_id] = rows
         if not rows or rows[0]["date"] != anchor["record_start"]:
             errors.append("daily range mismatch: " + series_id)
+    economic = ("placed_mw", "awarded_mw", "fill_rate", "modeled_pnl",
+                "always_clear_modeled_pnl", "limit_increment_modeled_pnl")
+    paired = [(a, b) for a, b in zip(daily["series-01"], daily["series-02"])
+              if a["status"] == b["status"] == "settled"]
+    if paired and all(all(a[key] == b[key] for key in economic) for a, b in paired):
+        errors.append("series-01 and series-02 are economically indistinguishable")
     print(json.dumps({"ok": not errors, "errors": errors}, indent=2))
     return 0 if not errors else 1
 
