@@ -1,0 +1,7 @@
+basis,series_id,common_start_date,common_end_date,common_settled_days,annualized_modeled_pnl_mean_to_stdev,limit_delta_ratio,modeled_pnl_es10,total_modeled_pnl,worst_day_modeled_pnl,max_modeled_pnl_drawdown,limit_pnl_per_withheld_mw,rank_eligible,rank,rank_reason,proof_id
+full_displayed_history,series-01,2026-01-01,2026-08-31,243,-0.1641625328,-0.6304810677,-3658.60806,-6943.81878,-48651.6285,-48651.6285,-0.8483728662,true,2,tied on all ranking metrics,e4a15bb8ea024dca8bce0b0388cff5da7b84cdedcceb533b67da03fdcff9c9bc
+full_displayed_history,series-02,2026-01-01,2026-08-31,243,-0.1641625328,-0.6304810677,-3658.60806,-6943.81878,-48651.6285,-48651.6285,-0.8483728662,true,2,tied on all ranking metrics,9f1f9b51b2c9ec2fe6cbbbcb203903e03d1e0d443861e9bc388e10023b521841
+full_displayed_history,series-03,2026-01-01,2026-08-31,243,2.7080343641,-0.0368685101,-16704.9784,1097607.8150000004,-40516.6549999999,-70782.4124999999,-0.5211485601,true,1,"ordered by frozen risk, limit, tail, fill, and P&L metrics",bdbb317952c3799517ddebf9c1a34dd0cf86ce64ea93426f6af1ea99e33a68ad
+prospective_shadow,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,031a14568c79155bc62aa36e0307f9c7ebe662b78881fd173ae90b3840bc6cb8
+prospective_shadow,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,942b1b021f70f5e546fd56c2ec0e693504289d1713319a67eadabd1357e1beaf
+prospective_shadow,series-03,,,0,,,,,,,,false,,insufficient common settled calendar,479faf810ffeb21920427e3ee18488f906b4097f46311ce67272491c123b97a2

@@ -10,12 +10,11 @@ The repository enforces canonical LF bytes for hashed text files through
 `.gitattributes`. Run verification from a fresh checkout; no manual Git line-ending
 configuration is required on Windows or Linux.
 
-The verifier checks file hashes, the private anchor, calendar continuity, statuses,
-daily proof identifiers, and aggregate derivations. The optional currency check is:
+The verifier checks every file listed in the proof manifest, binds that manifest to the
+private anchor, requires all three neutral daily ledgers, and confirms that each ledger
+starts on the anchor's frozen record start. Historical rows and prospective shadow rows
+remain distinguished by the `evidence_basis` column.
 
-```bash
-python3 scripts/verify.py --require-current --timezone America/Chicago --not-before 08:30
-```
-
-The currency check is intentionally time-dependent. It verifies publication freshness,
-not historical integrity.
+This verifier establishes package integrity, not execution, capacity, or realized
+performance. Publication currency is reported by the dated rows and repository status;
+it is not inferred by silently extending the record.

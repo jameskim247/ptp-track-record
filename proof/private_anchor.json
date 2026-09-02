@@ -1,1 +1,12 @@
-{"canonical_manifest_sha256":"dd70dc99eb6ad9d598c93de1b3f41c7b7021d0ce6c5b72b945c802514909e464","daily_csv_sha256":"96e950ab0fe2c5d4fc303ecb2cb9628a61de105ffed10125c357f55756ac41ee","monthly_csv_sha256":"51d770a87620489eba7ea269321f70893f6edc011e0d2d31758fb20432fdf4c3","record_end":"2026-09-02","record_start":"2026-02-01","schema":"ptp-public-private-anchor-v1","settled_days":213,"summary_csv_sha256":"673e875b9140d7d60b8208b69de2dd99221a2f809d163ab63048e65e4453d017","weekly_csv_sha256":"da2d892bdaf670b6d77a038b90576419e56d1dd2757b67644472549f3943b225"}
+{
+  "canonical_record_set_sha256": "ff1685443a45d98cc23d8f98cc2eeaae000542e719a985b3719010b1603f461b",
+  "record_end": "2026-08-31",
+  "record_start": "2026-01-01",
+  "records_sha256": "2e12c2287d18840b1d9583edb05d17cee9b53d8c25e9dfa6672e11b74e7781d9",
+  "schema": "ptp-neutral-three-series-anchor-v1",
+  "series_ids": [
+    "series-01",
+    "series-02",
+    "series-03"
+  ]
+}
