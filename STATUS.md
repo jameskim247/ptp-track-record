@@ -4,5 +4,5 @@
 brokerage statement or evidence of live realized trading performance. Every dollar
 figure is modeled P&L, and no capital denominator or executable capacity is established.
 
-- Range: 2026-02-01 through 2026-09-04
-- Settled: 215
+- Range: 2026-02-01 through 2026-09-05
+- Settled: 216
