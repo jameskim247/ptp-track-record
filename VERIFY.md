@@ -1,21 +1,17 @@
-# Verify
+# Verify the four-series package
 
-Run:
+Run from a fresh checkout with Python 3.11 or later:
 
 ```bash
 python3 scripts/verify.py
 ```
 
-The repository enforces canonical LF bytes for hashed text files through
-`.gitattributes`. Run verification from a fresh checkout; no manual Git line-ending
-configuration is required on Windows or Linux.
+The verifier checks the four neutral ledgers, their calendars and proof identifiers, aggregate derivations, file hashes, and programme anchor. Unavailable observations and unsettled obligations are explicit.
 
-The verifier checks file hashes, the private anchor, calendar continuity, statuses,
-daily proof identifiers, and aggregate derivations. The optional currency check is:
+To also require publication through yesterday after the Central-time SLA:
 
 ```bash
 python3 scripts/verify.py --require-current --timezone America/Chicago --not-before 08:30
 ```
 
-The currency check is intentionally time-dependent. It verifies publication freshness,
-not historical integrity.
+Freshness is time-dependent. These checks establish package integrity and publication currency, not executed fills or investment performance. Reconstructed and prospective paper observations remain hypothetical and are distinguished by evidence_basis. The numbered series belong to the programme in the current anchor; they do not continue the retired record.

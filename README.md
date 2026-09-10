@@ -1,21 +1,20 @@
-# PTP Trader Modeled Shadow Record
+# Four-Series Modeled Paper Record
 
-> **Evidence category:** This repository contains a retrospective, fixed-composition
-> quantity-scaling diagnostic. It is a modeled shadow record, not a brokerage statement
-> or evidence of live realized trading performance. It does not, by itself, establish
-> executable returns, capacity, slippage, or allocator-level performance.
+This repository contains four independently frozen, neutral modeled paper series.
+It is not a brokerage statement, realized trading performance, or evidence of executable
+capacity. Every dollar figure is modeled P&L.
 
-Public range: **2026-02-01 through 2026-09-09**. Every dollar figure in this
-repository is **modeled P&L**. No defensible capital denominator has been established,
-so no return or conventional return-based risk ratio is presented.
+Public range: **2026-01-01 through 2026-09-09**.
 
-The published values are a retrospective fixed-composition quantity-scaling
-diagnostic. They are not an allocator-resolved capacity or execution forecast.
+The primary result for each series uses its frozen limit prices. The same-book
+always-clear result is a counterfactual used only to measure limit-price contribution.
+Historical reconstruction and prospective shadow observations are labeled separately in
+every daily file.
 
-`data/daily.csv` is the public modeled-outcome ledger. `weekly.csv`, `monthly.csv`,
-and `summary.csv` are deterministic aggregates. Integrity hashes are in `proof/`.
-See [`2026-08-28_diligence-package.md`](2026-08-28_diligence-package.md) for the
-buyer note, methodology, July 22–23 incident analysis, change history, limitations,
-and a ready-to-send message.
+These numbered series belong to a new programme and do not continue the previous series performance. Research-only hypothetical observations; no promotion claim.
 
-Current settled rows: 219.
+Summary ratios use settled daily dollar P&L, not return on capital. Mean-to-standard-deviation uses sample SD and annualization by square root of 365. Sortino uses a zero-dollar daily target and downside squared deviations averaged over every settled day, also annualized by square root of 365. Win rate counts strictly positive days; profit factor divides positive P&L by absolute negative P&L. Undefined ratios are blank. Concentration fractions use positive total net P&L and may exceed one. Top-five exclusion removes the five largest daily P&Ls only for the explicitly labeled diagnostic; it never changes the published equity path.
+
+Half-year rows are descriptive cuts of the inspected calendar. Their drawdown restarts equity at zero at the cut; the daily file retains continuous equity. Summary statistics exclude unsettled dates and disclose settled coverage. Comparison statistics use only dates settled in every series. A latest settled date does not imply earlier gaps are settled; STATUS shows the contiguous cutoff.
+
+Explicit physical-MWh columns identify placed and awarded energy; the legacy `placed_mw` and `awarded_mw` columns are compatibility aliases in this programme. Modeled net P&L equals gross P&L less modeled fees. Fees are currently zero; impact and financing are omitted, unvalidated operating assumptions. Limit clearing is modeled, with no award at equality; these are not executed fills.

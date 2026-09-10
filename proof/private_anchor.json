@@ -1,1 +1,16 @@
-{"canonical_manifest_sha256":"51a19b8702ad16192e4f22306ff9cd97b1f3c59308def2a22e2fa20ec9fdad7d","daily_csv_sha256":"0fcceeacd4b32ccb8c978e3b5348c6149bc48cc64c9afc8593f610377eda6e6f","monthly_csv_sha256":"d4a070baf6239a59544c992faf59f1621d6ca7d8a83fb7076a5e9eb233396b8d","record_end":"2026-09-09","record_start":"2026-02-01","schema":"ptp-public-private-anchor-v1","settled_days":219,"summary_csv_sha256":"c0cc49b13b6e557a0cfb4023566572068a90779c8db44ff130bb8be836e0a468","weekly_csv_sha256":"349b59ef061c427ae918e96dbaa46aea227da6fc1df8bd4914dc8204c6ecf46e"}
+{
+  "canonical_record_set_sha256": "45554b59cd6e4b14217d04fae49a7df3e05fa763d49d64bdd81b89b368655efa",
+  "generation": "programme-02",
+  "publication_documentation_version": 1,
+  "record_end": "2026-09-09",
+  "record_start": "2026-01-01",
+  "records_sha256": "74889fcf50affd9c9ec89768976288faea59031604e7579c531f3f0a044a1c72",
+  "registry_sha256": "a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f",
+  "schema": "ptp-neutral-registry-anchor-v2",
+  "series_ids": [
+    "series-01",
+    "series-02",
+    "series-03",
+    "series-04"
+  ]
+}

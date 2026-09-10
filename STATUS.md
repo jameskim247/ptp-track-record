@@ -1,8 +1,15 @@
 # Status
 
-**Evidence category:** retrospective fixed-composition modeled shadow record; not a
-brokerage statement or evidence of live realized trading performance. Every dollar
-figure is modeled P&L, and no capital denominator or executable capacity is established.
+- series-01: 244 settled rows
+- series-02: 252 settled rows
+- series-03: 252 settled rows
+- series-04: 252 settled rows
 
-- Range: 2026-02-01 through 2026-09-09
-- Settled: 219
+Display through: 2026-09-09.
+
+- series-01: contiguous settled through 2026-01-07; latest settled date 2026-09-09; 8 unsettled or unavailable dates.
+- series-02: contiguous settled through 2026-09-09; latest settled date 2026-09-09; 0 unsettled or unavailable dates.
+- series-03: contiguous settled through 2026-09-09; latest settled date 2026-09-09; 0 unsettled or unavailable dates.
+- series-04: contiguous settled through 2026-09-09; latest settled date 2026-09-09; 0 unsettled or unavailable dates.
+
+All-series contiguous settled through: 2026-01-07.
