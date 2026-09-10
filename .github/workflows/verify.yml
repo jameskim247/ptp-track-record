@@ -10,6 +10,11 @@ on:
     - cron: '17 14-20 * * *'
 permissions:
   contents: read
+env:
+  # Hash verification requires the committed bytes, including .gitattributes.
+  GIT_CONFIG_COUNT: '1'
+  GIT_CONFIG_KEY_0: core.autocrlf
+  GIT_CONFIG_VALUE_0: 'false'
 jobs:
   verify:
     strategy:
