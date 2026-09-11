@@ -50,6 +50,7 @@ def main():
         errors.append("programme generation/registry mismatch")
     if tuple(anchor.get("series_ids", ())) != EXPECTED_IDS:
         errors.append("series identity mismatch")
+    pending = []
     if EXPECTED_BINDING:
         expected_files = {"README.md", "STATUS.md", "scripts/verify.py",
                           "data/comparison/daily.csv", "data/comparison/summary.csv"}
@@ -59,25 +60,38 @@ def main():
             errors.append("unsupported publication documentation version")
         expected_files.update("data/" + sid + "/" + name for sid in EXPECTED_IDS
                               for name in ("daily.csv", "weekly.csv", "monthly.csv", "summary.csv"))
+        # records.sha256 seals a snapshot. A commitment is pushed before its decision cutoff
+        # and sealed by the next snapshot, so it may be unlisted only while its target is
+        # later than the displayed record. Pending commitments are reported, never sealed.
+        listed_set = set(listed)
+        displayed_through = date.fromisoformat(anchor["record_end"])
+        present = set()
         for path in (ROOT / "commitments").rglob("*"):
             if not path.is_file():
                 continue
             relative = path.relative_to(ROOT).as_posix()
-            expected_files.add(relative)
+            present.add(relative)
             try:
                 value = json.loads(path.read_text())
                 keys = {"schema", "generation", "registry_sha256", "series_id", "target_date", "decision_sha256"}
                 wanted = "commitments/" + EXPECTED_BINDING["generation"] + "/" + value["target_date"] + "/" + value["series_id"] + ".json"
+                target = date.fromisoformat(value["target_date"])
                 if (set(value) != keys or value["schema"] != "neutral-paper-commitment-v1"
                         or any(value.get(k) != v for k, v in EXPECTED_BINDING.items())
                         or value["series_id"] not in EXPECTED_IDS or relative != wanted
+                        or target.isoformat() != value["target_date"]
                         or len(value["decision_sha256"]) != 64
                         or any(c not in "0123456789abcdef" for c in value["decision_sha256"])):
                     errors.append("invalid commitment: " + relative)
-                date.fromisoformat(value["target_date"])
+                elif relative not in listed_set:
+                    if target <= displayed_through:
+                        errors.append("unlisted commitment for displayed date: " + relative)
+                    else:
+                        pending.append(relative)
             except (ValueError, KeyError, TypeError):
                 errors.append("unreadable commitment: " + relative)
-        if set(listed) != expected_files or len(listed) != len(expected_files):
+        sealed = {p for p in listed_set if p.startswith("commitments/")}
+        if listed_set - sealed != expected_files or len(listed) != len(listed_set) or not sealed <= present:
             errors.append("replacement manifest inventory mismatch")
         actual_data = {p.relative_to(ROOT).as_posix() for p in (ROOT / "data").rglob("*") if p.is_file()}
         if actual_data != {p for p in expected_files if p.startswith("data/")}:
@@ -99,7 +113,8 @@ def main():
               if a["status"] == b["status"] == "settled"]
     if not EXPECTED_BINDING and paired and all(all(a[key] == b[key] for key in economic) for a, b in paired):
         errors.append("series-01 and series-02 are economically indistinguishable")
-    print(json.dumps({"ok": not errors, "errors": errors, "freshness": freshness}, indent=2))
+    print(json.dumps({"ok": not errors, "errors": errors, "pending_commitments": sorted(pending),
+                      "freshness": freshness}, indent=2))
     return 0 if not errors else 1
 
 if __name__ == "__main__":
