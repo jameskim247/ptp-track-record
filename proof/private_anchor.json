@@ -1,10 +1,10 @@
 {
-  "canonical_record_set_sha256": "ad16b3d2cb969e98ee79e87c1c9a8b78cc615e14c78a35cbc81a72d94b206334",
+  "canonical_record_set_sha256": "f3ea5370395eede65f36121e3dc113f0c846c5240284b83f893919b18648bad5",
   "generation": "programme-02",
   "publication_documentation_version": 1,
-  "record_end": "2026-09-12",
+  "record_end": "2026-09-13",
   "record_start": "2026-01-01",
-  "records_sha256": "5d1a8a9aece364e1ee11a167ba3bc9dc42811a863a5b6ae8192623e28ef429b8",
+  "records_sha256": "71e0c7e0abe22b8527b91e0cb7cb593b8362d7b48995f230facbe2e7a5cfad83",
   "registry_sha256": "a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
