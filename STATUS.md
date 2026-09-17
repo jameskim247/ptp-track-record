@@ -17,6 +17,7 @@ All-series contiguous settled through: 2026-01-07.
 ## Availability
 
 A date records INCONCLUSIVE-SHARED-AVAILABILITY when one shared cause left no series able to commit before the frozen cutoff, and FAIL-SERIES-AVAILABILITY when a series failed while the shared inputs and the other series stayed healthy. Only the second counts against a series. Both leave the date out of every settled statistic.
+
 - series-01, counting against that series: 2026-01-10, 2026-03-08, 2026-03-10, 2026-06-06, 2026-07-11, 2026-08-29, 2026-09-14, 2026-09-15.
 - series-02, counting against that series: 2026-09-14, 2026-09-15.
 - series-03, counting against that series: 2026-09-14, 2026-09-15.
