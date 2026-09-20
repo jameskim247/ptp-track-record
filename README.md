@@ -4,7 +4,7 @@ This repository contains two separately frozen, neutral modeled paper series.
 It is not a brokerage statement, realized trading performance, or evidence of executable
 capacity. Every dollar figure is modeled P&L.
 
-Public range: **2026-09-22 through 2026-09-21**.
+Public range: **no settled dates yet; the first target date is 2026-09-22**.
 
 The primary result for each series uses its frozen limit prices. The same-book
 always-clear result is a counterfactual used only to measure limit-price contribution.
