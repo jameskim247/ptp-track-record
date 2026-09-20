@@ -3,8 +3,9 @@ import argparse, csv, hashlib, json
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
-EXPECTED_BINDING = {'generation': 'programme-02', 'registry_sha256': 'a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f'}
-EXPECTED_IDS = ('series-01', 'series-02', 'series-03', 'series-04')
+EXPECTED_BINDING = {'generation': 'programme-03', 'registry_sha256': '01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23'}
+EXPECTED_IDS = ('series-01', 'series-02')
+RETIRED_BINDINGS = {'programme-02': {'registry_sha256': 'a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f', 'series_ids': ['series-01', 'series-02', 'series-03', 'series-04']}}
 ROOT = Path(__file__).resolve().parents[1]
 
 def digest(path):
@@ -60,6 +61,11 @@ def main():
             errors.append("unsupported publication documentation version")
         expected_files.update("data/" + sid + "/" + name for sid in EXPECTED_IDS
                               for name in ("daily.csv", "weekly.csv", "monthly.csv", "summary.csv"))
+        # A retired generation's published record stays in the package and stays sealed.
+        # Retirement closes a lane to new decisions; it never withdraws a published one,
+        # so deleting any of these changes records.sha256 and fails the anchor.
+        expected_files.update(p.relative_to(ROOT).as_posix()
+                              for p in (ROOT / "archive").rglob("*") if p.is_file())
         # records.sha256 seals a snapshot. A commitment is pushed before its decision cutoff
         # and sealed by the next snapshot, so it may be unlisted only while its target is
         # later than the displayed record. Pending commitments are reported, never sealed.
@@ -74,17 +80,25 @@ def main():
             try:
                 value = json.loads(path.read_text())
                 keys = {"schema", "generation", "registry_sha256", "series_id", "target_date", "decision_sha256"}
-                wanted = "commitments/" + EXPECTED_BINDING["generation"] + "/" + value["target_date"] + "/" + value["series_id"] + ".json"
+                # A commitment is judged against the programme that sealed it, never the
+                # one running today, so a retired generation's obligations stay verifiable.
+                generation = value.get("generation")
+                binding = ({**EXPECTED_BINDING, "series_ids": list(EXPECTED_IDS)}
+                           if generation == EXPECTED_BINDING["generation"]
+                           else RETIRED_BINDINGS.get(generation))
+                wanted = (None if binding is None else
+                          "commitments/" + generation + "/" + value["target_date"] + "/" + value["series_id"] + ".json")
                 target = date.fromisoformat(value["target_date"])
-                if (set(value) != keys or value["schema"] != "neutral-paper-commitment-v1"
-                        or any(value.get(k) != v for k, v in EXPECTED_BINDING.items())
-                        or value["series_id"] not in EXPECTED_IDS or relative != wanted
+                if (binding is None or set(value) != keys or value["schema"] != "neutral-paper-commitment-v1"
+                        or value["registry_sha256"] != binding["registry_sha256"]
+                        or value["series_id"] not in binding["series_ids"] or relative != wanted
                         or target.isoformat() != value["target_date"]
                         or len(value["decision_sha256"]) != 64
                         or any(c not in "0123456789abcdef" for c in value["decision_sha256"])):
                     errors.append("invalid commitment: " + relative)
                 elif relative not in listed_set:
-                    if target <= displayed_through:
+                    # only the active programme can still be holding an unsealed commitment
+                    if target <= displayed_through or generation != EXPECTED_BINDING["generation"]:
                         errors.append("unlisted commitment for displayed date: " + relative)
                     else:
                         pending.append(relative)
@@ -105,7 +119,8 @@ def main():
         calendar = [(start + timedelta(days=i)).isoformat() for i in range((end-start).days+1)]
         if [row["date"] for row in rows] != calendar:
             errors.append("daily calendar mismatch: " + series_id)
-        if not rows or rows[0]["date"] != anchor["record_start"]:
+        # a launch package displays nothing yet, so an empty ledger is the correct state
+        if calendar and (not rows or rows[0]["date"] != anchor["record_start"]):
             errors.append("daily range mismatch: " + series_id)
     economic = ("placed_mw", "awarded_mw", "fill_rate", "modeled_pnl",
                 "always_clear_modeled_pnl", "limit_increment_modeled_pnl")

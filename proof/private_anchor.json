@@ -1,16 +1,14 @@
 {
-  "canonical_record_set_sha256": "520d4f600670a845d42e3f96c62b8e9d983dcba7e9922886822c96f4808424e8",
-  "generation": "programme-02",
+  "canonical_record_set_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "generation": "programme-03",
   "publication_documentation_version": 1,
-  "record_end": "2026-09-19",
-  "record_start": "2026-01-01",
-  "records_sha256": "b83f26b8148f2b300b26c7d414c5f81b9c9321f770d135a9c3b78e2785248d4f",
-  "registry_sha256": "a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f",
+  "record_end": "2026-09-21",
+  "record_start": "2026-09-22",
+  "records_sha256": "b4ab4a412e8dc2de144584f8436769c7d7822623ea237654b85428d193bedcfa",
+  "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
     "series-01",
-    "series-02",
-    "series-03",
-    "series-04"
+    "series-02"
   ]
 }

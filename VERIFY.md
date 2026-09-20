@@ -1,4 +1,4 @@
-# Verify the four-series package
+# Verify the two-series package
 
 Run from a fresh checkout with Python 3.11 or later:
 
@@ -6,7 +6,7 @@ Run from a fresh checkout with Python 3.11 or later:
 python3 scripts/verify.py
 ```
 
-The verifier checks the four neutral ledgers, their calendars and proof identifiers, aggregate derivations, file hashes, and programme anchor. Unavailable observations and unsettled obligations are explicit.
+The verifier checks the two neutral ledgers, their calendars and proof identifiers, aggregate derivations, file hashes, and programme anchor. Unavailable observations and unsettled obligations are explicit.
 
 To also require publication through yesterday after the Central-time SLA:
 

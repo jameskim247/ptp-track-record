@@ -1,0 +1,9 @@
+basis,series_id,common_start_date,common_end_date,common_settled_days,annualized_modeled_pnl_mean_to_stdev,limit_delta_ratio,modeled_pnl_es10,total_modeled_pnl,worst_day_modeled_pnl,max_modeled_pnl_drawdown,limit_pnl_per_withheld_mw,rank_eligible,rank,rank_reason,proof_id
+full_displayed_history,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,aa65c969ea3f5fcc4ad8f07ee706c51a8eb72b8fd3a2bd9dd0aeb67ef6d7c7e7
+full_displayed_history,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,aff53daa0bcb88fb32a26e8c59917523890733f85a764ac73cc8e1f9fd054685
+prospective_shadow,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,031a14568c79155bc62aa36e0307f9c7ebe662b78881fd173ae90b3840bc6cb8
+prospective_shadow,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,942b1b021f70f5e546fd56c2ec0e693504289d1713319a67eadabd1357e1beaf
+2026_h1,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,7d8f8ca49fa6adcb598262124678b81c5c095ee5b2f4c27e527eecfd05db9310
+2026_h1,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,66e22d81ccc86a2c752ebb89e7a044a9aa0413c531b459a6716d62a712c967fb
+2026_h2_to_date,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,5c0e9400b3549d46fb2b5135cc0be715512679258e3ae2a2ce23d60594aa3b80
+2026_h2_to_date,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,5353c5480ba887899f0f8684de7dfe827d88eed45262aafbd11794f2c7863439
