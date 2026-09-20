@@ -4,7 +4,7 @@ This repository contains two separately frozen, neutral modeled paper series.
 It is not a brokerage statement, realized trading performance, or evidence of executable
 capacity. Every dollar figure is modeled P&L.
 
-Public range: **no settled dates yet; the first target date is 2026-09-22**.
+Public range: **2026-01-01 through 2026-09-19**.
 
 The primary result for each series uses its frozen limit prices. The same-book
 always-clear result is a counterfactual used only to measure limit-price contribution.
@@ -17,15 +17,17 @@ Evaluation policy: this launch is descriptive-only. No series is a preregistered
 
 These books share substantial signal lineage and are not independent sources of alpha. Their daily P&Ls are correlated; two series do not imply two diversified bets.
 
-Every row in this programme is prospective. No reconstructed history is published here, because the research that selected these two books inspected the whole of January to September 2026. Those historical numbers are development-only evidence and publishing them would present an outcome-selected result as a record.
+Read the two parts of this record differently. Rows before the prospective start are a **reconstruction**: they were computed after the fact from pinned inputs, and every daily file marks them `retrospective_reconstruction`. Rows from the prospective start are decisions committed to before their own gate. Only the second kind is a record of anything; the first is a backtest, and this one is worse than an ordinary backtest for the second series, because the research that chose it inspected these very dates.
 
-How these two were chosen, in full: the first series continues the identical frozen rule and execution adapter that the retired programme published as its series-02, so it is not a new strategy and its earlier record is retained under `archive/`. The second is a separately identified challenger selected on September 19, 2026 from a search over nineteen candidate rules scored on the same already-inspected 2026 windows. Its apparent advantage over the first series is not statistically established, and the search that produced it cannot establish one.
+Concretely: the second series was selected from nineteen candidate rules scored on 2026-H1 and the available 2026-H2. Its reconstructed 2026 rows are the window that selection ran on. They cannot evidence that it works, and a reader should treat that part of its curve as an illustration of the rule's shape rather than as performance. The first series was not selected that way: it continues an unchanged rule.
 
-Verification checks internal consistency and retained evidence. Public commitments contain hashes, not disclosed books. Private acknowledgements retain GitHub response times; they are not independently signed timestamp certificates. Public readers cannot independently reconstruct undisclosed trades or authenticate those private observations.
+How these two were chosen, in full: the first series continues the identical frozen rule and execution adapter that the retired programme published as its series-02, so it is not a new strategy. Its earlier record is retained privately. The second is a separately identified challenger selected on September 19, 2026 from a search over nineteen candidate rules scored on the same already-inspected 2026 windows. Its apparent advantage over the first series is not statistically established, and the search that produced it cannot establish one.
+
+Verification checks internal consistency across the files published here. Each day's decision is committed to, and hashed, before its gate, but those commitment receipts are retained privately rather than published, so a public reader sees the resulting ledgers and cannot confirm that timing from this repository alone. Private acknowledgements retain GitHub response times; they are not independently signed timestamp certificates. Public readers cannot independently reconstruct undisclosed trades or authenticate those private observations.
 
 Cutover history: the September 10 merge also made six previously unpushed local legacy update commits reachable publicly. Preserving both histories did not mean both histories had previously been public. They are retained without rewriting Git history.
 
-Retirement: the four-series programme that ran from September 10 to September 20, 2026 was closed in favour of this one. Nothing it published was withdrawn. Its daily records stay under `archive/`, its commitments stay under `commitments/` against the digest they were sealed with, and the verifier still checks both. Two of its series had research predecessors that failed their historical acceptance gates; retirement does not reverse, and publication never reversed, those rejections.
+Retirement: the four-series programme that ran from September 10 to September 20, 2026 was closed in favour of this one. Nothing it published was deleted or restated. Its daily records and its commitment receipts are retained in full and privately, against the digest they were sealed with, and are available on request; they are no longer published here so that a closed programme is not displayed beside a live one. Two of its series had research predecessors that failed their historical acceptance gates; retirement does not reverse, and publication never reversed, those rejections.
 
 Summary ratios use settled daily dollar P&L, not return on capital. Mean-to-standard-deviation uses sample SD and annualization by square root of 365. Sortino uses a zero-dollar daily target and downside squared deviations averaged over every settled day, also annualized by square root of 365. Win rate counts strictly positive days; profit factor divides positive P&L by absolute negative P&L. Undefined ratios are blank. Concentration fractions use positive total net P&L and may exceed one. Top-five exclusion removes the five largest daily P&Ls only for the explicitly labeled diagnostic; it never changes the published equity path.
 

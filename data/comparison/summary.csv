@@ -1,9 +1,9 @@
 basis,series_id,common_start_date,common_end_date,common_settled_days,annualized_modeled_pnl_mean_to_stdev,limit_delta_ratio,modeled_pnl_es10,total_modeled_pnl,worst_day_modeled_pnl,max_modeled_pnl_drawdown,limit_pnl_per_withheld_mw,rank_eligible,rank,rank_reason,proof_id
-full_displayed_history,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,aa65c969ea3f5fcc4ad8f07ee706c51a8eb72b8fd3a2bd9dd0aeb67ef6d7c7e7
-full_displayed_history,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,aff53daa0bcb88fb32a26e8c59917523890733f85a764ac73cc8e1f9fd054685
+full_displayed_history,series-01,2026-01-01,2026-09-19,248,4.9761436396,-0.2358557187,-14103.701,525641.7950000002,-43987.9124999998,-67771.2524999999,-2.4581073811,true,2,"ordered by frozen risk, limit, tail, fill, and P&L metrics",05369ee7c8e111be0204e731df3a477bc451b97cc103954944c20cb7b048ead6
+full_displayed_history,series-02,2026-01-01,2026-09-19,248,5.6916208263,-0.1850537192,-12582.0859,559394.7199999999,-31178.325,-67771.2524999999,-2.4771658279,true,1,"ordered by frozen risk, limit, tail, fill, and P&L metrics",922ba2c21a2fa7b5103d36446836ffcc461d04190b289007f5032ced0fda9500
 prospective_shadow,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,031a14568c79155bc62aa36e0307f9c7ebe662b78881fd173ae90b3840bc6cb8
 prospective_shadow,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,942b1b021f70f5e546fd56c2ec0e693504289d1713319a67eadabd1357e1beaf
-2026_h1,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,7d8f8ca49fa6adcb598262124678b81c5c095ee5b2f4c27e527eecfd05db9310
-2026_h1,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,66e22d81ccc86a2c752ebb89e7a044a9aa0413c531b459a6716d62a712c967fb
-2026_h2_to_date,series-01,,,0,,,,,,,,false,,insufficient common settled calendar,5c0e9400b3549d46fb2b5135cc0be715512679258e3ae2a2ce23d60594aa3b80
-2026_h2_to_date,series-02,,,0,,,,,,,,false,,insufficient common settled calendar,5353c5480ba887899f0f8684de7dfe827d88eed45262aafbd11794f2c7863439
+2026_h1,series-01,2026-01-01,2026-06-30,168,5.6306779814,-0.2565793589,-13816.7847058823,414740.93,-31178.325,-67771.2524999999,-2.5537406513,true,1,"ordered by frozen risk, limit, tail, fill, and P&L metrics",47c07e6c35ecb2951d8a7279e48c8483423debdd1356ddd69817089c5840ef5d
+2026_h1,series-02,2026-01-01,2026-06-30,168,5.6291883506,-0.2778186224,-13816.7847058823,414327.7775,-31178.325,-67771.2524999999,-2.7000375254,true,2,"ordered by frozen risk, limit, tail, fill, and P&L metrics",660e7b4f827c9e947fb8dbc70763db9ab06cd38b5b77cbaf81a1acebd1f0f93e
+2026_h2_to_date,series-01,2026-07-01,2026-09-19,80,3.4800718426,-0.1323738354,-14027.5871875,110900.8650000002,-43987.9124999998,-62369.7099999998,-1.5124770942,true,2,"ordered by frozen risk, limit, tail, fill, and P&L metrics",dcfc61b819ae690af440052b956dc890f48ae7271a11317a89b943c3e7bd8c96
+2026_h2_to_date,series-02,2026-07-01,2026-09-19,80,6.2381822102,0.0026855653,-8716.0703125,145066.9424999999,-18232.0575,-20895.2125,-0.2854953457,true,1,"ordered by frozen risk, limit, tail, fill, and P&L metrics",4d37fd89e3dccbbd186230873ec6a3fd390489ccbee4cd2c3b1797b0ef8cf25d
