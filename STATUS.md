@@ -1,12 +1,12 @@
 # Status
 
-- series-01: 250 settled rows
-- series-02: 250 settled rows
+- series-01: 251 settled rows
+- series-02: 251 settled rows
 
 Display through: 2026-09-22.
 
-- series-01: contiguous settled through 2026-01-07; latest settled date 2026-09-21; 15 unsettled or unavailable dates.
-- series-02: contiguous settled through 2026-01-07; latest settled date 2026-09-21; 15 unsettled or unavailable dates.
+- series-01: contiguous settled through 2026-01-07; latest settled date 2026-09-22; 14 unsettled or unavailable dates.
+- series-02: contiguous settled through 2026-01-07; latest settled date 2026-09-22; 14 unsettled or unavailable dates.
 
 All-series contiguous settled through: 2026-01-07.
 
