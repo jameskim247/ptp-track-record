@@ -40,3 +40,5 @@ Historical revision: universe timing correction for 2026-01-01 through 2026-09-1
 The superseded universe used coverage information from after some historical decision dates. The correction removes that hindsight in universe selection; it was chosen for input validity, not for improved P&L. Strategy selection still used inspected outcomes, so the corrected history is development-only.
 
 The corrected history through 2026-09-19 uses 1,007 nodes. Later bridge reconstructions and the initial prospective decisions from 2026-09-22 retain their original 1,069-node operational universe. Those bridge rows remain retrospective, and their original inputs and values are preserved. The joined curve therefore spans different opportunity sets.
+
+Historical revision: input recovery for 2026-01-01 through 2026-09-19. Superseded canonical record digest: `b4a31d27b20afec3089adb2fba87e925d8a23692f67dbae9d56b14292b0987aa`. The prior version is retained privately. Corrected rows remain retrospective development evidence; this revision does not replace prospective decisions.
