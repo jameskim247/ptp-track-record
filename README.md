@@ -1,46 +1,17 @@
-# Two-Series Modeled Paper Record
+# Two-Series Hypothetical Paper Record
 
-This repository contains two separately frozen, neutral modeled paper series.
-It is not a brokerage statement, realized trading performance, or evidence of executable
-capacity. Every dollar figure is modeled P&L.
+Range: **2026-01-01 through 2026-09-24**.
 
-Public range: **2026-01-01 through 2026-09-24**.
+- **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
+- **P&L** is USD per series-day, net of modeled fees (currently zero); market impact and financing are excluded. Unsettled values are blank, never zero.
+- **Two kinds of row** (`evidence_basis`): `retrospective_reconstruction` is a backtest computed after the fact; `prospective_shadow` (from 2026-09-22) was decided before each day's cutoff. Decision timestamps are kept privately.
+- **Selection bias.** series-02 was chosen on 2026-09-19 from 19 candidate rules scored on these 2026 dates, so its reconstructed rows illustrate the rule and cannot evidence that it works; its edge over series-01 is not statistically established. series-01 continues an unchanged earlier rule.
+- The series are correlated, not independent sources of alpha. Descriptive only; no promotion claim.
+- The four-series programme of 2026-09-10 to 09-20 was retired. Its records are retained privately and unchanged, and are available on request; two of its series had research predecessors that failed their historical acceptance gates.
+- **History revised** (universe timing correction, 2026-01-01 to 2026-09-19); superseded digest `244b3a63f8828a6a85e2cfd1b3255b7764752d31014861011ce9abd856ecc2f9`. Still development-only evidence. It removed hindsight: the superseded node universe used coverage from after some decision dates.
+- Rows through 2026-09-19 use 1,007 nodes; later rows keep the 1,069-node operational universe.
+- **History revised** (input recovery, 2026-01-01 to 2026-09-19); superseded digest `b4a31d27b20afec3089adb2fba87e925d8a23692f67dbae9d56b14292b0987aa`. Still development-only evidence.
+- **Ratios** use daily USD P&L, sample SD and square root of 365. `pnl_es10` is the mean of the worst tenth of settled days. Half-year rows restart drawdown at zero.
+- Columns were renamed on 2026-09-25 (`modeled_pnl` became `pnl`, and so on); values did not change.
 
-The primary result for each series uses its frozen limit prices. The same-book
-always-clear counterfactual is not published per series; it enters only the limit columns of the comparison summary.
-Historical reconstruction and prospective shadow observations are labeled separately in
-every daily file.
-
-These numbered series belong to a new programme and do not continue the previous series performance. Research-only hypothetical observations; no promotion claim.
-
-Evaluation policy: this launch is descriptive-only. No series is a preregistered promotion candidate; selecting a later winner cannot establish confirmation. Any future promotion study requires a separately frozen protocol and untouched cohort. Missing decisions and unsettled dates remain explicit; no backdated decisions, replacement dates or silently omitted losses are permitted.
-
-These books share substantial signal lineage and are not independent sources of alpha. Their daily P&Ls are correlated; two series do not imply two diversified bets.
-
-Read the two parts of this record differently. Rows before the prospective start are a **reconstruction**: they were computed after the fact from pinned inputs, and every daily file marks them `retrospective_reconstruction`. Rows from the prospective start are decisions committed to before their own gate. Only the second kind is a record of anything; the first is a backtest, and this one is worse than an ordinary backtest for the second series, because the research that chose it inspected these very dates.
-
-Concretely: the second series was selected from nineteen candidate rules scored on 2026-H1 and the available 2026-H2. Its reconstructed 2026 rows are the window that selection ran on. They cannot evidence that it works, and a reader should treat that part of its curve as an illustration of the rule's shape rather than as performance. The first series was not selected that way: it continues an unchanged rule.
-
-How these two were chosen, in full: the first series continues the identical frozen rule and execution adapter that the retired programme published as its series-02, so it is not a new strategy. Its earlier record is retained privately. The second is a separately identified challenger selected on September 19, 2026 from a search over nineteen candidate rules scored on the same already-inspected 2026 windows. Its apparent advantage over the first series is not statistically established, and the search that produced it cannot establish one.
-
-Verification checks internal consistency across the files published here. Reconstructed rows have no pre-gate commitment. Prospective decisions require a timely commitment. Public commitment files, when present, expose neutral hashes and programme identities; the underlying books remain private. Private acknowledgements retain GitHub response times; they are not independently signed timestamp certificates. Public readers cannot independently reconstruct undisclosed trades or authenticate those private observations.
-
-Cutover history: the September 10 merge also made six previously unpushed local legacy update commits reachable publicly. Preserving both histories did not mean both histories had previously been public. They are retained without rewriting Git history.
-
-Retirement: the four-series programme that ran from September 10 to September 20, 2026 was closed in favour of this one. Nothing it published was deleted or restated. Its daily records and its commitment receipts are retained in full and privately, against the digest they were sealed with, and are available on request; they are no longer published here so that a closed programme is not displayed beside a live one. Two of its series had research predecessors that failed their historical acceptance gates; retirement does not reverse, and publication never reversed, those rejections.
-
-Summary ratios use settled daily dollar P&L, not return on capital. Mean-to-standard-deviation uses sample SD and annualization by square root of 365. Sortino uses a zero-dollar daily target and downside squared deviations averaged over every settled day, also annualized by square root of 365. Win rate counts strictly positive days; profit factor divides positive P&L by absolute negative P&L. Undefined ratios are blank. Concentration fractions use positive total net P&L and may exceed one. Top-five exclusion removes the five largest daily P&Ls only for the explicitly labeled diagnostic; it never changes the published equity path.
-
-Half-year rows are descriptive cuts of the inspected calendar. Their drawdown restarts equity at zero at the cut; the daily file retains continuous equity. Summary statistics exclude unsettled dates and disclose settled coverage. Comparison statistics use only dates settled in every series. A latest settled date does not imply earlier gaps are settled; STATUS shows the contiguous cutoff.
-
-Column meanings. `pnl` is hypothetical net P&L in US dollars for one series-day: the frozen book paper-settled against published ERCOT market prices under frozen execution rules. It was never traded. `gross_pnl` is before modeled fees and the summary `costs` is their total, so `pnl` equals `gross_pnl` less fees. Fees are currently zero; impact and financing are omitted, unvalidated operating assumptions. Limit clearing is modeled, with no award at equality; these are not executed fills. `placed_mwh` and `awarded_mwh` are placed and modeled-awarded physical energy, and `fill_rate` is awarded divided by placed. `cumulative_pnl` and `pnl_drawdown` accumulate settled days only. `pnl_es10` is the mean of the worst tenth of settled days. Unsettled values are blank, never zero. Each `proof_id` commits to its published row; `proof/records.sha256` seals every file.
-
-Schema change on September 25, 2026: `modeled_pnl` became `pnl`, `gross_modeled_pnl` became `gross_pnl`, `cumulative_modeled_pnl` became `cumulative_pnl`, `modeled_pnl_drawdown` became `pnl_drawdown`, the physical-MWh columns became `placed_mwh` and `awarded_mwh`, `modeled_costs` became `costs`, and every other `modeled_pnl` summary name dropped `modeled_`. Removed from the per-series files: the always-clear and limit-increment diagnostics, the duplicate `placed_mw` and `awarded_mw` aliases, per-row costs and execution version, pending and unavailable day counts, settled calendar fraction and contiguous settled date. Values are unchanged; every proof identifier changed because proof identifiers cover column names. STATUS still reports unsettled dates and the contiguous settled cutoff.
-
-Historical revision: universe timing correction for 2026-01-01 through 2026-09-19. Superseded canonical record digest: `244b3a63f8828a6a85e2cfd1b3255b7764752d31014861011ce9abd856ecc2f9`. The prior version is retained privately. Corrected rows remain retrospective development evidence; this revision does not replace prospective decisions.
-
-The superseded universe used coverage information from after some historical decision dates. The correction removes that hindsight in universe selection; it was chosen for input validity, not for improved P&L. Strategy selection still used inspected outcomes, so the corrected history is development-only.
-
-The corrected history through 2026-09-19 uses 1,007 nodes. Later bridge reconstructions and the initial prospective decisions from 2026-09-22 retain their original 1,069-node operational universe. Those bridge rows remain retrospective, and their original inputs and values are preserved. The joined curve therefore spans different opportunity sets.
-
-Historical revision: input recovery for 2026-01-01 through 2026-09-19. Superseded canonical record digest: `b4a31d27b20afec3089adb2fba87e925d8a23692f67dbae9d56b14292b0987aa`. The prior version is retained privately. Corrected rows remain retrospective development evidence; this revision does not replace prospective decisions.
+Verify: `python3 scripts/verify.py` (see VERIFY.md). Coverage: STATUS.md.

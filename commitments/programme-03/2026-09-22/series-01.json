@@ -1,8 +1,0 @@
-{
-  "decision_sha256": "004cdad2e7e9fc7daf8844ca463951c486fcd23756c6ccc32d291a1e6fc8b56a",
-  "generation": "programme-03",
-  "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
-  "schema": "neutral-paper-commitment-v1",
-  "series_id": "series-01",
-  "target_date": "2026-09-22"
-}
