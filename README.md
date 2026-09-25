@@ -7,7 +7,7 @@ capacity. Every dollar figure is modeled P&L.
 Public range: **2026-01-01 through 2026-09-23**.
 
 The primary result for each series uses its frozen limit prices. The same-book
-always-clear result is a counterfactual used only to measure limit-price contribution.
+always-clear counterfactual is not published per series; it enters only the limit columns of the comparison summary.
 Historical reconstruction and prospective shadow observations are labeled separately in
 every daily file.
 
@@ -33,7 +33,9 @@ Summary ratios use settled daily dollar P&L, not return on capital. Mean-to-stan
 
 Half-year rows are descriptive cuts of the inspected calendar. Their drawdown restarts equity at zero at the cut; the daily file retains continuous equity. Summary statistics exclude unsettled dates and disclose settled coverage. Comparison statistics use only dates settled in every series. A latest settled date does not imply earlier gaps are settled; STATUS shows the contiguous cutoff.
 
-Explicit physical-MWh columns identify placed and awarded energy; the legacy `placed_mw` and `awarded_mw` columns are compatibility aliases in this programme. Modeled net P&L equals gross P&L less modeled fees. Fees are currently zero; impact and financing are omitted, unvalidated operating assumptions. Limit clearing is modeled, with no award at equality; these are not executed fills.
+Column meanings. `pnl` is hypothetical net P&L in US dollars for one series-day: the frozen book paper-settled against published ERCOT market prices under frozen execution rules. It was never traded. `gross_pnl` is before modeled fees and the summary `costs` is their total, so `pnl` equals `gross_pnl` less fees. Fees are currently zero; impact and financing are omitted, unvalidated operating assumptions. Limit clearing is modeled, with no award at equality; these are not executed fills. `placed_mwh` and `awarded_mwh` are placed and modeled-awarded physical energy, and `fill_rate` is awarded divided by placed. `cumulative_pnl` and `pnl_drawdown` accumulate settled days only. `pnl_es10` is the mean of the worst tenth of settled days. Unsettled values are blank, never zero. Each `proof_id` commits to its published row; `proof/records.sha256` seals every file.
+
+Schema change on September 25, 2026: `modeled_pnl` became `pnl`, `gross_modeled_pnl` became `gross_pnl`, `cumulative_modeled_pnl` became `cumulative_pnl`, `modeled_pnl_drawdown` became `pnl_drawdown`, the physical-MWh columns became `placed_mwh` and `awarded_mwh`, `modeled_costs` became `costs`, and every other `modeled_pnl` summary name dropped `modeled_`. Removed from the per-series files: the always-clear and limit-increment diagnostics, the duplicate `placed_mw` and `awarded_mw` aliases, per-row costs and execution version, pending and unavailable day counts, settled calendar fraction and contiguous settled date. Values are unchanged; every proof identifier changed because proof identifiers cover column names. STATUS still reports unsettled dates and the contiguous settled cutoff.
 
 Historical revision: universe timing correction for 2026-01-01 through 2026-09-19. Superseded canonical record digest: `244b3a63f8828a6a85e2cfd1b3255b7764752d31014861011ce9abd856ecc2f9`. The prior version is retained privately. Corrected rows remain retrospective development evidence; this revision does not replace prospective decisions.
 
