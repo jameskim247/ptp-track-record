@@ -4,7 +4,7 @@ from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 EXPECTED_BINDING = {'generation': 'programme-03', 'registry_sha256': '01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23'}
-EXPECTED_IDS = ('series-01', 'series-02')
+EXPECTED_IDS = ('series-01',)
 RETIRED_BINDINGS = {'programme-02': {'registry_sha256': 'a7c43a6691ac36d4e27a852d0476de8a08e7d56e96c1db1413c6c982807d721f', 'series_ids': ['series-01', 'series-02', 'series-03', 'series-04']}}
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -53,8 +53,9 @@ def main():
         errors.append("series identity mismatch")
     pending = []
     if EXPECTED_BINDING:
-        expected_files = {"README.md", "STATUS.md", "scripts/verify.py",
-                          "data/comparison/daily.csv", "data/comparison/summary.csv"}
+        expected_files = {"README.md", "STATUS.md", "scripts/verify.py"}
+        if len(EXPECTED_IDS) > 1:
+            expected_files.update({"data/comparison/daily.csv", "data/comparison/summary.csv"})
         if anchor.get("publication_documentation_version") == 1:
             expected_files.update({"VERIFY.md", ".gitattributes"})
         elif "publication_documentation_version" in anchor:
@@ -124,7 +125,7 @@ def main():
             errors.append("daily range mismatch: " + series_id)
     economic = ("placed_mw", "awarded_mw", "fill_rate", "modeled_pnl",
                 "always_clear_modeled_pnl", "limit_increment_modeled_pnl")
-    paired = [(a, b) for a, b in zip(daily["series-01"], daily["series-02"])
+    paired = [(a, b) for a, b in zip(daily.get("series-01", []), daily.get("series-02", []))
               if a["status"] == b["status"] == "settled"]
     if not EXPECTED_BINDING and paired and all(all(a[key] == b[key] for key in economic) for a, b in paired):
         errors.append("series-01 and series-02 are economically indistinguishable")

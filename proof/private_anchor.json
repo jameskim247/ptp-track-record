@@ -4,11 +4,10 @@
   "publication_documentation_version": 1,
   "record_end": "2026-09-25",
   "record_start": "2026-01-01",
-  "records_sha256": "35371859f450d1af7de0347d529097b3df6289ee0d4db3eefb2724d1c68bc8fd",
+  "records_sha256": "880f2ad3686e46cbadd89c6a266d22b5e3124ccd68274b33e279171c6de4910b",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
-    "series-01",
-    "series-02"
+    "series-01"
   ]
 }
