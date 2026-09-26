@@ -1,6 +1,6 @@
 # Two-Series Hypothetical Paper Record
 
-Range: **2026-01-01 through 2026-09-24**.
+Range: **2026-01-01 through 2026-09-25**.
 
 - **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
 - **P&L** is USD per series-day, net of modeled fees (currently zero); market impact and financing are excluded. Unsettled values are blank, never zero.
