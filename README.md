@@ -1,10 +1,10 @@
 # Hypothetical Paper Record
 
-Range: **2026-01-01 through 2026-09-27**.
+Range: **2026-01-01 through 2026-09-28**.
 
 - **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
 - **P&L** is USD per series-day, net of an estimated all-in cost of $0.40 per placed MWh (central estimate covering collateral financing, market access, data and systems; ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost; market impact is not modeled. Unsettled values are blank, never zero.
-- **Three kinds of row** (`evidence_basis`): `retrospective_reconstruction` is a backtest computed after the fact; `prospective_shadow` (from 2026-09-22) was decided before each day's cutoff; `recovered_after_cutoff` (2026-09-26) missed its cutoff and was rebuilt afterwards by the same frozen rule from inputs published before the cutoff (see STATUS.md). It counts in P&L and period statistics, not in the `prospective_shadow` summary. Decision timestamps are kept privately.
+- **Three kinds of row** (`evidence_basis`): `retrospective_reconstruction` is a backtest computed after the fact; `prospective_shadow` (from 2026-09-22) was decided before each day's cutoff; `recovered_after_cutoff` (2026-09-26, 2026-09-28) missed its cutoff and was rebuilt afterwards by the same frozen rule from inputs published before the cutoff (see STATUS.md). It counts in P&L and period statistics, not in the `prospective_shadow` summary. Decision timestamps are kept privately.
 - series-01 continues an unchanged earlier rule. Descriptive only; no promotion claim.
 - The four-series programme of 2026-09-10 to 09-20 was retired. Its records are retained privately and unchanged, and are available on request; two of its series had research predecessors that failed their historical acceptance gates.
 - **History revised** (universe timing correction, 2026-01-01 to 2026-09-19); superseded digest `244b3a63f8828a6a85e2cfd1b3255b7764752d31014861011ce9abd856ecc2f9`. Still development-only evidence. It removed hindsight: the superseded node universe used coverage from after some decision dates.
