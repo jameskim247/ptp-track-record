@@ -1,11 +1,11 @@
 {
-  "canonical_record_set_sha256": "e990430318a532ad958586ca4c2978d7b5ab7266af6a89af2c35a19a49d4a19c",
+  "canonical_record_set_sha256": "a6c32b19ffca3f60f9198600e4d42817eec0e0b8690c7a1db651ebed3207808b",
   "generation": "programme-03",
   "public_cost_per_placed_mwh": 0.4,
   "publication_documentation_version": 1,
   "record_end": "2026-10-02",
   "record_start": "2026-01-01",
-  "records_sha256": "8fbe0f0e799161fd2792957c06338ec337244368f42ae09105da5b17a40c0137",
+  "records_sha256": "4a31b742c19d38eeb0048351610054466bef5889fd3690a4e2479176ab77f996",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
