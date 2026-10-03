@@ -1,0 +1,17 @@
+{
+  "schema": "series-2-anchor-v1",
+  "series_id": "series-2",
+  "record_start": "2023-10-01",
+  "record_end": "2026-09-29",
+  "evidence_basis": "retrospective_reconstruction",
+  "public_cost_per_placed_mwh": 0.4,
+  "records_sha256": "c5bdf2a7db6d1b3ca1691bfc8ca7bb9a4d9a721627767394c27b52ba1363946b",
+  "private_commitments_sha256": {
+    "frozen_specification": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+    "order_books_and_settlement_lines": "02db90565338449203e9f7aa965a0d636438f4b9a6956160e6be26095e1a9c82",
+    "decision_prices_first_published": "ad4c6e416c2f7d10b13227d03cbb8d5f697ddd33d72e75f094ba6fbdb5e62595",
+    "settlement_prices_final": "2e535113df62419f0f84b41b32111026d7ef5c2c9dee6af617040d34ec9beb93",
+    "record_builder": "c0c8d96d247cb3fc5b76845b192a02991351db39213b2c1eaf5c01c57ba756b2"
+  },
+  "specification_frozen": "2026-10-02"
+}
