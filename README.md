@@ -1,6 +1,6 @@
 # Hypothetical Paper Record
 
-Range: **2026-01-01 through 2026-10-02**.
+Range: **2026-01-01 through 2026-10-03**.
 
 - **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
 - **P&L** is USD per series-day, net of an estimated all-in cost of $0.40 per placed MWh (central estimate covering collateral financing, market access, data and systems; ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost; market impact is not modeled. Unsettled values are blank, never zero.
