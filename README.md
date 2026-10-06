@@ -2,6 +2,13 @@
 
 Range: **2023-10-01 through 2026-09-29**.
 
+**Daily publication:** a scheduled GitHub job runs at 14:17 and 22:17 UTC (with manual retry available).
+Its current coverage and calculation readiness are published in [proof/publication.json](proof/publication.json).
+The original package was a one-time export; the frozen E24 result producer has not yet been connected.
+The publication job can consume verified result packages, but cannot manufacture a daily P&L without an order book and prices.
+Until that producer is restored, the job publishes a dated blocked-coverage receipt and fails its freshness check.
+It does not run the older GCP `series-02` lane or substitute that lane's results for E24.
+
 - **Hypothetical backtest, development evidence only.** Every row is `retrospective_reconstruction`: a backtest computed after the fact by a rule whose components, weights and size were chosen while this same history was being inspected. Never traded and not paper-traded forward. Not realized performance, returns on capital, or evidence of capacity. No out-of-sample claim.
 - **The rule.** An ensemble of 24 ERCOT PTP-obligation books that rank node pairs on persistent real-time minus day-ahead carry, with a volatility target computed from the book's own P&L through two days before each decision. Limits: at most 800 placed MWh a day, a 1-MW minimum on a 0.1-MW grid, and bids floored to $0.01. An order is awarded when the day-ahead spread is strictly below its bid. The full specification was frozen on 2026-10-02 and is published here only as a SHA-256 commitment (`proof/anchor.json`).
 - **P&L** is USD per day, net of an estimated all-in cost of $0.40 per placed MWh, the same convention as series-01 (ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost. Market impact is not modeled. `placed_mw` and `awarded_mw` are physical MWh; the column names follow series-01.

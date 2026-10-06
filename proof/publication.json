@@ -1,0 +1,20 @@
+{
+  "schema": "series-2-publication-status-v1",
+  "series_id": "series-2",
+  "checked_through_operating_date": "2026-10-04",
+  "latest_result_date": "2026-09-29",
+  "missing_result_days": 5,
+  "missing_result_start": "2026-09-30",
+  "missing_result_end": "2026-10-04",
+  "partially_settled_days": 86,
+  "source_state": "source_not_configured",
+  "source_error_kind": null,
+  "result_generation_ready": false,
+  "status": "blocked_result_generation",
+  "publication_schedule_utc": [
+    "14:17",
+    "22:17"
+  ],
+  "paper_trading_active": false,
+  "reason": "The E24 result producer is not connected or has not supplied current verified results. The original research price files and replay state are required. No missing date is valued at zero or represented as a prospective decision."
+}

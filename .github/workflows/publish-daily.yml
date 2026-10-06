@@ -1,0 +1,49 @@
+name: daily publication
+on:
+  schedule:
+    - cron: '17 14,22 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: series-2-publication
+  cancel-in-progress: false
+env:
+  GIT_CONFIG_COUNT: '1'
+  GIT_CONFIG_KEY_0: core.autocrlf
+  GIT_CONFIG_VALUE_0: 'false'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test publication consumer
+        run: python3 -m unittest discover -s tests -v
+      - name: Verify current record
+        run: python3 scripts/verify.py
+      - name: Consume results and publish coverage receipt
+        env:
+          SERIES2_SOURCE_URL: ${{ vars.SERIES2_SOURCE_URL }}
+        run: python3 scripts/publish_daily.py
+      - name: Commit verified results and coverage
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/series-2/daily.csv data/series-2/weekly.csv data/series-2/monthly.csv data/series-2/summary.csv proof/anchor.json proof/records.sha256 proof/publication.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish Series-2 daily coverage and verified results'
+            git push origin HEAD:main
+          fi
+      - name: Independently verify published origin
+        run: |
+          git fetch origin main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+          python3 scripts/verify.py
+      - name: Require current generated results
+        run: python3 scripts/publish_daily.py --check-freshness

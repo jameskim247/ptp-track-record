@@ -1,5 +1,25 @@
 # Status
 
+## Daily publication readiness
+
+The [daily publication workflow](.github/workflows/publish-daily.yml) runs twice daily at 14:17 and 22:17 UTC.
+See [the machine-readable coverage receipt](proof/publication.json) for the latest checked date and missing-result range.
+
+The original E24 producer was left in a temporary research workspace. Its first-published decision cube
+`/home/claude/ptp/data/cube_pit2.npz`, final-settlement cube `cube_full4.npz`, and replay/sizing state
+have not been restored to the production VM. E24 is not running prospective paper trading there.
+The production programme's `series-02` is a different strategy.
+
+Once the producer is restored, configure the repository variable `SERIES2_SOURCE_URL` to its HTTPS public-result ZIP.
+The ZIP must contain exactly `data/series-2/{daily,weekly,monthly,summary}.csv` and `proof/anchor.json`.
+The consumer checks the unchanged frozen-spec digest, costs, evidence class, contiguous dates, row proofs,
+and independent arithmetic before installation. New rows require updated private source commitments;
+historical restatements require `supersedes_records_sha256` naming the current public manifest.
+The source package must contain no strategy code, orders, credentials or private price files.
+No source URL is currently configured. Missing calculations remain explicitly missing, never zero-valued results.
+
+## Existing economic record
+
 - series-2: 1,095 rows, 2023-10-01 through 2026-09-29. 1,009 `settled`, 86 `partially_settled`, none blank.
 - Every row is `retrospective_reconstruction`. There are no forward rows: no book in this record was committed before its decision cutoff.
 
