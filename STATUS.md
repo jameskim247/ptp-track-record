@@ -6,7 +6,7 @@ The [daily publication workflow](.github/workflows/publish-daily.yml) runs twice
 See [the machine-readable coverage receipt](proof/publication.json) for the latest checked date and missing-result range.
 
 The original price seeds were recovered on 6 October 2026, checked against the public fingerprints,
-and backed up privately in GCS. The restored source matches the frozen specification. Five days of books,
+and backed up privately in GCS. The restored source matches the frozen specification. On the recovered laptop runtime, five days of books,
 per-order settlement lines and volatility sizing reconcile against the original record.
 The E24 producer supports daily retrospective continuation on GCP; the production programme's `series-02`
 remains a different strategy. No E24 prospective paper-trading claim is made.
