@@ -76,8 +76,11 @@ class PublicationTests(unittest.TestCase):
 
     def test_undeclared_restatement_rejected(self):
         data = (self.root / publisher.DATA[0]).read_bytes().replace(b'retrospective_reconstruction', b'prospective_shadow', 1)
+        incoming = dict(self.anchor)
+        incoming.pop('supersedes_records_sha256', None)
         with self.assertRaisesRegex(ValueError, 'restatement'):
-            publisher.import_package(self.root, self.package({publisher.DATA[0]: data}), self.end)
+            publisher.import_package(self.root, self.package({
+                publisher.DATA[0]: data, 'proof/anchor.json': json.dumps(incoming).encode()}), self.end)
 
     def test_invalid_math_retains_verified_record(self):
         incoming = dict(self.anchor, supersedes_records_sha256=self.anchor['records_sha256'])
