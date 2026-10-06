@@ -5,16 +5,16 @@
   "record_end": "2026-10-05",
   "evidence_basis": "retrospective_reconstruction",
   "public_cost_per_placed_mwh": 0.4,
-  "records_sha256": "b1345095715e8f43e8f5858db52ce027dddd1111b115d0c2e8010e8accb1fe08",
+  "records_sha256": "b36f04b1330c90ac8aef6a778c3a0c3b21ec692a2dcd783352ffebd23284005a",
   "private_commitments_sha256": {
     "frozen_specification": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
-    "order_books_and_settlement_lines": "4417268e3501489e686d9529c4c26deb1d1f884fa90f7c046b2601b4ffc4614e",
+    "order_books_and_settlement_lines": "55e1d6d1e81b9e3f67f5b0abccca98692c4681d82164cd6428f4c98347c7bc24",
     "decision_prices_first_published": "9d8c64c498132782c4aa60bb1ae3971f8763798eb1a5789a36b5d404d557425e",
     "settlement_prices_final": "93fc736a546134c2b4d180ed1c64e18a69f9f057439337295120b6ee3293e568",
     "record_builder": "b598257cc08035caa142f1dc21640ac567a18fe89c7d352679ab1779334a7492"
   },
   "specification_frozen": "2026-10-02",
-  "supersedes_records_sha256": "f00072e9dbe14091527b2823c1d7fdbdd84e63119343aa4977e78fb3914d3544",
+  "supersedes_records_sha256": "b1345095715e8f43e8f5858db52ce027dddd1111b115d0c2e8010e8accb1fe08",
   "continuation": {
     "start": "2026-09-30",
     "evidence_basis": "retrospective_reconstruction",
@@ -35,5 +35,18 @@
       "tied_sort_probe_sha256": "51f7f188e3d4db95804233d2b7df5f3cc52a9b2fc68709130a686dc367aad649",
       "legacy_cpu_exact_order_portability": false
     }
+  },
+  "historical_settlement_restatement": {
+    "source": "Modo public secondary copy of ERCOT interval settlement quotes; official archive catalogs checked for the remaining missing intervals",
+    "normalization": "Exact cent-quote or float32-encoding equality required; no estimated prices",
+    "no_imputation": true,
+    "original_decision_books_and_awards_unchanged": true,
+    "previous_public_origin_commit": "3999f7a5fdea952fc9560c9b956446c50dc4cc25",
+    "evidence_sha256": "55e1d6d1e81b9e3f67f5b0abccca98692c4681d82164cd6428f4c98347c7bc24",
+    "restatement_builder_sha256": "f48d2e57683ccfb9936ba767c6534f120ffa33bc90fa4b61b86023b35ed892df",
+    "recovered_price_cells": 155,
+    "revalued_dates": 82,
+    "remaining_partially_settled_days": 4,
+    "remaining_pending_mwh": 150.2
   }
 }

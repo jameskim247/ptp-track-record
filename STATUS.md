@@ -13,7 +13,8 @@ remains a different strategy. No E24 prospective paper-trading claim is made.
 
 The original engine contains an unstable sort for equal-scored pairs. Its tie order can differ
 between the original AVX-512 environment and the GCP AVX2 environment, even with identical
-source and NumPy versions. Original published books and rows are retained exactly, not reselected.
+source and NumPy versions. Original published decision books are retained exactly, not reselected.
+Missing historical settlement prices can be recovered through a disclosed, controlled restatement.
 Continuation pins the existing GCP NumPy 2.5 / X86_V3 / single-threaded OpenBLAS Haswell kernels,
 records them in the anchor, and verifies restored continuation books against archived orders.
 This is a numerical-runtime limitation, not a change to weights or a newly selected historical strategy.
@@ -29,7 +30,7 @@ The source package must contain no strategy code, orders, credentials or private
 The producer retains verified observations and retries incomplete continuation settlements hourly.
 A narrower or temporarily unavailable current price view cannot erase previously verified observations.
 The coverage receipt reports readiness from actual verified artifacts,
-not from this setup description. Original-history rows remain unchanged; continuation restatements name the superseded
+not from this setup description. Verified historical settlement corrections and continuation restatements name the superseded
 public manifest. A partially settled row reports only priced P&L and all placed costs, with unknown awarded volume shown separately.
 
 ## Original economic record (snapshot before daily continuation)
@@ -43,12 +44,29 @@ A `partially_settled` row has at least one awarded order whose settlement needs 
 
 The row stays `partially_settled` until the missing prices are recovered from ERCOT's archive and the row is restated. A restatement changes the affected rows, their proofs and every derived table, and is recorded here with the superseded manifest digest.
 
-The 86 original-history partial days below are preserved unchanged by the continuation producer;
-their historical archive repair is not included in this deployment. New continuation partial days are retried automatically.
+On 6 October 2026, a controlled settlement-only restatement resolved 82 of the original 86 partial days,
+recovering 155 missing node-hour quotes and 271.6 awarded MWh. Historical P&L increased by $1,543.4450.
+The quotes came from a disclosed Modo public secondary copy of ERCOT interval prices. Only exact cent quotes
+or their exact float32 encodings were accepted; retained official overlapping intervals agreed.
+All original orders, awards, decision proofs, prices already known, strategy parameters and sizing remain unchanged.
+The public anchor records the exact superseded manifest, recovery-builder and private evidence digests.
+Raw recovered observations and the immutable original books are backed up privately in GCS.
+Normal daily continuation retains verified historical public rows; its protected cache must be reconciled when accepting this restatement.
+New continuation partial days are retried automatically.
 The current date range, missing-day count and total partial-day count are always in `proof/publication.json`.
 
-- 2025: 82 days. The volume is mostly DC ties (DC_L, DC_N, DC_R, DC_E).
-- 2026: 4 days (01-08, 06-04, 07-09, 08-27). Each is a whole hour missing for almost every resource node.
+Remaining partial days: **4**, with **150.2 awarded MWh** unvalued:
+
+- 2025-12-04: 14.0 MWh, HE24, missing interval ending 00:00 on 5 December.
+- 2026-01-08: 33.0 MWh, HE16, missing interval ending 15:45.
+- 2026-06-04: 65.2 MWh, HE16, missing interval ending 15:45.
+- 2026-07-09: 38.0 MWh, HE16, missing interval ending 15:45.
+
+The checked secondary feed and narrowly queried official NP6-905-CD archive listings both lack those intervals.
+No missing price was estimated, zero-filled, borrowed from a nearby interval or replaced with an energy-weighted DC-tie price.
+Recovering actual quotes can resolve these dates later; `partially_settled` is not a permanent designation.
+5 October 2026 was separately settled using all 96 official ERCOT public MIS intervals: net P&L -$9,490.2700,
+with no pending awarded volume.
 
 ## Not yet in ERCOT's annual reports
 

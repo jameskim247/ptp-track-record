@@ -6,7 +6,7 @@
   "missing_result_days": 0,
   "missing_result_start": null,
   "missing_result_end": null,
-  "partially_settled_days": 86,
+  "partially_settled_days": 4,
   "source_state": "verified_package_consumed",
   "source_error_kind": null,
   "result_generation_ready": true,

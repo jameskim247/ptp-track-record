@@ -15,17 +15,18 @@ It does not run the older GCP `series-02` lane or substitute that lane's results
 - **P&L** is USD per day, net of an estimated all-in cost of $0.40 per placed MWh, the same convention as series-01 (ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost. Market impact is not modeled. `placed_mw` and `awarded_mw` are physical MWh; the column names follow series-01.
 - **Prices.**
   - Original history through 2026-09-29: decisions use the restored first-published price seed, and settlement uses the restored final-price seed (zones/hubs from NP4-180-ER and NP6-785-ER; resource nodes as first published).
-  - From 2026-09-30: the same frozen rule and reconciled sizing state continue using qualified ERCOT prices observed on GCP. The original price seeds and historical rows are unchanged. Reconstructed books are frozen when generated; later settlement data can resolve pending orders or restate values.
+  - From 2026-09-30: the same frozen rule and reconciled sizing state continue using qualified ERCOT prices observed on GCP. The original price seeds and decision books are unchanged. Reconstructed books are frozen when generated; later settlement data can resolve pending orders or restate values.
+  - On 2026-10-06, 155 missing historical node-hour prices were recovered from a disclosed Modo public secondary copy of ERCOT's interval quotes. Exact cent quotes were decoded from float32 storage and checked against retained official intervals, with no conflicting overlap. Existing prices, orders, awards, weights and sizing were not changed. Settlement-only restatement resolved 82 partial days, adding $1,543.4450 to historical P&L; the superseded manifest and private evidence digest are recorded in `proof/anchor.json`. This is retrospective evidence, not a prospective validation.
   - These later reconstructions are also development/backtest evidence. Their inputs were not captured before the original operating-day cutoff, and settlement prices are the latest observed quotes, not a guarantee that ERCOT will never correct them.
   - Final resource-node prices were not available for 97 hours with location-specific ERCOT corrections, including January 24–26, 2026.
   - Zone and hub prices for 2026-09-27 to 09-29 are not yet in ERCOT's annual reports.
-- **`partially_settled` rows: 86 days, 421.8 awarded MWh in total (82 days in 2025, 4 in 2026).** On these days some awarded orders have no real-time price in our data for a resource node or a DC tie.
+- **`partially_settled` rows after the 2026-10-06 recovery: 4 days, 150.2 awarded MWh in total.** Dates: 2025-12-04, 2026-01-08, 2026-06-04 and 2026-07-09. Some awarded orders still lack a quarter-hour real-time price in both the checked feed and official archive listing. A three-interval average is not substituted for a complete hour.
   - P&L on these rows covers the priced orders and deducts the cost of every placed MWh.
   - `pending_awarded_mw` shows the awarded volume left unvalued; its outcome is unknown and not estimated.
   - These rows count in the cumulative and period statistics. All other rows are `settled`.
 - **Proofs.** `decision_proof_id` and `settlement_proof_id` are SHA-256 digests of each day's order book and per-order settlement. Both are kept privately and are available on request. `proof_id` is the digest of the row itself.
 - **Ratios** use daily USD P&L, sample SD and the square root of 365, as in series-01. `pnl_es10` is the mean of the worst tenth of days. Every summary row restarts drawdown at zero.
-- **Known weaknesses:**
+- **Known weaknesses (research measurements before the 2026-10-06 settlement recovery, not revalidated acceptance results):**
   - Against acceptance criteria fixed before this replay, the 2026 window fails one: second-half to first-half P&L with the best three days removed is 1.436, against a limit of 1.43.
   - October–December 2023 includes a −$69K day and a $72K drawdown.
   - Daily correlation with series-01's published 2026 record is 0.38. Against a replica of the series-01 rule it was 0.58 in both 2024 and 2025.
