@@ -1,11 +1,19 @@
 {
   "canonical_record_set_sha256": "1dda0cca42a4101bda58f6749ffb46eaa5d8b3cbdc69b5d3d8acb34108767983",
+  "external_series": {
+    "series-02": {
+      "evidence_basis": "retrospective_reconstruction",
+      "frozen_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+      "source_repository": "jameskim247/series-2",
+      "source_series_id": "series-2"
+    }
+  },
   "generation": "programme-03",
   "public_cost_per_placed_mwh": 0.4,
   "publication_documentation_version": 1,
   "record_end": "2026-10-05",
   "record_start": "2026-01-01",
-  "records_sha256": "98ab7ddccaf2cf33c0022b8f6027d2ffe77f081091c3bf34073091f4cb2ed1dd",
+  "records_sha256": "5fbaac073da5fcb21590c1af2fd89ad675e8d05e044b5888306014aa1b43e397",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [

@@ -14,3 +14,9 @@ Range: **2026-01-01 through 2026-10-05**.
 - Columns were renamed on 2026-09-25 (`modeled_pnl` became `pnl`, and so on). On 2026-10-01 the per-row `evidence_basis` column and the `prospective_shadow` summary row were removed; the kinds of day are listed above. Since 2026-09-26 published P&L deducts the all-in cost above; earlier versions of this repository showed P&L before it.
 
 Verify: `python3 scripts/verify.py` (see VERIFY.md). Coverage: STATUS.md.
+
+## Series-02 / E24
+
+[Daily](data/series-02/daily.csv) · [Weekly](data/series-02/weekly.csv) · [Monthly](data/series-02/monthly.csv) · [Summary](data/series-02/summary.csv)
+
+Frozen E24 results: 2023-10-01–2026-10-05. Retrospective reconstruction, not an on-time live commitment or untouched validation. Separate from Series-01 and from the programme's withheld lane; no combined performance claim. Incomplete settlement prices remain explicitly pending, never zero-filled. The existing GCP publisher refreshes this mirror on its regular runs. [Source and original proof](https://github.com/jameskim247/series-2), [source anchor](data/series-02/source_anchor.json), [mirror status](data/series-02/publication.json).

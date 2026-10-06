@@ -51,9 +51,20 @@ def main():
         errors.append("programme generation/registry mismatch")
     if tuple(anchor.get("series_ids", ())) != EXPECTED_IDS:
         errors.append("series identity mismatch")
+    external_files = ()
+    if "external_series" in anchor:
+        try:
+            import sys
+            sys.dont_write_bytecode = True
+            import verify_e24
+            external_files = verify_e24.expected_files(anchor)
+            errors.extend(verify_e24.verify(ROOT, anchor))
+        except (ImportError, ValueError) as exc:
+            errors.append("external series verification failed: " + str(exc))
     pending = []
     if EXPECTED_BINDING:
         expected_files = {"README.md", "STATUS.md", "scripts/verify.py"}
+        expected_files.update(external_files)
         if len(EXPECTED_IDS) > 1:
             expected_files.update({"data/comparison/daily.csv", "data/comparison/summary.csv"})
         if anchor.get("publication_documentation_version") == 1:
