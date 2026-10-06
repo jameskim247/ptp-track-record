@@ -1,2 +1,3 @@
+# Keep local Python caches out of publication packages.
 __pycache__/
 *.pyc

@@ -5,7 +5,7 @@
   "record_end": "2026-09-29",
   "evidence_basis": "retrospective_reconstruction",
   "public_cost_per_placed_mwh": 0.4,
-  "records_sha256": "76b0999938eaf676886ccf78da387ab2ad7d4c9666232fb8eb2d88177be0d812",
+  "records_sha256": "b7a8dccdb643bc27f4266daab1db83b67fd38d8514340383929fa341d4458d46",
   "private_commitments_sha256": {
     "frozen_specification": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
     "order_books_and_settlement_lines": "02db90565338449203e9f7aa965a0d636438f4b9a6956160e6be26095e1a9c82",
