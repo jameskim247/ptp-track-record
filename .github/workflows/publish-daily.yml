@@ -38,6 +38,14 @@ jobs:
       - name: Prepare Google Cloud CLI
         if: vars.SERIES2_GCS_URI != ''
         uses: google-github-actions/setup-gcloud@v3
+      - name: Verify private evidence is inaccessible
+        if: vars.SERIES2_GCS_URI != ''
+        run: |
+          if gcloud storage objects describe 'gs://currentiq-ptp-paper-evidence/series-2/private/seeds/ad4c6e416c2f7d10b13227d03cbb8d5f697ddd33d72e75f094ba6fbdb5e62595.npz' > "$RUNNER_TEMP/private-probe.out" 2> "$RUNNER_TEMP/private-probe.err"; then
+            echo '::error::Public reader unexpectedly has private evidence access.'
+            exit 1
+          fi
+          python3 -c 'import os,pathlib; error=pathlib.Path(os.environ["RUNNER_TEMP"],"private-probe.err").read_text(); assert "403" in error or "storage.objects.get" in error, "Private probe did not fail with the expected permission denial"'
       - name: Download public result artifact
         if: vars.SERIES2_GCS_URI != ''
         env:
