@@ -5,18 +5,23 @@
 The [daily publication workflow](.github/workflows/publish-daily.yml) runs twice daily at 14:17 and 22:17 UTC.
 See [the machine-readable coverage receipt](proof/publication.json) for the latest checked date and missing-result range.
 
-The original E24 producer was left in a temporary research workspace. Its first-published decision cube
-`/home/claude/ptp/data/cube_pit2.npz`, final-settlement cube `cube_full4.npz`, and replay/sizing state
-have not been restored to the production VM. E24 is not running prospective paper trading there.
-The production programme's `series-02` is a different strategy.
+The original price seeds were recovered on 6 October 2026, checked against the public fingerprints,
+and backed up privately in GCS. The restored source matches the frozen specification. Five days of books,
+per-order settlement lines and volatility sizing reconcile against the original record.
+The E24 producer supports daily retrospective continuation on GCP; the production programme's `series-02`
+remains a different strategy. No E24 prospective paper-trading claim is made.
 
-Once the producer is restored, configure the repository variable `SERIES2_SOURCE_URL` to its HTTPS public-result ZIP.
+The normal source is `SERIES2_GCS_URI`, read through a GitHub OIDC identity restricted to this repository's
+main-branch publication workflow and the GCS public-artifact prefix. It cannot read private seeds or orders.
+An HTTPS public-result ZIP configured as `SERIES2_SOURCE_URL` remains an optional alternate.
 The ZIP must contain exactly `data/series-2/{daily,weekly,monthly,summary}.csv` and `proof/anchor.json`.
 The consumer checks the unchanged frozen-spec digest, costs, evidence class, contiguous dates, row proofs,
 and independent arithmetic before installation. New rows require updated private source commitments;
 historical restatements require `supersedes_records_sha256` naming the current public manifest.
 The source package must contain no strategy code, orders, credentials or private price files.
-No source URL is currently configured. Missing calculations remain explicitly missing, never zero-valued results.
+The producer retains and retries incomplete dates. The coverage receipt reports readiness from actual verified artifacts,
+not from this setup description. Original-history rows remain unchanged; continuation restatements name the superseded
+public manifest. A partially settled row reports only priced P&L and all placed costs, with unknown awarded volume shown separately.
 
 ## Existing economic record
 

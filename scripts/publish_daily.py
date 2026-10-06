@@ -179,8 +179,8 @@ def refresh(root, through, source_url='', package=None):
         'publication_schedule_utc': ['14:17', '22:17'],
         'paper_trading_active': False,
         'reason': None if count == 0 and source_state == 'verified_package_consumed' else
-                  'The E24 result producer is not connected or has not supplied current verified results. '
-                  'The original research price files and replay state are required. '
+                  'The E24 producer has not supplied current verified results. '
+                  'Check the private producer receipt and qualified ERCOT price/load availability. '
                   'No missing date is valued at zero or represented as a prospective decision.'
     }
     (root / 'proof/publication.json').write_text(json.dumps(receipt, indent=2) + '\n',

@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  id-token: write
 concurrency:
   group: series-2-publication
   cancel-in-progress: false
@@ -27,10 +28,31 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Verify current record
         run: python3 scripts/verify.py
+      - name: Authenticate read-only public-artifact reader
+        if: vars.SERIES2_GCS_URI != ''
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: currentiq
+          workload_identity_provider: ${{ vars.SERIES2_WIF_PROVIDER }}
+          service_account: ${{ vars.SERIES2_READER_SERVICE_ACCOUNT }}
+      - name: Prepare Google Cloud CLI
+        if: vars.SERIES2_GCS_URI != ''
+        uses: google-github-actions/setup-gcloud@v3
+      - name: Download public result artifact
+        if: vars.SERIES2_GCS_URI != ''
+        env:
+          SERIES2_GCS_URI: ${{ vars.SERIES2_GCS_URI }}
+        run: gcloud storage cp "$SERIES2_GCS_URI" "$RUNNER_TEMP/series2.zip" --quiet
       - name: Consume results and publish coverage receipt
         env:
           SERIES2_SOURCE_URL: ${{ vars.SERIES2_SOURCE_URL }}
-        run: python3 scripts/publish_daily.py
+          SERIES2_GCS_URI: ${{ vars.SERIES2_GCS_URI }}
+        run: |
+          if [ -n "$SERIES2_GCS_URI" ]; then
+            python3 scripts/publish_daily.py --package "$RUNNER_TEMP/series2.zip"
+          else
+            python3 scripts/publish_daily.py
+          fi
       - name: Commit verified results and coverage
         run: |
           git config user.name 'github-actions[bot]'

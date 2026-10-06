@@ -4,17 +4,19 @@ Range: **2023-10-01 through 2026-09-29**.
 
 **Daily publication:** a scheduled GitHub job runs at 14:17 and 22:17 UTC (with manual retry available).
 Its current coverage and calculation readiness are published in [proof/publication.json](proof/publication.json).
-The original package was a one-time export; the frozen E24 result producer has not yet been connected.
-The publication job can consume verified result packages, but cannot manufacture a daily P&L without an order book and prices.
-Until that producer is restored, the job publishes a dated blocked-coverage receipt and fails its freshness check.
+The original package was a one-time export. A restored, hash-pinned E24 producer supports daily continuation on GCP,
+with immutable reconstructed books and sizing references, and retries for unpriced settlements.
+The publication job consumes verified result packages through a keyless, read-only GCS identity.
+Its coverage receipt and freshness check expose missing result dates; unavailable prices remain unvalued.
 It does not run the older GCP `series-02` lane or substitute that lane's results for E24.
 
 - **Hypothetical backtest, development evidence only.** Every row is `retrospective_reconstruction`: a backtest computed after the fact by a rule whose components, weights and size were chosen while this same history was being inspected. Never traded and not paper-traded forward. Not realized performance, returns on capital, or evidence of capacity. No out-of-sample claim.
 - **The rule.** An ensemble of 24 ERCOT PTP-obligation books that rank node pairs on persistent real-time minus day-ahead carry, with a volatility target computed from the book's own P&L through two days before each decision. Limits: at most 800 placed MWh a day, a 1-MW minimum on a 0.1-MW grid, and bids floored to $0.01. An order is awarded when the day-ahead spread is strictly below its bid. The full specification was frozen on 2026-10-02 and is published here only as a SHA-256 commitment (`proof/anchor.json`).
 - **P&L** is USD per day, net of an estimated all-in cost of $0.40 per placed MWh, the same convention as series-01 (ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost. Market impact is not modeled. `placed_mw` and `awarded_mw` are physical MWh; the column names follow series-01.
 - **Prices.**
-  - Decisions use prices as first published, so later ERCOT price corrections are invisible to them.
-  - Settlement uses final prices: load zones and hubs from ERCOT reports NP4-180-ER and NP6-785-ER, resource nodes as first published.
+  - Original history through 2026-09-29: decisions use the restored first-published price seed, and settlement uses the restored final-price seed (zones/hubs from NP4-180-ER and NP6-785-ER; resource nodes as first published).
+  - From 2026-09-30: the same frozen rule and reconciled sizing state continue using qualified ERCOT prices observed on GCP. The original price seeds and historical rows are unchanged. Reconstructed books are frozen when generated; later settlement data can resolve pending orders or restate values.
+  - These later reconstructions are also development/backtest evidence. Their inputs were not captured before the original operating-day cutoff, and settlement prices are the latest observed quotes, not a guarantee that ERCOT will never correct them.
   - Final resource-node prices were not available for 97 hours with location-specific ERCOT corrections, including January 24–26, 2026.
   - Zone and hub prices for 2026-09-27 to 09-29 are not yet in ERCOT's annual reports.
 - **`partially_settled` rows: 86 days, 421.8 awarded MWh in total (82 days in 2025, 4 in 2026).** On these days some awarded orders have no real-time price in our data for a resource node or a DC tie.
