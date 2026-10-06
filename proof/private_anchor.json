@@ -1,5 +1,5 @@
 {
-  "canonical_record_set_sha256": "1dda0cca42a4101bda58f6749ffb46eaa5d8b3cbdc69b5d3d8acb34108767983",
+  "canonical_record_set_sha256": "fd7935ccf2fc78b5451f642047569a6b05763e94b84791cb03a0e75704742af4",
   "external_series": {
     "series-02": {
       "evidence_basis": "retrospective_reconstruction",
@@ -13,7 +13,7 @@
   "publication_documentation_version": 1,
   "record_end": "2026-10-05",
   "record_start": "2026-01-01",
-  "records_sha256": "d239eb77c64da11afa9c15e3922229d3eac16b6a55e9502574fafeb2b03396ef",
+  "records_sha256": "ac7a7bf2e454e19fe46d6fcc0e11c4d84af5d36855006b3f8e8e0d58400ead0c",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
