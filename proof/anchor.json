@@ -9,22 +9,31 @@
   "private_commitments_sha256": {
     "frozen_specification": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
     "order_books_and_settlement_lines": "343adac9e79fd9a1396652e273d78f7169f5af512d6c97916d78e91edd6f712b",
-    "decision_prices_first_published": "7ec6511aa544387ac31f22a401c3a5ed1a8a663cbe500a963114e080777f4520",
-    "settlement_prices_final": "fc38dd61202824a08abcab4575262a825fcc58c3848898e97b22f2b81aaeb05e",
-    "record_builder": "638caa67228eb216017509a1b7d821830b9307a88a45f6d5d9aef221e3ba72eb"
+    "decision_prices_first_published": "5162037ad6e71454c119de7ebd5cedb54afcb26bc0b27878830d936352a13d2f",
+    "settlement_prices_final": "8d06f1c9a9dc4d30a9de755d9dc9fc7df7aa3fe38a19c02d992b0145e1657a82",
+    "record_builder": "fd0ef5ed7d1de1867e28c12efeb79d212e57673fbfd34d0745bca99eb27ea51b"
   },
   "specification_frozen": "2026-10-02",
-  "supersedes_records_sha256": "79a43e15e2697181671b76953c7a21d67fb6b4b59bd870fb6a8bbe52ad9c906b",
+  "supersedes_records_sha256": "f4dda79e0f8d9c5e1f02abbf7995e81cb326d6f4e7af6c3c1742b14ecb78b690",
   "continuation": {
     "start": "2026-09-30",
     "evidence_basis": "retrospective_reconstruction",
-    "producer_sha256": "638caa67228eb216017509a1b7d821830b9307a88a45f6d5d9aef221e3ba72eb",
-    "origin_commit_before_generation": "ebf8bc1c95e6d7d1edfe964212541a3411437e7b",
+    "producer_sha256": "fd0ef5ed7d1de1867e28c12efeb79d212e57673fbfd34d0745bca99eb27ea51b",
+    "origin_commit_before_generation": "a633a78f124ae723389f7e3ef5b55e324f414986",
     "original_price_seeds_sha256": {
       "cube_pit2.npz": "ad4c6e416c2f7d10b13227d03cbb8d5f697ddd33d72e75f094ba6fbdb5e62595",
       "cube_full4.npz": "2e535113df62419f0f84b41b32111026d7ef5c2c9dee6af617040d34ec9beb93"
     },
     "pricing": "original first-published/final seeds unchanged; newer observed qualified ERCOT prices",
-    "immutable_decision_books": true
+    "immutable_decision_books": true,
+    "numeric_runtime": {
+      "numpy": "2.5.0",
+      "simd": "X86_V3",
+      "openblas": "0.3.33.112.0",
+      "openblas_core": "Haswell",
+      "threads": 1,
+      "tied_sort_probe_sha256": "51f7f188e3d4db95804233d2b7df5f3cc52a9b2fc68709130a686dc367aad649",
+      "legacy_cpu_exact_order_portability": false
+    }
   }
 }
