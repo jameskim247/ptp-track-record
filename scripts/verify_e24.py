@@ -15,6 +15,7 @@ from pathlib import Path
 import re
 import statistics
 import warnings
+import zipfile
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
@@ -22,6 +23,9 @@ SPEC = "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f"
 CONTRACT = {"series-02": {"source_repository": "jameskim247/series-2",
     "source_series_id": "series-2", "evidence_basis": "retrospective_reconstruction",
     "frozen_specification_sha256": SPEC}}
+DIRECT_CONTRACT = {"series-02": {**CONTRACT["series-02"],
+    "source_repository": "jameskim247/ptp-track-record",
+    "source_kind": "verified_gcs_package"}}
 NAMES = ("daily.csv", "weekly.csv", "monthly.csv", "summary.csv", "source_anchor.json")
 FILES = tuple("data/series-02/" + name for name in (*NAMES, "publication.json")) + ("scripts/verify_e24.py",)
 LIMIT = 20 * 1024 * 1024
@@ -34,7 +38,7 @@ def sha(body):
 def expected_files(identity):
     if "external_series" not in identity:
         return ()
-    if identity["external_series"] != CONTRACT:
+    if identity["external_series"] not in (CONTRACT, DIRECT_CONTRACT):
         raise ValueError("unsupported external series contract")
     if "series-02" in identity.get("series_ids", ()):
         raise ValueError("E24 alias collides with a programme lane")
@@ -168,8 +172,14 @@ def verify(root, identity):
         anchor = validate(files, date.fromisoformat(identity["record_end"]))
         receipt = json.loads((root/"data/series-02/publication.json").read_text())
         missing = (date.fromisoformat(receipt["checked_through"]) - date.fromisoformat(anchor["record_end"])).days
-        if (receipt["record_end"] != anchor["record_end"] or receipt["source_repository"] != "jameskim247/series-2"
-                or not re.fullmatch("[0-9a-f]{40}", receipt["source_commit"])
+        direct = identity["external_series"] == DIRECT_CONTRACT
+        source_valid = (receipt.get("source_repository") == "jameskim247/ptp-track-record"
+            and re.fullmatch("[0-9a-f]{64}", str(receipt.get("source_package_sha256", "")))
+            and receipt.get("source_object") == "gs://currentiq-ptp-paper-evidence/series-2/public/"
+                + str(receipt.get("source_package_sha256")) + ".zip") if direct else (
+            receipt.get("source_repository") == "jameskim247/series-2"
+            and re.fullmatch("[0-9a-f]{40}", str(receipt.get("source_commit", ""))))
+        if (receipt["record_end"] != anchor["record_end"] or not source_valid
                 or receipt["state"] not in ("verified_source", "retained_verified_source")
                 or receipt["missing_result_days"] != missing
                 or receipt["status"] != ("current" if missing == 0 else "stale")):
@@ -179,11 +189,14 @@ def verify(root, identity):
         return [str(exc)]
 
 
-def attach(root, files, *, source_commit, through, state="verified_source"):
+def attach(root, files, *, source_commit=None, through, state="verified_source", source_package_sha256=None):
     """Attach only validated economic bytes; reseal without changing programme identity."""
     root = Path(root)
     anchor = validate(files, through)
-    if not re.fullmatch("[0-9a-f]{40}", source_commit):
+    direct = source_package_sha256 is not None
+    if direct and not re.fullmatch("[0-9a-f]{64}", str(source_package_sha256)):
+        raise ValueError("invalid E24 source package digest")
+    if not direct and not re.fullmatch("[0-9a-f]{40}", str(source_commit)):
         raise ValueError("invalid E24 source commit")
     folder = root/"data/series-02"; folder.mkdir(parents=True, exist_ok=True)
     for name, body in files.items():
@@ -193,6 +206,11 @@ def attach(root, files, *, source_commit, through, state="verified_source"):
         "evidence_basis": "retrospective_reconstruction",
         "missing_result_days": (through - date.fromisoformat(anchor["record_end"])).days,
         "status": "current" if anchor["record_end"] == str(through) else "stale"}
+    if direct:
+        receipt.pop("source_commit")
+        receipt.update(source_repository="jameskim247/ptp-track-record",
+            source_package_sha256=source_package_sha256,
+            source_object="gs://currentiq-ptp-paper-evidence/series-2/public/" + source_package_sha256 + ".zip")
     (folder/"publication.json").write_text(json.dumps(receipt, indent=2)+"\n", encoding="utf-8")
     (root/"scripts/verify_e24.py").write_bytes(Path(__file__).read_bytes())
     readme = root/"README.md"
@@ -204,15 +222,16 @@ def attach(root, files, *, source_commit, through, state="verified_source"):
         "Retrospective reconstruction, not an on-time live commitment or untouched validation. "
         "Separate from Series-01 and from the programme's withheld lane; no combined performance claim. "
         "Incomplete settlement prices remain explicitly pending, never zero-filled. "
-        "The existing GCP publisher refreshes this mirror on its regular runs. "
-        "[Source and original proof](https://github.com/jameskim247/series-2), "
+        "The sole GCP publisher refreshes verified E24 results on its regular runs. "
+        + ("The original source Git history is preserved in this repository's `archive/series-2` branch. "
+           if direct else "[Source and original proof](https://github.com/jameskim247/series-2), ") +
         "[source anchor](data/series-02/source_anchor.json), "
         "[mirror status](data/series-02/publication.json).\n", encoding="utf-8")
-    seal(root)
+    seal(root, direct=direct)
     return receipt
 
 
-def seal(root):
+def seal(root, *, direct=False):
     root = Path(root)
     manifest = root/"proof/records.sha256"
     paths = {line.split("  ", 1)[1] for line in manifest.read_text().splitlines()}
@@ -220,7 +239,7 @@ def seal(root):
     manifest.write_text("".join(f"{sha((root/rel).read_bytes())}  {rel}\n" for rel in sorted(paths)), encoding="utf-8")
     path = root/"proof/private_anchor.json"
     identity = json.loads(path.read_text())
-    identity["external_series"] = CONTRACT
+    identity["external_series"] = DIRECT_CONTRACT if direct else CONTRACT
     identity["records_sha256"] = sha(manifest.read_bytes())
     path.write_text(json.dumps(identity, indent=2, sort_keys=True)+"\n", encoding="utf-8")
 
@@ -245,8 +264,66 @@ def preserve(root, previous, through):
         raise ValueError("existing E24 mirror invalid: " + "; ".join(errors))
     files = {name: (previous/"data/series-02"/name).read_bytes() for name in NAMES}
     receipt = json.loads((previous/"data/series-02/publication.json").read_text())
-    return attach(root, files, source_commit=receipt["source_commit"], through=through,
-                  state="retained_verified_source")
+    return attach(root, files, source_commit=receipt.get("source_commit"), through=through,
+                  source_package_sha256=receipt.get("source_package_sha256"), state="retained_verified_source")
+
+
+def package_files(package):
+    if len(package) > LIMIT:
+        raise ValueError("E24 package exceeds size limit")
+    expected = {"proof/anchor.json", *("data/series-2/" + name for name in NAMES if name.endswith(".csv"))}
+    with zipfile.ZipFile(io.BytesIO(package)) as archive:
+        members = archive.infolist()
+        if (len(members) != len(expected) or {m.filename for m in members} != expected
+                or sum(m.file_size for m in members) > LIMIT or any(m.is_dir() for m in members)):
+            raise ValueError("E24 package inventory is unexpected or duplicated")
+        return {name: archive.read("proof/anchor.json" if name == "source_anchor.json"
+                                  else "data/series-2/" + name) for name in NAMES}
+
+
+def _continuity(files, previous, through):
+    incoming = validate(files, through)
+    previous = Path(previous)
+    old = previous / "data/series-02/source_anchor.json"
+    if old.is_file():
+        if incoming["record_end"] < json.loads(old.read_text())["record_end"]:
+            raise ValueError("E24 source regressed")
+        before = list(csv.DictReader(io.StringIO((previous / "data/series-02/daily.csv").read_text())))
+        after = list(csv.DictReader(io.StringIO(files["daily.csv"].decode("utf-8"))))
+        if (len(after) < len(before) or any((a["date"], a["decision_proof_id"]) !=
+                (b["date"], b["decision_proof_id"]) for a, b in zip(before, after))):
+            raise ValueError("E24 source changed an existing frozen decision")
+        # Producer restatements must name the exact source manifest they replace.
+        if before != after[:len(before)] and incoming.get("supersedes_records_sha256") != json.loads(old.read_text())["records_sha256"]:
+            raise ValueError("E24 historical restatement lacks its superseded source manifest")
+    return incoming
+
+
+def attach_package(root, package, *, previous, through):
+    files = package_files(package)
+    _continuity(files, previous, through)
+    return attach(root, files, source_package_sha256=sha(package), through=through)
+
+
+def _gcs_package():
+    # Only this private producer's public-only prefix is readable by this path.
+    from deploy.gcp.ptp_control import gce_access_token, GateError
+    prefix = "https://storage.googleapis.com/storage/v1/b/currentiq-ptp-paper-evidence/o/series-2%2Fpublic%2F"
+    try:
+        headers = {"Authorization": "Bearer " + gce_access_token()}
+    except GateError as exc:
+        raise ValueError("E24 package reader identity unavailable") from exc
+    def read(name):
+        with urlopen(Request(prefix + name + "?alt=media", headers=headers), timeout=60) as response:
+            body = response.read(LIMIT + 1)
+        if len(body) > LIMIT:
+            raise ValueError("E24 source exceeds size limit")
+        return body
+    latest = read("latest.zip")
+    immutable = read(sha(latest) + ".zip")
+    if immutable != latest:
+        raise ValueError("E24 latest object lacks its immutable matching package")
+    return immutable
 
 
 def _get(url):
@@ -260,26 +337,35 @@ def _get(url):
 def refresh(root, previous, through):
     """Consumer: sole GCP publication transaction. Never adds another Git writer."""
     try:
-        commit = json.loads(_get("https://api.github.com/repos/jameskim247/series-2/commits/main"))["sha"]
-        if not re.fullmatch("[0-9a-f]{40}", commit):
-            raise ValueError("invalid source revision")
-        prefix = "https://raw.githubusercontent.com/jameskim247/series-2/" + commit + "/"
-        files = {name: _get(prefix + ("proof/anchor.json" if name == "source_anchor.json"
-                                      else "data/series-2/" + name)) for name in NAMES}
-        incoming = validate(files, through)
-        prior_path = Path(previous)/"data/series-02/source_anchor.json"
-        if prior_path.is_file():
-            if incoming["record_end"] < json.loads(prior_path.read_text())["record_end"]:
-                raise ValueError("E24 source regressed")
-            before = list(csv.DictReader(io.StringIO((Path(previous)/"data/series-02/daily.csv").read_text())))
-            after = list(csv.DictReader(io.StringIO(files["daily.csv"].decode("utf-8"))))
-            if (len(after) < len(before) or any((a["date"], a["decision_proof_id"]) !=
-                    (b["date"], b["decision_proof_id"]) for a, b in zip(before, after))):
-                raise ValueError("E24 source changed an existing frozen decision")
-    except (OSError, URLError, ValueError, KeyError, TypeError) as exc:
+        from deploy.gcp.repository_layout import load
+        direct = load()["layout"] == "consolidated"
+        if direct:
+            package = _gcs_package()
+            files = package_files(package)
+            _continuity(files, previous, through)
+        else:
+            commit = json.loads(_get("https://api.github.com/repos/jameskim247/series-2/commits/main"))["sha"]
+            if not re.fullmatch("[0-9a-f]{40}", commit):
+                raise ValueError("invalid source revision")
+            prefix = "https://raw.githubusercontent.com/jameskim247/series-2/" + commit + "/"
+            files = {name: _get(prefix + ("proof/anchor.json" if name == "source_anchor.json"
+                                          else "data/series-2/" + name)) for name in NAMES}
+            incoming = validate(files, through)
+            prior_path = Path(previous)/"data/series-02/source_anchor.json"
+            if prior_path.is_file():
+                if incoming["record_end"] < json.loads(prior_path.read_text())["record_end"]:
+                    raise ValueError("E24 source regressed")
+                before = list(csv.DictReader(io.StringIO((Path(previous)/"data/series-02/daily.csv").read_text())))
+                after = list(csv.DictReader(io.StringIO(files["daily.csv"].decode("utf-8"))))
+                if (len(after) < len(before) or any((a["date"], a["decision_proof_id"]) !=
+                        (b["date"], b["decision_proof_id"]) for a, b in zip(before, after))):
+                    raise ValueError("E24 source changed an existing frozen decision")
+    except (OSError, URLError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as exc:
         # Explicit degraded receipt, not a silent drop and not a Series-01 outage.
         retained = preserve(root, previous, through)
         warnings.warn("E24 mirror refresh rejected; retaining verified results: " + type(exc).__name__)
         return retained or {"state": "source_unavailable", "error_kind": type(exc).__name__}
     # Validation precedes all staging writes; filesystem/install errors are fatal.
+    if direct:
+        return attach(root, files, source_package_sha256=sha(package), through=through)
     return attach(root, files, source_commit=commit, through=through)

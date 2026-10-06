@@ -4,7 +4,8 @@
     "series-02": {
       "evidence_basis": "retrospective_reconstruction",
       "frozen_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
-      "source_repository": "jameskim247/series-2",
+      "source_kind": "verified_gcs_package",
+      "source_repository": "jameskim247/ptp-track-record",
       "source_series_id": "series-2"
     }
   },
@@ -13,7 +14,7 @@
   "publication_documentation_version": 1,
   "record_end": "2026-10-05",
   "record_start": "2026-01-01",
-  "records_sha256": "ac7a7bf2e454e19fe46d6fcc0e11c4d84af5d36855006b3f8e8e0d58400ead0c",
+  "records_sha256": "3ef03f792003928b4c55169a90fe0bbcc6e1a933327a7e3f8d5b6e7271aab359",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
