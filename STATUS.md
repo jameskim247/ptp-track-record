@@ -11,6 +11,13 @@ per-order settlement lines and volatility sizing reconcile against the original 
 The E24 producer supports daily retrospective continuation on GCP; the production programme's `series-02`
 remains a different strategy. No E24 prospective paper-trading claim is made.
 
+The original engine contains an unstable sort for equal-scored pairs. Its tie order can differ
+between the original AVX-512 environment and the GCP AVX2 environment, even with identical
+source and NumPy versions. Original published books and rows are retained exactly, not reselected.
+Continuation pins the existing GCP NumPy 2.5 / X86_V3 / single-threaded OpenBLAS Haswell kernels,
+records them in the anchor, and verifies restored continuation books against archived orders.
+This is a numerical-runtime limitation, not a change to weights or a newly selected historical strategy.
+
 The normal source is `SERIES2_GCS_URI`, read through a GitHub OIDC identity restricted to this repository's
 main-branch publication workflow and the GCS public-artifact prefix. It cannot read private seeds or orders.
 An HTTPS public-result ZIP configured as `SERIES2_SOURCE_URL` remains an optional alternate.
