@@ -1,5 +1,5 @@
 {
-  "canonical_record_set_sha256": "fd7935ccf2fc78b5451f642047569a6b05763e94b84791cb03a0e75704742af4",
+  "canonical_record_set_sha256": "30c63056d751191543b22303d4da1be8b20558d5a17e8988bf856003333a3ba7",
   "external_series": {
     "series-02": {
       "evidence_basis": "retrospective_reconstruction",
@@ -12,9 +12,9 @@
   "generation": "programme-03",
   "public_cost_per_placed_mwh": 0.4,
   "publication_documentation_version": 1,
-  "record_end": "2026-10-05",
+  "record_end": "2026-10-06",
   "record_start": "2026-01-01",
-  "records_sha256": "69382f1c2a3c1f8a2a32a9ed04fa50deed30eaebf0d78f93e0c5bae08bad337b",
+  "records_sha256": "f9d61910b469557e2d06ada1b463bfe042b12a20e9ae6dd7459b3d6227746790",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
