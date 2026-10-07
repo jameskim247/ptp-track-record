@@ -19,7 +19,7 @@
     "start": "2026-09-30",
     "evidence_basis": "retrospective_reconstruction",
     "producer_sha256": "ab3959539bebdec815c991bb455344cab6e78c872d66f2016438b4475fced9c7",
-    "origin_commit_before_generation": "08beec23d215a1444e9a982b50f006126bfa146d",
+    "origin_commit_before_generation": "ae961d11aeb8fd0fb1baea62f7e88cf66f706da6",
     "original_price_seeds_sha256": {
       "cube_pit2.npz": "ad4c6e416c2f7d10b13227d03cbb8d5f697ddd33d72e75f094ba6fbdb5e62595",
       "cube_full4.npz": "2e535113df62419f0f84b41b32111026d7ef5c2c9dee6af617040d34ec9beb93"

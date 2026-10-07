@@ -6,6 +6,6 @@
   "evidence_basis": "retrospective_reconstruction",
   "missing_result_days": 0,
   "status": "current",
-  "source_package_sha256": "0e054d94a3c733ac1e1591fcef378e317738c41eca79b5012c5e0592b4acc0d3",
-  "source_object": "gs://currentiq-ptp-paper-evidence/series-2/public/0e054d94a3c733ac1e1591fcef378e317738c41eca79b5012c5e0592b4acc0d3.zip"
+  "source_package_sha256": "f3afb1204619f0f0ce929e1c3b67eded3b65e7f360409d2997d51099b2c9cc12",
+  "source_object": "gs://currentiq-ptp-paper-evidence/series-2/public/f3afb1204619f0f0ce929e1c3b67eded3b65e7f360409d2997d51099b2c9cc12.zip"
 }
