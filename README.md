@@ -1,10 +1,10 @@
 # Hypothetical Paper Record
 
-Range: **2026-01-01 through 2026-10-06**.
+Range: **2026-01-01 through 2026-10-07**.
 
 - **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
 - **P&L** is USD per series-day, net of an estimated all-in cost of $0.40 per placed MWh (central estimate covering collateral financing, market access, data and systems; ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost; market impact is not modeled. Unsettled values are blank, never zero.
-- **Kinds of day:** rows before 2026-09-22 are a backtest computed after the fact; from 2026-09-22 each day was decided before its cutoff, except 2026-09-26, 2026-09-28, which missed the cutoff and were rebuilt afterwards by the same frozen rule from inputs published before the cutoff (see STATUS.md). They count in P&L and period statistics. Decision timestamps are kept privately.
+- **Kinds of day:** rows before 2026-09-22 are a backtest computed after the fact; from 2026-09-22 each day was decided before its cutoff, except 2026-09-26, 2026-09-28, 2026-10-07, which missed the cutoff and were rebuilt afterwards by the same frozen rule from inputs published before the cutoff (see STATUS.md). They count in P&L and period statistics. Decision timestamps are kept privately.
 - series-01 continues an unchanged earlier rule. Descriptive only; no promotion claim.
 - The four-series programme of 2026-09-10 to 09-20 was retired. Its records are retained privately and unchanged, and are available on request; two of its series had research predecessors that failed their historical acceptance gates.
 - **History revised** (universe timing correction, 2026-01-01 to 2026-09-19); superseded digest `244b3a63f8828a6a85e2cfd1b3255b7764752d31014861011ce9abd856ecc2f9`. Still development-only evidence. It removed hindsight: the superseded node universe used coverage from after some decision dates.
@@ -19,4 +19,4 @@ Verify: `python3 scripts/verify.py` (see VERIFY.md). Coverage: STATUS.md.
 
 [Daily](data/series-02/daily.csv) · [Weekly](data/series-02/weekly.csv) · [Monthly](data/series-02/monthly.csv) · [Summary](data/series-02/summary.csv)
 
-Frozen E24 results: 2023-10-01–2026-10-06. Retrospective reconstruction, not an on-time live commitment or untouched validation. Separate from Series-01 and from the programme's withheld lane; no combined performance claim. Incomplete settlement prices remain explicitly pending, never zero-filled. The sole GCP publisher refreshes verified E24 results on its regular runs. The original source Git history is preserved in this repository's `archive/series-2` branch. [source anchor](data/series-02/source_anchor.json), [mirror status](data/series-02/publication.json).
+Frozen E24 results: 2023-10-01–2026-10-07. Retrospective reconstruction, not an on-time live commitment or untouched validation. Separate from Series-01 and from the programme's withheld lane; no combined performance claim. Incomplete settlement prices remain explicitly pending, never zero-filled. The sole GCP publisher refreshes verified E24 results on its regular runs. The original source Git history is preserved in this repository's `archive/series-2` branch. [source anchor](data/series-02/source_anchor.json), [mirror status](data/series-02/publication.json).
