@@ -1,6 +1,6 @@
 # Hypothetical Paper Record
 
-Range: **2026-01-01 through 2026-10-07**.
+Range: **2026-01-01 through 2026-10-08**.
 
 - **Hypothetical.** Frozen books paper-settled against published ERCOT prices; never traded. Not realized performance, returns on capital, or evidence of capacity.
 - **P&L** is USD per series-day, net of an estimated all-in cost of $0.40 per placed MWh (central estimate covering collateral financing, market access, data and systems; ERCOT charges no per-MWh fee on PTP obligations). `gross_pnl` is before that cost; market impact is not modeled. Unsettled values are blank, never zero.
@@ -19,4 +19,4 @@ Verify: `python3 scripts/verify.py` (see VERIFY.md). Coverage: STATUS.md.
 
 [Daily](data/series-02/daily.csv) · [Weekly](data/series-02/weekly.csv) · [Monthly](data/series-02/monthly.csv) · [Summary](data/series-02/summary.csv)
 
-Frozen E24 results: 2023-10-01–2026-10-07. Retrospective reconstruction, not an on-time live commitment or untouched validation. Separate from Series-01 and from the programme's withheld lane; no combined performance claim. Incomplete settlement prices remain explicitly pending, never zero-filled. The sole GCP publisher refreshes verified E24 results on its regular runs. The original source Git history is preserved in this repository's `archive/series-2` branch. [source anchor](data/series-02/source_anchor.json), [mirror status](data/series-02/publication.json).
+Frozen E24 results: 2023-10-01–2026-10-08. Retrospective reconstruction, not an on-time live commitment or untouched validation. Separate from Series-01 and from the programme's withheld lane; no combined performance claim. Incomplete settlement prices remain explicitly pending, never zero-filled. The sole GCP publisher refreshes verified E24 results on its regular runs. The original source Git history is preserved in this repository's `archive/series-2` branch. [source anchor](data/series-02/source_anchor.json), [mirror status](data/series-02/publication.json).
