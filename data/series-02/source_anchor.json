@@ -9,8 +9,8 @@
   "private_commitments_sha256": {
     "frozen_specification": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
     "order_books_and_settlement_lines": "7901926c3f47eb3931f7cbda371203e8855ef6d4e7e7f7c84b829953d1f594e3",
-    "decision_prices_first_published": "651d8284c37d73915c320db048b31a0d99872f505fe8bbe72a4101ebaeadf6f6",
-    "settlement_prices_final": "8a7c725acac26c3d296c89493f96b670725e58fb21c2edd03a0338c227f5b84c",
+    "decision_prices_first_published": "fa44c364abfe0b27f02ed81e156d991a47e5131dfffb527c4d68a9c4d32918ab",
+    "settlement_prices_final": "099954a9621007b0350e39be2676a0e1fb1ca29ae694cbe0bb0aac33fad664d7",
     "record_builder": "ab3959539bebdec815c991bb455344cab6e78c872d66f2016438b4475fced9c7"
   },
   "specification_frozen": "2026-10-02",
@@ -19,7 +19,7 @@
     "start": "2026-09-30",
     "evidence_basis": "retrospective_reconstruction",
     "producer_sha256": "ab3959539bebdec815c991bb455344cab6e78c872d66f2016438b4475fced9c7",
-    "origin_commit_before_generation": "3944ed0cb1bf4773fc33b10fcea26f93ad246313",
+    "origin_commit_before_generation": "da30a5c62d6bf1dca4611e60fe42fb0368f8bbf1",
     "original_price_seeds_sha256": {
       "cube_pit2.npz": "ad4c6e416c2f7d10b13227d03cbb8d5f697ddd33d72e75f094ba6fbdb5e62595",
       "cube_full4.npz": "2e535113df62419f0f84b41b32111026d7ef5c2c9dee6af617040d34ec9beb93"
