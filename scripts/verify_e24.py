@@ -35,6 +35,62 @@ def sha(body):
     return hashlib.sha256(body).hexdigest()
 
 
+def material_sha256(files):
+    """Identity of result bytes and all provenance except predecessor bindings.
+
+    Callers must validate and check continuity before reusing a package. These
+    two bindings remain in the sealed artifact; excluding them here never
+    authorizes a restatement or ignores new/unknown provenance fields.
+    """
+    if set(files) != set(NAMES) or sum(len(body) for body in files.values()) > LIMIT:
+        raise ValueError("unexpected E24 payload inventory/size")
+    anchor = json.loads(files["source_anchor.json"])
+    anchor.pop("supersedes_records_sha256", None)
+    if "continuation" in anchor:
+        anchor["continuation"].pop("origin_commit_before_generation", None)
+    material = {**files, "source_anchor.json": json.dumps(anchor, sort_keys=True,
+        separators=(",", ":"), allow_nan=False).encode()}
+    return sha(json.dumps({name: sha(body) for name, body in material.items()},
+        sort_keys=True, separators=(",", ":")).encode())
+
+
+def deterministic_package(files):
+    """Same member bytes produce the same transport hash, independent of mtimes."""
+    material_sha256(files)  # Exact, bounded inventory; unknown files fail closed.
+    stream = io.BytesIO()
+    with zipfile.ZipFile(stream, "w") as archive:
+        for name in NAMES:
+            member = "proof/anchor.json" if name == "source_anchor.json" else "data/series-2/" + name
+            info = zipfile.ZipInfo(member, date_time=(1980, 1, 1, 0, 0, 0))
+            info.create_system = 3
+            info.external_attr = 0o100644 << 16
+            archive.writestr(info, files[name], compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    package = stream.getvalue()
+    package_files(package)  # Keep the consumer's compressed/uncompressed bounds.
+    return package
+
+
+def reusable_checkpoint(candidate, stored, uri):
+    """Keep the first immutable restore mapping for an unchanged public package."""
+    match = re.fullmatch(r"(gs://[^/]+/.+)/private/checkpoints/([0-9a-f]{64})\.json", uri)
+    required = {"schema", "package_sha256", "evidence_uri", "evidence_sha256",
+                "original_runtime_bundle_sha256", "upgrade", "price_seeds_sha256", "producer_sha256"}
+    if not match or set(candidate) != required or set(stored) != required:
+        raise ValueError("invalid immutable E24 checkpoint inventory/key")
+    for checkpoint in (candidate, stored):
+        digest = checkpoint["evidence_sha256"]
+        if (checkpoint["schema"] != "e24-private-checkpoint-v1"
+                or checkpoint["package_sha256"] != match[2]
+                or not re.fullmatch("[0-9a-f]{64}", str(digest))
+                or checkpoint["evidence_uri"] != match[1] + "/private/evidence/" + digest + ".tar.gz"):
+            raise ValueError("invalid immutable E24 checkpoint binding")
+    operational = {"evidence_uri", "evidence_sha256"}
+    if ({key: value for key, value in candidate.items() if key not in operational}
+            != {key: value for key, value in stored.items() if key not in operational}):
+        raise ValueError("immutable E24 checkpoint material collision")
+    return stored
+
+
 def expected_files(identity):
     if "external_series" not in identity:
         return ()
