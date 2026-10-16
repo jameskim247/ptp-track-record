@@ -5,7 +5,10 @@ import hashlib, io, json, math, statistics
 from pathlib import Path
 START = '2024-01-01'
 FOLDER = 'data/ptp-paper'
+PAIRS = ('pairs-500', 'pairs-100', 'pairs-50')
 NAMES = ('daily.csv', 'weekly.csv', 'monthly.csv', 'summary.csv', 'source_anchor.json', 'publication.json')
+E24_SPEC = '3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f'
+PAIRS_DAILY = ('date', 'signal_date', 'status', 'pnl', 'gross_pnl', 'cumulative_pnl', 'pnl_drawdown', 'placed_mw', 'awarded_mw', 'fill_rate', 'pending_awarded_mw', 'pairs', 'pair_hours', 'eligibility_snapshot_id', 'decision_proof_id', 'settlement_proof_id', 'proof_id')
 
 def digest(body):
     return hashlib.sha256(body).hexdigest()
@@ -20,7 +23,8 @@ def proved(row):
 
 
 def read_rows(body):
-    integers = {"calendar_days", "settled_days", "pending_price_days", "ex_top_five_days_count", "path_count"}
+    integers = {"calendar_days", "settled_days", "pending_price_days", "ex_top_five_days_count", "path_count",
+                "pairs", "pair_hours"}
     strings = {"date", "signal_date", "status", "basis", "start_date", "end_date",
                "period_start", "period_end", "latest_settled_date"}
     result = []
@@ -116,29 +120,113 @@ def tables(daily, *, include_counts=False):
     return result
 
 
+def check_daily(daily, end, *, cap=None, legacy=False):
+    """Public daily arithmetic, exposure bounds and honest pending labels."""
+    start, end = date.fromisoformat(START), date.fromisoformat(end)
+    if [row["date"] for row in daily] != [(start + timedelta(days=i)).isoformat() for i in range((end-start).days+1)]:
+        raise ValueError("paper daily calendar mismatch")
+    equity = peak = 0.0
+    for row in daily:
+        if "evidence_basis" in row or "partially" in row["status"]:
+            raise ValueError("retired public daily schema")
+        if not 0 <= row["pending_awarded_mw"] <= row["awarded_mw"] <= row["placed_mw"] <= 2400:
+            raise ValueError("paper exposure bounds violated")
+        if legacy:
+            if "path_count" in row and not 0 <= row["path_count"] <= row["placed_mw"]/3 + 1e-8:
+                raise ValueError("paper submitted path count bounds violated")
+        else:
+            hours, pairs = row.get("pair_hours"), row.get("pairs")
+            if "path_count" in row or type(hours) is not int or not 0 <= hours <= row["placed_mw"]/3 + 1e-8:
+                raise ValueError("paper pair-hour count bounds violated")
+            if pairs != "" or cap is not None:
+                if type(pairs) is not int or not (pairs == hours == 0 or 1 <= pairs <= hours):
+                    raise ValueError("paper distinct pair count bounds violated")
+                if cap is not None and pairs > cap:
+                    raise ValueError("pair cap exceeded")
+        if row["status"] != ("prices_pending" if row["pending_awarded_mw"] else "settled"):
+            raise ValueError("paper settlement status hides pending prices")
+        if row["signal_date"] != (date.fromisoformat(row["date"]) - timedelta(days=1)).isoformat():
+            raise ValueError("paper signal date mismatch")
+        equity += row["pnl"]
+        peak = max(peak, equity)
+        if (abs(row["pnl"] - (row["gross_pnl"] - 0.4 * row["placed_mw"])) > 0.001
+                or abs(row["cumulative_pnl"] - equity) > 0.001
+                or abs(row["pnl_drawdown"] - (equity-peak)) > 0.001
+                or abs(row["fill_rate"] - (row["awarded_mw"] / row["placed_mw"] if row["placed_mw"] else 0)) > 1e-6):
+            raise ValueError("paper daily arithmetic mismatch")
+
+
+def check_receipt(receipt, end):
+    missing = (date.fromisoformat(receipt["checked_through"]) - date.fromisoformat(end)).days
+    if (missing < 0 or receipt.get("missing_result_days") != missing
+            or receipt.get("status") != ("current" if missing == 0 else "stale")
+            or receipt.get("state") not in ("verified_source", "retained_verified_source")):
+        raise ValueError("paper publication freshness mismatch")
+
+
+def check_pairs_folder(root, folder, record_end):
+    name = folder.split("/", 1)[1]
+    cap = int(name.split("-", 1)[1])
+    anchor = json.loads((root / folder / "source_anchor.json").read_bytes())
+    receipt = json.loads((root / folder / "publication.json").read_bytes())
+    package = str(anchor.get("source_package_sha256", ""))
+    if (anchor.get("schema") != "ptp-pairs-anchor-v1" or anchor.get("series") != name
+            or anchor.get("pair_cap") != cap or anchor.get("record_start") != START
+            or anchor.get("quantity_multiplier") != 3 or anchor.get("public_cost_per_placed_mwh") != 0.4
+            or anchor.get("evidence_basis") != "retrospective_scaled_reconstruction"
+            or anchor.get("development_only") is not True
+            or anchor.get("parent_specification_sha256") != E24_SPEC
+            or str(anchor.get("record_end", "")) > record_end
+            or receipt.get("record_start") != START or receipt.get("record_end") != anchor.get("record_end")
+            or len(package) != 64 or any(c not in "0123456789abcdef" for c in package)
+            or receipt.get("source_package_sha256") != package):
+        raise ValueError("pairs provenance contract mismatch: " + name)
+    hashes = {n: digest((root / folder / n).read_bytes()) for n in NAMES if n.endswith(".csv")}
+    if anchor.get("files_sha256") != hashes:
+        raise ValueError("pairs file binding mismatch: " + name)
+    data = {n: read_rows((root / folder / n).read_bytes()) for n in hashes}
+    daily = data["daily.csv"]
+    if any(list(row) != list(PAIRS_DAILY[:-1]) + ["source_proof_id", "proof_id"] for row in daily):
+        raise ValueError("pairs daily schema mismatch: " + name)
+    if any(len(row["eligibility_snapshot_id"]) != 64 for row in daily):
+        raise ValueError("pairs eligibility binding missing: " + name)
+    check_daily(daily, anchor["record_end"], cap=cap)
+    expected = tables(daily)
+    if any(data[n] != expected[n] for n in ("weekly.csv", "monthly.csv", "summary.csv")):
+        raise ValueError("pairs aggregate arithmetic mismatch: " + name)
+    check_receipt(receipt, anchor["record_end"])
+
+
 def verify(root):
     """Standalone public checks: hashes, calendar, arithmetic and honest exposure."""
     root = Path(root)
     try:
         identity = json.loads((root / "proof/private_anchor.json").read_bytes())
         projection = identity.get("paper_projection")
-        if projection not in tuple({"schema": schema, "record_start": START,
+        legacy = projection in tuple({"schema": schema, "record_start": START,
                 "folder": FOLDER, "quantity_multiplier": 3}
-                for schema in ("ptp-paper-projection-v1", "ptp-paper-projection-v2")):
+                for schema in ("ptp-paper-projection-v1", "ptp-paper-projection-v2"))
+        if legacy:
+            folders = [FOLDER]
+        elif (isinstance(projection, dict) and projection.get("schema") == "ptp-paper-projection-v3"
+                and set(projection) == {"schema", "record_start", "folders", "quantity_multiplier"}
+                and projection["record_start"] == START and projection["quantity_multiplier"] == 3
+                and projection["folders"] in ([FOLDER], [FOLDER, *("data/" + p for p in PAIRS)])):
+            folders = projection["folders"]
+        else:
             raise ValueError("unsupported paper projection")
         manifest = (root / "proof/records.sha256").read_bytes()
         if digest(manifest) != identity.get("records_sha256"):
             raise ValueError("paper manifest hash mismatch")
         entries = [line.split("  ", 1) for line in manifest.decode().splitlines()]
-        required = {"README.md", "STATUS.md", "scripts/verify.py", ".gitattributes",
-                    *(FOLDER + "/" + name for name in NAMES)}
+        published = {folder + "/" + name for folder in folders for name in NAMES}
+        required = {"README.md", "STATUS.md", "scripts/verify.py", ".gitattributes", *published}
         if len(entries) != len(required) or {entry[1] for entry in entries} != required:
             raise ValueError("paper manifest inventory mismatch")
         for expected, relative in entries:
             if digest((root / relative).read_bytes()) != expected:
                 raise ValueError("paper file hash mismatch: " + relative)
-        for directory, expected in (("data", {FOLDER + "/" + name for name in NAMES}),
-                                    ("scripts", {"scripts/verify.py"})):
+        for directory, expected in (("data", published), ("scripts", {"scripts/verify.py"})):
             if {p.relative_to(root).as_posix() for p in (root / directory).rglob("*") if p.is_file()} != expected:
                 raise ValueError("paper folder inventory mismatch: " + directory)
         anchor = json.loads((root / FOLDER / "source_anchor.json").read_bytes())
@@ -147,7 +235,7 @@ def verify(root):
                 or anchor.get("quantity_multiplier") != 3
                 or anchor.get("evidence_basis") != "retrospective_scaled_reconstruction"
                 or anchor.get("public_cost_per_placed_mwh") != 0.4
-                or anchor.get("source_frozen_specification_sha256") != "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f"
+                or anchor.get("source_frozen_specification_sha256") != E24_SPEC
                 or anchor.get("record_end") != identity.get("record_end")
                 or receipt.get("record_start") != START or receipt.get("record_end") != anchor["record_end"]):
             raise ValueError("paper provenance contract mismatch")
@@ -160,41 +248,18 @@ def verify(root):
             raise ValueError("paper source file binding mismatch")
         data = {name: read_rows((root / FOLDER / name).read_bytes()) for name in hashes}
         daily = data["daily.csv"]
-        start, end = date.fromisoformat(START), date.fromisoformat(anchor["record_end"])
-        if [row["date"] for row in daily] != [(start + timedelta(days=i)).isoformat() for i in range((end-start).days+1)]:
-            raise ValueError("paper daily calendar mismatch")
-        equity = peak = 0.0
-        for row in daily:
-            if (projection["schema"] == "ptp-paper-projection-v2"
-                    and {"settled_days", "pending_price_days"} & row.keys()):
-                raise ValueError("retired paper count columns")
-            if "evidence_basis" in row or "partially" in row["status"]:
-                raise ValueError("retired public daily schema")
-            if not 0 <= row["pending_awarded_mw"] <= row["awarded_mw"] <= row["placed_mw"] <= 2400:
-                raise ValueError("paper exposure bounds violated")
-            if "path_count" in row and not 0 <= row["path_count"] <= row["placed_mw"]/3 + 1e-8:
-                raise ValueError("paper submitted path count bounds violated")
-            if row["status"] != ("prices_pending" if row["pending_awarded_mw"] else "settled"):
-                raise ValueError("paper settlement status hides pending prices")
-            if row["signal_date"] != (date.fromisoformat(row["date"]) - timedelta(days=1)).isoformat():
-                raise ValueError("paper signal date mismatch")
-            equity += row["pnl"]
-            peak = max(peak, equity)
-            if (abs(row["pnl"] - (row["gross_pnl"] - 0.4 * row["placed_mw"])) > 0.001
-                    or abs(row["cumulative_pnl"] - equity) > 0.001
-                    or abs(row["pnl_drawdown"] - (equity-peak)) > 0.001
-                    or abs(row["fill_rate"] - (row["awarded_mw"] / row["placed_mw"] if row["placed_mw"] else 0)) > 1e-6):
-                raise ValueError("paper daily arithmetic mismatch")
+        if (projection["schema"] in ("ptp-paper-projection-v2", "ptp-paper-projection-v3")
+                and any({"settled_days", "pending_price_days"} & row.keys() for row in daily)):
+            raise ValueError("retired paper count columns")
+        check_daily(daily, anchor["record_end"], legacy=legacy)
         # Retained v1 packages remain verifiable during recovery; new v2 output
         # omits only the two count columns, never pending exposure or its status.
         expected = tables(daily, include_counts=projection["schema"] == "ptp-paper-projection-v1")
         if any(data[name] != expected[name] for name in ("weekly.csv", "monthly.csv", "summary.csv")):
             raise ValueError("paper aggregate arithmetic/counts mismatch")
-        missing = (date.fromisoformat(receipt["checked_through"]) - end).days
-        if (missing < 0 or receipt.get("missing_result_days") != missing
-                or receipt.get("status") != ("current" if missing == 0 else "stale")
-                or receipt.get("state") not in ("verified_source", "retained_verified_source")):
-            raise ValueError("paper publication freshness mismatch")
+        check_receipt(receipt, anchor["record_end"])
+        for folder in folders[1:]:
+            check_pairs_folder(root, folder, anchor["record_end"])
         return []
     except (OSError, ValueError, KeyError, TypeError, csv.Error) as exc:
         return [str(exc)]

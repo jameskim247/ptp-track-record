@@ -1,0 +1,37 @@
+{
+  "derivation": "multiply_final_bid_quantities",
+  "development_only": true,
+  "evidence_basis": "retrospective_scaled_reconstruction",
+  "files_sha256": {
+    "daily.csv": "306a7908beb1013e3af651339a25fa4ed217d01f60e45bdc4500601560bc12d4",
+    "monthly.csv": "db862d3333e6c6c843023ca1076f805fc0980aa59e47bf023074afae66d858f2",
+    "summary.csv": "f88f7c77704b8e5da967bc457621a83fe00e5054ef8ad08cfdfce1b4230330e1",
+    "weekly.csv": "ff10f7da5dea08e94a11eb8ca955305d8f30373b865571bf816820bafbdd2356"
+  },
+  "pair_cap": 500,
+  "parent_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+  "public_cost_per_placed_mwh": 0.4,
+  "quantity_multiplier": 3,
+  "record_end": "2026-10-15",
+  "record_start": "2024-01-01",
+  "rule": {
+    "eligibility": "A settlement point is eligible if it is the source or sink of any QSE's PTP Obligation bid in at least one of the latest 30 disclosure documents published before the cutoff. Bids appear in the disclosure only after ERCOT submission validation, which rejects non-biddable settlement points.",
+    "pair_cap": {
+      "applies_to": "every decision book and each variant's own scale-1.0 volatility-reference book",
+      "fee_per_placed_mwh": 0.4,
+      "min_observations": 20,
+      "ranking": "mwh",
+      "rule": "Keep the N distinct directed (source, sink) pairs with the largest physical bid MWh in the finished gated book; ties by source then sink; kept orders are unchanged. One ERCOT bid ID per pair.",
+      "selection_evidence": "Pre-declared at 2026-10-16 09:15 CT: rankings mwh / causal expected value / causal value-to-risk, each with kept or refilled quantities, compared on 2024-01-01..2026-09-29 with full volatility targeting (approximate linear-scaling evaluation). mwh with kept quantities had the highest mean annualised Sharpe across caps 200, 100 and 50 (4.35 vs 4.31 next; tie-break mean net). Development evidence only.",
+      "sizing": "keep",
+      "window_days": 120
+    }
+  },
+  "schema": "ptp-pairs-anchor-v1",
+  "series": "pairs-500",
+  "source_files_sha256": {
+    "daily.csv": "ab0a4702ef607c8848924195f482707a73f51cce18503a8eead5b7b3f069cb84"
+  },
+  "source_package_sha256": "41ef212bf5a68233940b0400dcb7a77e092d1402203c60a1c1fbbd0075df1456",
+  "specification_sha256": "93400d9ddf5fd38fb883b203f7831ea56078da31cc477e2c2735accf3935a76f"
+}

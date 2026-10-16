@@ -4,14 +4,19 @@
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_projection": {
-    "folder": "data/ptp-paper",
+    "folders": [
+      "data/ptp-paper",
+      "data/pairs-500",
+      "data/pairs-100",
+      "data/pairs-50"
+    ],
     "quantity_multiplier": 3,
     "record_start": "2024-01-01",
-    "schema": "ptp-paper-projection-v2"
+    "schema": "ptp-paper-projection-v3"
   },
   "record_end": "2026-10-15",
   "record_start": "2024-01-01",
-  "records_sha256": "d3e2068b3a358ed863c8db4feb0aed682d0b7fb7dbef2f099fab8644f1b72b20",
+  "records_sha256": "2c360f1d801a031505c8c553386a1d78f601adb49cf9a49a4dfe1aa1ddd49fb6",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [

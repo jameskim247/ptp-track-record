@@ -5,10 +5,14 @@
     "no_market_impact_or_credit_model",
     "unpriced_obligations_remain_pending"
   ],
+  "count_columns": {
+    "pair_hours": "submitted source-sink-hour orders (bid intervals); formerly path_count",
+    "pairs": "distinct directed source-sink pairs submitted (one bid ID per pair); empty when the pairs source is unavailable for the day"
+  },
   "derivation": "multiply_final_bid_quantities",
   "evidence_basis": "retrospective_scaled_reconstruction",
   "files_sha256": {
-    "daily.csv": "e440e80989b49b729f26cc868b761c7bee248d15cc397841296840e173109bc8",
+    "daily.csv": "0b3fc747d30553e7f7f8959586044037c6db0961dd0480670d8fcfd630ae9a29",
     "monthly.csv": "ebd4f567d5a9afab0c3b06192810e794d53901c68caa568b9b55a5de32bd0191",
     "summary.csv": "31ffd77179d2be8e3fbf90b7b718905f7acf9e4465534c2c7d7d4a3afa4ad1ce",
     "weekly.csv": "dea0213a42d9ee2168ead89ba21d62bd95b4d1e102a4c5d6208437869e653e04"
@@ -20,7 +24,6 @@
     ],
     "baseline_seed_daily_sha256": "1a9c40a605349d4165ec31815475f8f1fa7d9bc3ea59824be20010e4261d6ae9",
     "evidence_sha256": "090758b842cce0bee1e456b6eab18a0e6434fbfa393e53d537ad4e01eb4682ab",
-    "path_count_definition": "submitted source-sink-hour orders; quantity scaling does not multiply this count",
     "policy": {
       "max_missing_intervals_per_day": 4,
       "method": "paired_available_interval_mean",
