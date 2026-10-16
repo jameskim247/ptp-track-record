@@ -3,35 +3,77 @@
   "development_only": true,
   "evidence_basis": "retrospective_scaled_reconstruction",
   "files_sha256": {
-    "daily.csv": "306a7908beb1013e3af651339a25fa4ed217d01f60e45bdc4500601560bc12d4",
-    "monthly.csv": "db862d3333e6c6c843023ca1076f805fc0980aa59e47bf023074afae66d858f2",
-    "summary.csv": "f88f7c77704b8e5da967bc457621a83fe00e5054ef8ad08cfdfce1b4230330e1",
-    "weekly.csv": "ff10f7da5dea08e94a11eb8ca955305d8f30373b865571bf816820bafbdd2356"
+    "daily.csv": "7fd3eed3d4137d8eb3af0434fddc603bbe2de74d9a5e6da317a5b22945aaa28c",
+    "monthly.csv": "c37fe13dd877c0b128b3743f7eb7356bb77056e5f31a1cca4d50f61ca62c432b",
+    "summary.csv": "1540e2b20ddb8de3dcba0493d8541d883fb1a1ff1861a9464110582cf5a6a994",
+    "weekly.csv": "0cb7498d5805fac97d0d8145ed6714e8b40bd26e1fce77f8124e988f8e59ffe5"
   },
   "pair_cap": 500,
   "parent_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
-  "public_cost_per_placed_mwh": 0.4,
+  "public_cost_per_placed_mwh": 0,
   "quantity_multiplier": 3,
   "record_end": "2026-10-15",
   "record_start": "2024-01-01",
   "rule": {
+    "costs": {
+      "cost_per_placed_mwh": 0,
+      "description": "No fees or cost assumptions: P&L is the ERCOT DA and RT settlement of awarded orders, so pnl equals gross_pnl. ERCOT charges no PTP Obligation bid fee. v1 and the original record deducted an assumed $0.40 per placed MWh until 2026-10-16."
+    },
+    "deenergized": {
+      "award_rule": "An order whose source or sink is listed for its hour ending in the first-published NP4-200-CD csv document for its own operating day is not awarded: zero P&L, while it still counts as placed.",
+      "basis": "ERCOT does not award a PTP Obligation bid whose source or sink settlement point is de-energized in the DAM (NPRR339, approved 2011-04-19). ERCOT publishes those points for each DAM as NP4-200-CD, DAM De-Energized Settlement Points in Base Case, around 12:35 CT on the day before the operating day.",
+      "coverage": {
+        "award_rule": {
+          "np3-966-er-reconstruction": "2024-01-24..2026-08-17 except DST days",
+          "np4-200-cd": "2026-09-16 onward",
+          "unavailable": [
+            "2023-09-29..2024-01-23",
+            "2024-03-10",
+            "2024-11-03",
+            "2025-03-09",
+            "2025-11-02",
+            "2026-03-08",
+            "2026-08-18..2026-09-15"
+          ]
+        },
+        "decision_gate": {
+          "np3-966-er-reconstruction": "2024-01-25..2026-08-19",
+          "np4-200-cd": "2026-09-17 onward",
+          "unavailable": [
+            "2023-09-29..2024-01-24",
+            "2026-08-20..2026-09-16"
+          ]
+        }
+      },
+      "decision_gate": "For operating day D, every settlement point listed in any hour of the latest NP4-200-CD csv document published strictly before the decision cutoff (09:55 CT on D-1) is excluded from every sleeve's candidate universe, provided that document is for operating day D-1 or D-2.",
+      "historical_reconstruction": "ERCOT no longer displays older lists. For operating days 2024-01-24..2026-08-17 except DST days the list is reconstructed from NP3-966-ER 60-day DAM disclosures: a settlement point-hour counts as de-energized when at least one hourly PTP Obligation bid touching it was in the money by more than $0.05 against that hour's first-published DA spread and no PTP Obligation bid touching it was awarded. The gate then uses the reconstruction for D-1 (else D-2) and the award rule the reconstruction for D. 96% of in-the-money PTP bids without an award fell at reconstructed point-hours. A reconstruction misses de-energized points nobody bid in the money that hour, so it removes less than ERCOT's own lists would.",
+      "official_source": "NP4-200-CD csv documents (MIS report type 13063), each kept with its ZIP SHA-256. ERCOT displays them for 31 days; those for operating days 2026-09-16..2026-10-17 are pinned in pairs_deenergized_history.json.gz and later ones are fetched and cached by the producer.",
+      "reference_books": "Each variant's scale-1.0 volatility-reference book uses the same gate and award rule, so the corrected awards flow into sizing."
+    },
     "eligibility": "A settlement point is eligible if it is the source or sink of any QSE's PTP Obligation bid in at least one of the latest 30 disclosure documents published before the cutoff. Bids appear in the disclosure only after ERCOT submission validation, which rejects non-biddable settlement points.",
     "pair_cap": {
       "applies_to": "every decision book and each variant's own scale-1.0 volatility-reference book",
-      "fee_per_placed_mwh": 0.4,
+      "fee_per_placed_mwh": 0,
       "min_observations": 20,
       "ranking": "mwh",
       "rule": "Keep the N distinct directed (source, sink) pairs with the largest physical bid MWh in the finished gated book; ties by source then sink; kept orders are unchanged. One ERCOT bid ID per pair.",
-      "selection_evidence": "Pre-declared at 2026-10-16 09:15 CT: rankings mwh / causal expected value / causal value-to-risk, each with kept or refilled quantities, compared on 2024-01-01..2026-09-29 with full volatility targeting (approximate linear-scaling evaluation). mwh with kept quantities had the highest mean annualised Sharpe across caps 200, 100 and 50 (4.35 vs 4.31 next; tie-break mean net). Development evidence only.",
+      "selection_evidence": "Pre-declared at 2026-10-16 09:15 CT: rankings mwh / causal expected value / causal value-to-risk, each with kept or refilled quantities, compared on 2024-01-01..2026-09-29 with full volatility targeting (approximate linear-scaling evaluation). mwh with kept quantities had the highest mean annualised Sharpe across caps 200, 100 and 50 (4.35 vs 4.31 next; tie-break mean net). Development evidence only. The comparison deducted the then-assumed $0.40/placed MWh; the kept rule (mwh) does not use it.",
       "sizing": "keep",
       "window_days": 120
-    }
+    },
+    "primary_series": "pairs-100",
+    "supersedes": {
+      "reason": "v1 treated every biddable settlement point as awardable and deducted an assumed $0.40 per placed MWh. ERCOT does not award a PTP Obligation bid whose source or sink is de-energized in the DAM, so v1 credited orders that could not have cleared, and ERCOT charges no PTP bid fee. v1 results, published 2026-10-16, are superseded and remain in the public Git history.",
+      "schema": "pairs-spec-v1",
+      "sha256": "93400d9ddf5fd38fb883b203f7831ea56078da31cc477e2c2735accf3935a76f"
+    },
+    "version": "pairs-spec-v2"
   },
   "schema": "ptp-pairs-anchor-v1",
   "series": "pairs-500",
   "source_files_sha256": {
-    "daily.csv": "ab0a4702ef607c8848924195f482707a73f51cce18503a8eead5b7b3f069cb84"
+    "daily.csv": "1c0e6f236413696cb6ee8910d0239be35a6a5ce55cab4d9416dd6cac1b7f434d"
   },
-  "source_package_sha256": "c3e87989fa4163d54d29fdefa5316e7e9db304f8ab112f63bb4dd567c8db1bd3",
-  "specification_sha256": "93400d9ddf5fd38fb883b203f7831ea56078da31cc477e2c2735accf3935a76f"
+  "source_package_sha256": "659e8fcb7ed4a29281dc533b3a19d9fa748da8f801a6dd8953287a1be37faabb",
+  "specification_sha256": "7fc38dd69dfb6351661615d67a4760d0373d74ee53a4a9c3be2aff0a3dc8ca17"
 }
