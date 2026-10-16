@@ -9,6 +9,7 @@ PAIRS = ('pairs-500', 'pairs-100', 'pairs-50')
 NAMES = ('daily.csv', 'weekly.csv', 'monthly.csv', 'summary.csv', 'source_anchor.json', 'publication.json')
 E24_SPEC = '3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f'
 PAIRS_DAILY = ('date', 'signal_date', 'status', 'pnl', 'gross_pnl', 'cumulative_pnl', 'pnl_drawdown', 'placed_mw', 'awarded_mw', 'fill_rate', 'pending_awarded_mw', 'pairs', 'pair_hours', 'eligibility_snapshot_id', 'decision_proof_id', 'settlement_proof_id', 'proof_id')
+COSTS = (0, 0.4)
 
 def digest(body):
     return hashlib.sha256(body).hexdigest()
@@ -120,7 +121,7 @@ def tables(daily, *, include_counts=False):
     return result
 
 
-def check_daily(daily, end, *, cap=None, legacy=False):
+def check_daily(daily, end, *, cap=None, legacy=False, cost=0):
     """Public daily arithmetic, exposure bounds and honest pending labels."""
     start, end = date.fromisoformat(START), date.fromisoformat(end)
     if [row["date"] for row in daily] != [(start + timedelta(days=i)).isoformat() for i in range((end-start).days+1)]:
@@ -149,7 +150,7 @@ def check_daily(daily, end, *, cap=None, legacy=False):
             raise ValueError("paper signal date mismatch")
         equity += row["pnl"]
         peak = max(peak, equity)
-        if (abs(row["pnl"] - (row["gross_pnl"] - 0.4 * row["placed_mw"])) > 0.001
+        if (abs(row["pnl"] - (row["gross_pnl"] - cost * row["placed_mw"])) > 0.001
                 or abs(row["cumulative_pnl"] - equity) > 0.001
                 or abs(row["pnl_drawdown"] - (equity-peak)) > 0.001
                 or abs(row["fill_rate"] - (row["awarded_mw"] / row["placed_mw"] if row["placed_mw"] else 0)) > 1e-6):
@@ -172,7 +173,7 @@ def check_pairs_folder(root, folder, record_end):
     package = str(anchor.get("source_package_sha256", ""))
     if (anchor.get("schema") != "ptp-pairs-anchor-v1" or anchor.get("series") != name
             or anchor.get("pair_cap") != cap or anchor.get("record_start") != START
-            or anchor.get("quantity_multiplier") != 3 or anchor.get("public_cost_per_placed_mwh") != 0.4
+            or anchor.get("quantity_multiplier") != 3 or anchor.get("public_cost_per_placed_mwh") not in COSTS
             or anchor.get("evidence_basis") != "retrospective_scaled_reconstruction"
             or anchor.get("development_only") is not True
             or anchor.get("parent_specification_sha256") != E24_SPEC
@@ -190,7 +191,7 @@ def check_pairs_folder(root, folder, record_end):
         raise ValueError("pairs daily schema mismatch: " + name)
     if any(len(row["eligibility_snapshot_id"]) != 64 for row in daily):
         raise ValueError("pairs eligibility binding missing: " + name)
-    check_daily(daily, anchor["record_end"], cap=cap)
+    check_daily(daily, anchor["record_end"], cap=cap, cost=anchor["public_cost_per_placed_mwh"])
     expected = tables(daily)
     if any(data[n] != expected[n] for n in ("weekly.csv", "monthly.csv", "summary.csv")):
         raise ValueError("pairs aggregate arithmetic mismatch: " + name)
@@ -234,7 +235,7 @@ def verify(root):
         if (anchor.get("schema") != "ptp-paper-anchor-v1" or anchor.get("record_start") != START
                 or anchor.get("quantity_multiplier") != 3
                 or anchor.get("evidence_basis") != "retrospective_scaled_reconstruction"
-                or anchor.get("public_cost_per_placed_mwh") != 0.4
+                or anchor.get("public_cost_per_placed_mwh") not in COSTS
                 or anchor.get("source_frozen_specification_sha256") != E24_SPEC
                 or anchor.get("record_end") != identity.get("record_end")
                 or receipt.get("record_start") != START or receipt.get("record_end") != anchor["record_end"]):
@@ -251,7 +252,7 @@ def verify(root):
         if (projection["schema"] in ("ptp-paper-projection-v2", "ptp-paper-projection-v3")
                 and any({"settled_days", "pending_price_days"} & row.keys() for row in daily)):
             raise ValueError("retired paper count columns")
-        check_daily(daily, anchor["record_end"], legacy=legacy)
+        check_daily(daily, anchor["record_end"], legacy=legacy, cost=anchor["public_cost_per_placed_mwh"])
         # Retained v1 packages remain verifiable during recovery; new v2 output
         # omits only the two count columns, never pending exposure or its status.
         expected = tables(daily, include_counts=projection["schema"] == "ptp-paper-projection-v1")

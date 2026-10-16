@@ -4,6 +4,6 @@
   "record_end": "2026-10-15",
   "record_start": "2024-01-01",
   "source_package_sha256": "c3e87989fa4163d54d29fdefa5316e7e9db304f8ab112f63bb4dd567c8db1bd3",
-  "state": "verified_source",
+  "state": "retained_verified_source",
   "status": "current"
 }
