@@ -1,6 +1,6 @@
 {
-  "canonical_record_end": "2026-10-14",
-  "canonical_record_set_sha256": "ec69c95c298e38e24db239bc40b2a4c4e029532475fc3b2da892b5c9d09680f7",
+  "canonical_record_end": "2026-10-15",
+  "canonical_record_set_sha256": "b4265073d78e9a3f8bda2339beca571f078e1e6fbac89fe0a86ce2d05e794370",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_projection": {
@@ -9,9 +9,9 @@
     "record_start": "2024-01-01",
     "schema": "ptp-paper-projection-v2"
   },
-  "record_end": "2026-10-14",
+  "record_end": "2026-10-15",
   "record_start": "2024-01-01",
-  "records_sha256": "dd78da3c8e55180d8d8966b5195440d0a983e7d2ba597931584b6de3dd20ec84",
+  "records_sha256": "01906f8069483a334fbbcca57cc5e101a49752b8e9a85fa2b64e50fe4e2e8647",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
