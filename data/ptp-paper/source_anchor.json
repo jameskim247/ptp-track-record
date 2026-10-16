@@ -1,0 +1,48 @@
+{
+  "assumptions": [
+    "unchanged_prices_and_awards",
+    "linear_cost_per_placed_mwh",
+    "no_market_impact_or_credit_model",
+    "unpriced_obligations_remain_pending"
+  ],
+  "derivation": "multiply_final_bid_quantities",
+  "evidence_basis": "retrospective_scaled_reconstruction",
+  "files_sha256": {
+    "daily.csv": "ffa9bcc7b53671862590e586eb226c76b58082e89653c61817b40af2c5d76381",
+    "monthly.csv": "7a1f982f0a5fefd47922afc5ac5fc2d79ff3f1c3679c2a6293b45c9c164603d5",
+    "summary.csv": "912707a6556649b1f0592a551a183feaea4247854bd4d3fb8348dd9d455cbc50",
+    "weekly.csv": "0dae106e44b9cd0533927ef199779e4c63f4b1f28a2112fce42af7dcba9624e4"
+  },
+  "paper_settlement_amendment": {
+    "affected_days": [
+      "2025-12-04",
+      "2026-06-04"
+    ],
+    "baseline_seed_daily_sha256": "1a9c40a605349d4165ec31815475f8f1fa7d9bc3ea59824be20010e4261d6ae9",
+    "evidence_sha256": "090758b842cce0bee1e456b6eab18a0e6434fbfa393e53d537ad4e01eb4682ab",
+    "path_count_definition": "submitted source-sink-hour orders; quantity scaling does not multiply this count",
+    "policy": {
+      "max_missing_intervals_per_day": 4,
+      "method": "paired_available_interval_mean",
+      "minimum_paired_intervals_per_hour": 1,
+      "missing_count_basis": "union_of_physical_utc_timestamps_across_awarded_endpoints",
+      "official_settlement": false,
+      "schema": "ptp-paper-available-rt-v1",
+      "scope": "paper_settlement_only; frozen_decisions_and_sizing_unchanged"
+    }
+  },
+  "public_cost_per_placed_mwh": 0.4,
+  "quantity_multiplier": 3,
+  "record_end": "2026-10-14",
+  "record_start": "2024-01-01",
+  "schema": "ptp-paper-anchor-v1",
+  "source_files_sha256": {
+    "daily.csv": "70177a4abe747df21a9541f8b735a5a9f8e6bf747b1704ad7562779cc7f03a75",
+    "monthly.csv": "a5a4f056b7010e2ea5dcb868ac3460bad39271ac460fdd29264c3cfa8797296b",
+    "source_anchor.json": "3fb1f140ee6d9a35211d0cde18dc02044a49a27807297afd6e0b98597f4b0d53",
+    "summary.csv": "5e1d5609aeccab1b145fadaf88fa4b86224d1252a18df164f2efaa13d673241e",
+    "weekly.csv": "1edf83ceeaf821210178c8834327e907b979b9535214964d69e62c832a0d9c5d"
+  },
+  "source_frozen_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+  "source_package_sha256": "8078af5713e12b71ca54a4e7254a1705be996dab1dc67d0e584b1437c4626b59"
+}
