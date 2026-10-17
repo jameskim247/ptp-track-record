@@ -1,3 +1,3 @@
 # Status
 
-Results through 2026-10-15. 1016/1019 days paper-settled. Unvalued payouts excluded; see [daily details](data/ptp-paper/daily.csv). Publication: current. Pair-capped variants through 2026-10-15.
+Results through 2026-10-16. 1017/1020 days paper-settled. Unvalued payouts excluded; see [daily details](data/ptp-paper/daily.csv). Publication: current. Pair-capped variants through 2026-10-15.

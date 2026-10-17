@@ -13,10 +13,10 @@
   "derivation": "multiply_final_bid_quantities",
   "evidence_basis": "retrospective_scaled_reconstruction",
   "files_sha256": {
-    "daily.csv": "156e4be42fef443a1749c68ed57153e6bd7408098620afbaf29d756c722c3331",
-    "monthly.csv": "fe5733544e0de80add28609eb1f99c1985b305f3149a61faad1c9c281ba9a83f",
-    "summary.csv": "d0526df4c93930bdd7fc8395a348461171dbb94078c83c71e9cc7bfcb8b4ae36",
-    "weekly.csv": "34dfd451c2cea69291c82103456e4df385e9d52245f7cace09205dd6d10d19b0"
+    "daily.csv": "cc92561ee05916d2388fb7c087738883a1ea96dcf41145bd9f237df1be62375a",
+    "monthly.csv": "f52f42ad052f43e2c1192784aa2f5739c745142ddf58acd2bebb6d00b2cf4862",
+    "summary.csv": "60beae97f232433dabe49ec08c0536c4bf5db6d99167327b3f6e49b8f691e82b",
+    "weekly.csv": "fe9565f3205271475bdb85a0cf93eaa7e678a4f5054ddcf14c99821e790a136c"
   },
   "paper_settlement_amendment": {
     "affected_days": [
@@ -37,16 +37,16 @@
   },
   "public_cost_per_placed_mwh": 0,
   "quantity_multiplier": 3,
-  "record_end": "2026-10-15",
+  "record_end": "2026-10-16",
   "record_start": "2024-01-01",
   "schema": "ptp-paper-anchor-v1",
   "source_files_sha256": {
-    "daily.csv": "819cbc4a0dc4f7acdbc507248f1e03444b2f1daddbf7f517c67453f1d343f4ef",
-    "monthly.csv": "a9a64d02adc45bb0dbfd3c2fd1534611c5f47eeec73a8e8376581e1f5360a2da",
-    "source_anchor.json": "95d58214d403b25800ebaf82f838d03ca2f9ba20c51ee4d6b63211390e4a30f2",
-    "summary.csv": "7a9a0a39dd794e0d865b0934dcf09450abfffefa5adb1c95ef99c80cd9d1c93b",
-    "weekly.csv": "551d40cb9093cbe0b09a9db5f34650c47f4de29bbafb587abe0b2b6aa6f1bf0b"
+    "daily.csv": "b6b870c6cfef8da6d9d46cb8959cda973b23676976dd9fdcdc41ece58e390f49",
+    "monthly.csv": "37c6fde274f97ca9109ffc9d5b77c74134a63cbc90de121b32b4ab528150bd7b",
+    "source_anchor.json": "9b3201f264c75732495044ccf8768e4bb0c170827b01ebfb3cab1126fdffa807",
+    "summary.csv": "c5efdab66afd777528a87b06a2f302e9ac0f0ce78884d788c0f262ce7da6926a",
+    "weekly.csv": "1435e6f68663dbd1073b53869e05fc827947be7e265d73b36e8d980c25bccb9a"
   },
   "source_frozen_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
-  "source_package_sha256": "a8aa6ea559148b35581a6a902a9e1576820994488dbb9f908d5bf00b88bf2c64"
+  "source_package_sha256": "cb8345832a65ba48118529a10e387fc55333dc71b7697971dc710b32b76e38ac"
 }
