@@ -13,7 +13,7 @@
   "derivation": "multiply_final_bid_quantities",
   "evidence_basis": "retrospective_scaled_reconstruction",
   "files_sha256": {
-    "daily.csv": "cc92561ee05916d2388fb7c087738883a1ea96dcf41145bd9f237df1be62375a",
+    "daily.csv": "54ba0951126acee09c7e1a67d6fe4eb898593e5b7209e8ba46488d2062db5c1f",
     "monthly.csv": "f52f42ad052f43e2c1192784aa2f5739c745142ddf58acd2bebb6d00b2cf4862",
     "summary.csv": "60beae97f232433dabe49ec08c0536c4bf5db6d99167327b3f6e49b8f691e82b",
     "weekly.csv": "fe9565f3205271475bdb85a0cf93eaa7e678a4f5054ddcf14c99821e790a136c"

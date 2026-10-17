@@ -3,16 +3,16 @@
   "development_only": true,
   "evidence_basis": "retrospective_scaled_reconstruction",
   "files_sha256": {
-    "daily.csv": "03e6d0d311afd80e4f826fb4de78d413568b7a2082428f625071f54b6392d63b",
-    "monthly.csv": "aed3370791195b3ac87eb770834b6200cf761fc86b045c5d3fa210a908223c7e",
-    "summary.csv": "ebe798721344d77d5ce45abd46103d71e752b5492873969fec2b5c4abcff0478",
-    "weekly.csv": "d768228429fcbbcbc4f21cd2392f0ad143ede1172ba5d48be1eef6f52626caa1"
+    "daily.csv": "851c3df35d6e960b934f01a4c4d0a3a95ca8713e2f0107adc6aadb4489c87984",
+    "monthly.csv": "2ee04227b171c1805dddcb82e42846ca09ad555b01738370b1ae43d93cebc1f8",
+    "summary.csv": "642602d46a406e207298eec4614747e2f63e4a6a4e8f059f210f5d2baf18c841",
+    "weekly.csv": "27b39eea8d809aafbf2a768de73e8411a83e623f865b6d96b6f392545074c216"
   },
   "pair_cap": 50,
   "parent_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
   "public_cost_per_placed_mwh": 0,
   "quantity_multiplier": 3,
-  "record_end": "2026-10-15",
+  "record_end": "2026-10-16",
   "record_start": "2024-01-01",
   "rule": {
     "costs": {
@@ -72,8 +72,8 @@
   "schema": "ptp-pairs-anchor-v1",
   "series": "pairs-50",
   "source_files_sha256": {
-    "daily.csv": "4adab2ea6cd07591db756be642234c5a8cdf2ce765b90142e4a2da2961dd4c74"
+    "daily.csv": "ac2a2af7b21c07efedef0fe3fae0859e8c81b907470ed1af5c75a6a7ca074167"
   },
-  "source_package_sha256": "659e8fcb7ed4a29281dc533b3a19d9fa748da8f801a6dd8953287a1be37faabb",
+  "source_package_sha256": "8b670f5936091092232856a88ddd5287cb510723e6e61855a3e7bbfd1181ad55",
   "specification_sha256": "7fc38dd69dfb6351661615d67a4760d0373d74ee53a4a9c3be2aff0a3dc8ca17"
 }
