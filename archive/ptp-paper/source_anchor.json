@@ -1,0 +1,52 @@
+{
+  "assumptions": [
+    "unchanged_prices_and_awards",
+    "no_fees_or_costs",
+    "no_market_impact_or_credit_model",
+    "unpriced_obligations_remain_pending"
+  ],
+  "cost_basis": "no fees or cost assumptions: pnl is the ERCOT DA/RT settlement of awarded orders (gross_pnl); the source package deducts an assumed $0.40 per placed MWh, which this public view stopped applying on 2026-10-16",
+  "count_columns": {
+    "pair_hours": "submitted source-sink-hour orders (bid intervals); formerly path_count",
+    "pairs": "distinct directed source-sink pairs submitted (one bid ID per pair); empty when the pairs source is unavailable for the day"
+  },
+  "derivation": "multiply_final_bid_quantities",
+  "evidence_basis": "retrospective_scaled_reconstruction",
+  "files_sha256": {
+    "daily.csv": "c8b379aabc7d4fd5eaa4d0a7339686ed3fab66008272e0c1ffe080f61079b04c",
+    "monthly.csv": "6f557e6262e12ea728f125c1be56ad965b39f9eb428ae2b282243bc21695ddbd",
+    "summary.csv": "a29e7c6b083c38f8d2bb04b3e2a4266ad71f6ac59853fe739833d77225630381",
+    "weekly.csv": "e7f82a1a58204e06564a25cc80f4f9581ee7650390ba4bd1a7802dd671c6777a"
+  },
+  "paper_settlement_amendment": {
+    "affected_days": [
+      "2025-12-04",
+      "2026-06-04"
+    ],
+    "baseline_seed_daily_sha256": "1a9c40a605349d4165ec31815475f8f1fa7d9bc3ea59824be20010e4261d6ae9",
+    "evidence_sha256": "090758b842cce0bee1e456b6eab18a0e6434fbfa393e53d537ad4e01eb4682ab",
+    "policy": {
+      "max_missing_intervals_per_day": 4,
+      "method": "paired_available_interval_mean",
+      "minimum_paired_intervals_per_hour": 1,
+      "missing_count_basis": "union_of_physical_utc_timestamps_across_awarded_endpoints",
+      "official_settlement": false,
+      "schema": "ptp-paper-available-rt-v1",
+      "scope": "paper_settlement_only; frozen_decisions_and_sizing_unchanged"
+    }
+  },
+  "public_cost_per_placed_mwh": 0,
+  "quantity_multiplier": 3,
+  "record_end": "2026-10-17",
+  "record_start": "2024-01-01",
+  "schema": "ptp-paper-anchor-v1",
+  "source_files_sha256": {
+    "daily.csv": "a99f985519ca0bf1e1a2b3dd3ade48f6cbcfe34e69521bd2d9f576028316397d",
+    "monthly.csv": "30f44ea99b9a53676b014928850da32da92f8f32b80845a8b06c10d2f182278c",
+    "source_anchor.json": "05b4bee10f15961b8e441ecf434df92030d8823b0228d05d8428b6f04e8fa85d",
+    "summary.csv": "7b0bbff2da070594edebdbee1e6712af75cf92782063b62db4051c864539ebc2",
+    "weekly.csv": "e981b7c3b140f324546b6e2af7118ab1a3a9463f5e2e81276467c6111c07459a"
+  },
+  "source_frozen_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+  "source_package_sha256": "e1ca7df06ef4be51edd5a4ddad9a5c7d3cacf1e3f8d7c79507a8e3b072496d10"
+}

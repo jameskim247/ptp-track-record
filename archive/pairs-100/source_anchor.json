@@ -1,0 +1,79 @@
+{
+  "derivation": "multiply_final_bid_quantities",
+  "development_only": true,
+  "evidence_basis": "retrospective_scaled_reconstruction",
+  "files_sha256": {
+    "daily.csv": "7b4fc57dd7f5cb651da415364f553555f8d46dcb8aa995831b9bbaf8aed0279f",
+    "monthly.csv": "9f7d23d1b1e46f9a3acade90b4c62b1440aaad70351103cce126ec854741ca57",
+    "summary.csv": "57be47b75171a9c39b3e395651f4d07e9a5be555fc08ba91c75e7b3f974d3a7c",
+    "weekly.csv": "e13c63f1dc7945c9c01c9ffb5b864879ee0e2b6d9fd8b8c9d1ae93903a35fde2"
+  },
+  "pair_cap": 100,
+  "parent_specification_sha256": "3d9b97fd7f5ec8b509e459873cdc32c484f2d56d29ff250f0e20270a5b77435f",
+  "public_cost_per_placed_mwh": 0,
+  "quantity_multiplier": 3,
+  "record_end": "2026-10-17",
+  "record_start": "2024-01-01",
+  "rule": {
+    "costs": {
+      "cost_per_placed_mwh": 0,
+      "description": "No fees or cost assumptions: P&L is the ERCOT DA and RT settlement of awarded orders, so pnl equals gross_pnl. ERCOT charges no PTP Obligation bid fee. v1 and the original record deducted an assumed $0.40 per placed MWh until 2026-10-16."
+    },
+    "deenergized": {
+      "award_rule": "An order whose source or sink is listed for its hour ending in the first-published NP4-200-CD csv document for its own operating day is not awarded: zero P&L, while it still counts as placed.",
+      "basis": "ERCOT does not award a PTP Obligation bid whose source or sink settlement point is de-energized in the DAM (NPRR339, approved 2011-04-19). ERCOT publishes those points for each DAM as NP4-200-CD, DAM De-Energized Settlement Points in Base Case, around 12:35 CT on the day before the operating day.",
+      "coverage": {
+        "award_rule": {
+          "np3-966-er-reconstruction": "2024-01-24..2026-08-17 except DST days",
+          "np4-200-cd": "2026-09-16 onward",
+          "unavailable": [
+            "2023-09-29..2024-01-23",
+            "2024-03-10",
+            "2024-11-03",
+            "2025-03-09",
+            "2025-11-02",
+            "2026-03-08",
+            "2026-08-18..2026-09-15"
+          ]
+        },
+        "decision_gate": {
+          "np3-966-er-reconstruction": "2024-01-25..2026-08-19",
+          "np4-200-cd": "2026-09-17 onward",
+          "unavailable": [
+            "2023-09-29..2024-01-24",
+            "2026-08-20..2026-09-16"
+          ]
+        }
+      },
+      "decision_gate": "For operating day D, every settlement point listed in any hour of the latest NP4-200-CD csv document published strictly before the decision cutoff (09:55 CT on D-1) is excluded from every sleeve's candidate universe, provided that document is for operating day D-1 or D-2.",
+      "historical_reconstruction": "ERCOT no longer displays older lists. For operating days 2024-01-24..2026-08-17 except DST days the list is reconstructed from NP3-966-ER 60-day DAM disclosures: a settlement point-hour counts as de-energized when at least one hourly PTP Obligation bid touching it was in the money by more than $0.05 against that hour's first-published DA spread and no PTP Obligation bid touching it was awarded. The gate then uses the reconstruction for D-1 (else D-2) and the award rule the reconstruction for D. 96% of in-the-money PTP bids without an award fell at reconstructed point-hours. A reconstruction misses de-energized points nobody bid in the money that hour, so it removes less than ERCOT's own lists would.",
+      "official_source": "NP4-200-CD csv documents (MIS report type 13063), each kept with its ZIP SHA-256. ERCOT displays them for 31 days; those for operating days 2026-09-16..2026-10-17 are pinned in pairs_deenergized_history.json.gz and later ones are fetched and cached by the producer.",
+      "reference_books": "Each variant's scale-1.0 volatility-reference book uses the same gate and award rule, so the corrected awards flow into sizing."
+    },
+    "eligibility": "A settlement point is eligible if it is the source or sink of any QSE's PTP Obligation bid in at least one of the latest 30 disclosure documents published before the cutoff. Bids appear in the disclosure only after ERCOT submission validation, which rejects non-biddable settlement points.",
+    "pair_cap": {
+      "applies_to": "every decision book and each variant's own scale-1.0 volatility-reference book",
+      "fee_per_placed_mwh": 0,
+      "min_observations": 20,
+      "ranking": "mwh",
+      "rule": "Keep the N distinct directed (source, sink) pairs with the largest physical bid MWh in the finished gated book; ties by source then sink; kept orders are unchanged. One ERCOT bid ID per pair.",
+      "selection_evidence": "Pre-declared at 2026-10-16 09:15 CT: rankings mwh / causal expected value / causal value-to-risk, each with kept or refilled quantities, compared on 2024-01-01..2026-09-29 with full volatility targeting (approximate linear-scaling evaluation). mwh with kept quantities had the highest mean annualised Sharpe across caps 200, 100 and 50 (4.35 vs 4.31 next; tie-break mean net). Development evidence only. The comparison deducted the then-assumed $0.40/placed MWh; the kept rule (mwh) does not use it.",
+      "sizing": "keep",
+      "window_days": 120
+    },
+    "primary_series": "pairs-100",
+    "supersedes": {
+      "reason": "v1 treated every biddable settlement point as awardable and deducted an assumed $0.40 per placed MWh. ERCOT does not award a PTP Obligation bid whose source or sink is de-energized in the DAM, so v1 credited orders that could not have cleared, and ERCOT charges no PTP bid fee. v1 results, published 2026-10-16, are superseded and remain in the public Git history.",
+      "schema": "pairs-spec-v1",
+      "sha256": "93400d9ddf5fd38fb883b203f7831ea56078da31cc477e2c2735accf3935a76f"
+    },
+    "version": "pairs-spec-v2"
+  },
+  "schema": "ptp-pairs-anchor-v1",
+  "series": "pairs-100",
+  "source_files_sha256": {
+    "daily.csv": "ec91f8972e755ee0f41cc1ad83b69cca5fca3fec764d68cf039e80cc5910b275"
+  },
+  "source_package_sha256": "a1cc3439156c3880874ddab5a71bb8478d05f541ae7e6f2f51a3b52f0c311a34",
+  "specification_sha256": "7fc38dd69dfb6351661615d67a4760d0373d74ee53a4a9c3be2aff0a3dc8ca17"
+}

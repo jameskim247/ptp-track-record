@@ -1,0 +1,39 @@
+{
+  "assumptions": {
+    "coverage": "Price coverage divides fully priced modeled awarded MWh by modeled awarded MWh. Award-node evidence requires both node/hour endpoints in actual market PTP awards; it is not actual awards to this strategy or exact directed-pair award coverage.",
+    "deenergized_lists": "Original operating-day lists unavailable. Existing in-money/no-awards restriction reconstructed from market bids and awards for auction outcomes only, not that day's order selection.",
+    "grid": "Same grid-score formula, causally refitted from archives beginning 2018; no modern topology peer map; unavailable node fits retain the existing zero fallback.",
+    "nodes": "Then-observed price universe and the latest 30 DAM disclosures published before D-1 09:55 America/Chicago; fixed logical-node exclusions.",
+    "prices": "First-published vintages for decisions and original DA clearing for awards. Final corrections affect settlement, never earlier decisions. Correction search ends 181 days after each event start.",
+    "settlement": "Strict DA sink-minus-source spread < bid. P&L = MWh times (RT spread minus DA settlement spread). Four paired 15-minute RT intervals required; missing payouts are not zero.",
+    "sizing": "Cold start at the frozen risk prior at each event start; D-2 reference updates within the event. Not a continuous pre-storm sizing history."
+  },
+  "cost_basis": "before costs; no market-impact model; current published quantities",
+  "development_only": true,
+  "events": {
+    "elliott": [
+      "2022-12-22",
+      "2022-12-25"
+    ],
+    "uri": [
+      "2021-02-14",
+      "2021-02-19"
+    ]
+  },
+  "evidence_basis": "retrospective diagnostic; not executed trades or independent validation",
+  "files_sha256": {
+    "stress.csv": "ee767a49018a09992b6703b6da3d073dff2b9d1469c3cf3a94dacf5841e23c8c",
+    "stress_daily.csv": "2ce416b123a5fbc05a7562fca00ecdffa675d236affce23c240c3ff4deb479e2"
+  },
+  "method": "historical_strategy_replay",
+  "run_date": "2026-10-19",
+  "schema": "ptp-historical-storm-anchor-v1",
+  "source_bindings": {
+    "audit_results_sha256": "b05a1538696cb957b76df5bea68f9835184c0e77f45e84c7ca3a63298105aeb0",
+    "elliott_order_records_sha256": "5ea809889e1068b9566a271bd4d8cc92226d47cfa2c35a052374516327e8b9c0",
+    "frozen_plan_sha256": "7227acf4478dc00d8677f0849e48639bc2983d51f390f90b6d4170563121b70b",
+    "replay_code_sha256": "5e843a2c066c042e2b659914fd8a182bc5b7f294e917642979102fd03595aba2",
+    "uri_order_records_sha256": "10263e2036c3d29fece16847f6801d5f6d953d92bdaf740bf4e949e825de6927"
+  },
+  "study_sha256": "43e7d9fe086c2c2702c24b69c6c292d31a65358d644ee4010d212144d7093078"
+}

@@ -1,0 +1,76 @@
+{
+  "canonical_record_end": "2026-10-18",
+  "canonical_record_set_sha256": "d5c346d56340d3fde43912a8632a8dcc8a77e05d317d31d623163ceb08f37467",
+  "canonical_record_start": "2026-01-01",
+  "generation": "programme-03",
+  "paper_parent": {
+    "record_end": "2026-10-18",
+    "schema": "ptp-paper-parent-v1",
+    "source_files_sha256": {
+      "daily.csv": "371c088200d0e444382a98e4784e4a210798df87025f47b183463fbd2c018e75",
+      "monthly.csv": "012b968648783d3c720d734b10c8354ff1f68fb377e163819bbca612349488c6",
+      "source_anchor.json": "357fd881493215431556c16a6684160246f20c478afa91cfec06324b65577e20",
+      "summary.csv": "fb7ceaf32c8b74c0e5d53cc979e06a43bb4b2563d9fcc2d993b4ad453f144521",
+      "weekly.csv": "4330b8bf3dfef279950b6df38d04b7e26a3c5e54d52e08cf957dbc97fc57aafe"
+    },
+    "source_package_sha256": "65fccd7fd8b254c6dbc20ab5d314dcf8090c20ede5cfc4b5de4eecb8583f5260"
+  },
+  "paper_projection": {
+    "archive": {
+      "files_sha256": {
+        "archive/pairs-100/daily.csv": "7b4fc57dd7f5cb651da415364f553555f8d46dcb8aa995831b9bbaf8aed0279f",
+        "archive/pairs-100/monthly.csv": "9f7d23d1b1e46f9a3acade90b4c62b1440aaad70351103cce126ec854741ca57",
+        "archive/pairs-100/publication.json": "de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e",
+        "archive/pairs-100/source_anchor.json": "e5b1bfab1637d8edd64db599cc303883d126a2d6b16643850a0a4053d24b2fd8",
+        "archive/pairs-100/summary.csv": "57be47b75171a9c39b3e395651f4d07e9a5be555fc08ba91c75e7b3f974d3a7c",
+        "archive/pairs-100/weekly.csv": "e13c63f1dc7945c9c01c9ffb5b864879ee0e2b6d9fd8b8c9d1ae93903a35fde2",
+        "archive/pairs-50/daily.csv": "95dc55a06da519c43e2fb1b1a7ec1d3c725238bbff88fc534b3e3e9920fd64e7",
+        "archive/pairs-50/monthly.csv": "7d4d758a1e14bda7c579a7d034693a4e20c175d10b3321eb22d0a38741ba03a8",
+        "archive/pairs-50/publication.json": "de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e",
+        "archive/pairs-50/source_anchor.json": "94e3fdd0bb74bf13d4b7476f5982303c1399394c083821b6874d8a0978dc26e7",
+        "archive/pairs-50/summary.csv": "7cac5abba2de4fa9edb05e30f64ae710c8bc9b459f25a4b6987615398a216faa",
+        "archive/pairs-50/weekly.csv": "a5366af3630175cb116bdcfdcbcbc0bdca8a813df5fdad2dc7d2fa131e8d2dc0",
+        "archive/pairs-500/daily.csv": "44a39472351463ae2c67efc79e5bc8f8d986d4bd9b4fcfa2d0b52b47cdbee7b8",
+        "archive/pairs-500/monthly.csv": "42dff4e6efac7bb2d8bf7c26ad2acb3fb7e571cbf0cf98d7b4cf6867c3b9a794",
+        "archive/pairs-500/publication.json": "de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e",
+        "archive/pairs-500/source_anchor.json": "1ea6be5c5ed8ccc1c39962f78a6f5634901ca63fbe0d886d6df66ceecc77d399",
+        "archive/pairs-500/summary.csv": "436575f82ceb2281b00455965a0dfbe497997f511424fd5583a217919201aff4",
+        "archive/pairs-500/weekly.csv": "2a4ce3bc5e52975b678aded7726006f366eaa343dc5b7545848d9f330776e488",
+        "archive/ptp-paper/daily.csv": "c8b379aabc7d4fd5eaa4d0a7339686ed3fab66008272e0c1ffe080f61079b04c",
+        "archive/ptp-paper/monthly.csv": "6f557e6262e12ea728f125c1be56ad965b39f9eb428ae2b282243bc21695ddbd",
+        "archive/ptp-paper/publication.json": "81767aab27d0848dcb430a42032a06d07105a4fb3c7a970e2d6f15460571f608",
+        "archive/ptp-paper/source_anchor.json": "afff003aaf3f4d82625c450f3613217e059a62d8ddbb0a3847236bb0539e16cd",
+        "archive/ptp-paper/summary.csv": "a29e7c6b083c38f8d2bb04b3e2a4266ad71f6ac59853fe739833d77225630381",
+        "archive/ptp-paper/weekly.csv": "e7f82a1a58204e06564a25cc80f4f9581ee7650390ba4bd1a7802dd671c6777a"
+      },
+      "last_published_day": "2026-10-17",
+      "retired_series": [
+        "ptp-paper",
+        "pairs-500",
+        "pairs-100",
+        "pairs-50"
+      ]
+    },
+    "documents": [
+      "data/docs/submission-credit.md",
+      "data/docs/stress.md"
+    ],
+    "folders": [
+      "data/pairs-100",
+      "data/pairs-50",
+      "data/risk"
+    ],
+    "prospective_from": "2026-10-20",
+    "record_start": "2024-01-01",
+    "schema": "ptp-paper-projection-v6"
+  },
+  "record_end": "2026-10-18",
+  "record_start": "2024-01-01",
+  "records_sha256": "d027f93dfe7c6d05ddf3a1f49d4b6e579510dfda90638e0747a48b3d36d0cdb3",
+  "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
+  "schema": "ptp-neutral-registry-anchor-v2",
+  "series_ids": [
+    "pairs-100",
+    "pairs-50"
+  ]
+}
