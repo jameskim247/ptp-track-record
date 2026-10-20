@@ -5,17 +5,17 @@
     "prospective": "from 2026-10-20: prospective record of the rule frozen at 2026-10-18T12:00:14-05:00, rebuilt from the inputs each base decision recorded (recorded vintage)"
   },
   "files_sha256": {
-    "daily.csv": "d1d091e034575e377b5302a26e6c8b325b6893ab8943ff5b58faef5ea46d3f11",
-    "monthly.csv": "53a0731b4d6d94986b97d6c65766c4c3b9b85ef8a5814945640dcde94ac8ca3a",
-    "summary.csv": "773e12ac0f57605aecff7fbee21e584ca02864a68ef9253afbeb590d28ed637e",
-    "weekly.csv": "c888943fbbffd5ec9861306483e73e7dcc2d69e77b985ceee76352edbbcfe8b9"
+    "daily.csv": "102e194eae59333628cb707a1c4c4a6c021f28893ddbf7aa7dd8cd4b4888d518",
+    "monthly.csv": "9f7c7930e9349df66e11b4d50b0106ed822fd030efb405de85ac6168e9c06ffa",
+    "summary.csv": "f92e59ff069f0bc741d5b9e7ddbba335e9983bfc6a69937f2c97a92cc01f9fcc",
+    "weekly.csv": "d646419d236234857e7c71093831ec89e1b817c2d57898b657aa5f1de5890631"
   },
   "kill_rule_breach": null,
   "pair_cap": 50,
   "prospective_from": "2026-10-20",
   "protocol_sha256": "8d89c954b9210d6078537b0dbac2881bdc6fa9ee8b76259b9158419def61898a",
   "public_cost_per_placed_mwh": 0,
-  "record_end": "2026-10-18",
+  "record_end": "2026-10-19",
   "record_start": "2024-01-01",
   "rule": {
     "first_prospective_cutoff": "2026-10-19T09:55:00-05:00",
@@ -25,7 +25,7 @@
   "schema": "ptp-series-anchor-v6",
   "series": "pairs-50",
   "source_files_sha256": {
-    "daily.csv": "2af16c85a855aea8fee9a73410ba049f77c6d2cea8cb8fb1af4a1886189d2816"
+    "daily.csv": "a58808888941cc9b010d82d969ae31f8f33b2869952dfa3d474d7a6d0110327e"
   },
-  "source_package_sha256": "b64399c9a0aeddbcd0aa75d6f586e02a9a23fd0b10924ee5d8ef2f66cd8f6646"
+  "source_package_sha256": "1f0a899ea7f9a5e8930cf926f4aa5949c15a72ebaa8b9fb23ac04483e92306ef"
 }
