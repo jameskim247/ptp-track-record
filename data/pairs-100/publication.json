@@ -3,7 +3,7 @@
   "missing_result_days": 0,
   "record_end": "2026-10-20",
   "record_start": "2024-01-01",
-  "source_package_sha256": "ff6a67450a9cf18d8569d9360310cf8a44f6b4694e7c72e6cbde8a8ea819bba2",
+  "source_package_sha256": "3c8491b5982090ee45dc9ca8729b86eaa6c7ebd58ec4dff93bb4763c858bf3ac",
   "state": "verified_source",
   "status": "current"
 }
