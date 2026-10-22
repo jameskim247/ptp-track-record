@@ -1,19 +1,19 @@
 {
-  "canonical_record_end": "2026-10-20",
-  "canonical_record_set_sha256": "340d5c4ccc0e6b68fc6d330b2681d5b287d4938ab5378cfbbc6dba6a878c2ef1",
+  "canonical_record_end": "2026-10-21",
+  "canonical_record_set_sha256": "0b82e1496178e2c353ee79ce36cc67968896921ac445aa260faea45f0ff5d80f",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_parent": {
-    "record_end": "2026-10-20",
+    "record_end": "2026-10-21",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "7fb666cf10b94b146ea39ea434b5b05221d25749027456f2073a3754d1e629ee",
-      "monthly.csv": "e9f02a1b6d466eb91d5f8187df2e18409cf1763532d950f966e687a2ccd9aace",
-      "source_anchor.json": "dce1ba2e86f8aeb3d1a86093aa0317f208c410672b088033a1687e96311fe533",
-      "summary.csv": "83d37ce13bd86181b859d5818a4ee9c6bb0b117cc3cde35f5adfc23f0029121d",
-      "weekly.csv": "b2c15190d8dcf188f03b296cfe4964fe2b8e4f36cac38a7d22fc806a717a5cc0"
+      "daily.csv": "fa16aabe52734429efc5e2bb8623925e6888ff503dafa3ee8bbc0a5bfed1a7b9",
+      "monthly.csv": "0ec569596102d37bff3f4e6eda4b2232eb1aab2fbd668e10900489236d770e47",
+      "source_anchor.json": "c85411adca5fb04571cfc765e833aa2969b535266e070e39d9b637142627e16e",
+      "summary.csv": "9d329ff234d775de7762770f027afe985049af8a34f0b4979338b98b900279bf",
+      "weekly.csv": "833bba259c4014a17d1c38778222bb86b75d321f5c4630bcb907a5ea450b58aa"
     },
-    "source_package_sha256": "71664da2624c59460c6cbca26d5880736df3008a3fc6753154de031a00840e98"
+    "source_package_sha256": "8625e32ecd7f10b9790257e37f91376f4a6c7a1bc812a4811dbc4dad62cbb720"
   },
   "paper_projection": {
     "archive": {
@@ -66,7 +66,7 @@
   },
   "record_end": "2026-10-20",
   "record_start": "2024-01-01",
-  "records_sha256": "003372ddf47c6ffe72898b020e98b79424e457cf95cc5de7aec3d277d5eddd8d",
+  "records_sha256": "bf930e125bb42dbf4d64fa649ac5b523536f8515523e478643331ebfb630fb4d",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
