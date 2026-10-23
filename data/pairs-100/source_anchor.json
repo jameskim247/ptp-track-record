@@ -5,10 +5,10 @@
     "prospective": "from 2026-10-20: prospective record of the rule frozen at 2026-10-18T12:00:14-05:00, rebuilt from the inputs each base decision recorded (recorded vintage)"
   },
   "files_sha256": {
-    "daily.csv": "a6f63643d6d5aed82b9325b69a3e4a360fd4c38fb41ed239c8a83a4fc3fd1aee",
-    "monthly.csv": "a64eb42593ec07d0032740f224a3b1617e340e79c7fdc12c029aff6dc3cc8baf",
-    "summary.csv": "8c33f8e553a9b4d637f902eeb4a1b8a310e51abe56f858c243b07c5b07d9a76b",
-    "weekly.csv": "3f60ee2340069f900e9ec54cb5831c2bc2323098a167ac64786334de328a59a4"
+    "daily.csv": "9001ddea16dc52f5c14eccedc76c3d301a0bf7d777a1f74d685d02762253c1dd",
+    "monthly.csv": "146912851ed4de01977e349a46a34bc414ce56a48e9ddb9b93395db57e8abac3",
+    "summary.csv": "b69dc75541632a8005d580bd7ac2254e5b0cbf870b1a01aebedc0f78e3a025df",
+    "weekly.csv": "9f47446c18940a6474feece8c2214905e1543d7c8822506ec093ac403da482fe"
   },
   "kill_rule_breach": null,
   "pair_cap": 100,
@@ -25,7 +25,7 @@
   "schema": "ptp-series-anchor-v6",
   "series": "pairs-100",
   "source_files_sha256": {
-    "daily.csv": "38510f614a1b2d86f316e373d6d86fe10dc17aba0f4d89737ef1c872ed1f150c"
+    "daily.csv": "b52dea4d1b6a92aaaa2e28c91600a0a2afaadcce2322ed2df9e16757476ce24e"
   },
-  "source_package_sha256": "a43fd68195c6d13b53a378b39e64b595835490be4858fd4055b1c19b31b84687"
+  "source_package_sha256": "0b43ede28347ba8e3b5742ff49ca71f0efc745924507c7a6edb0b553242fb3ee"
 }
