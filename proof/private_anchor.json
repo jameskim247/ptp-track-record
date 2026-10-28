@@ -66,7 +66,7 @@
   },
   "record_end": "2026-10-27",
   "record_start": "2024-01-01",
-  "records_sha256": "6f1b6e2dba5e87dfaff6c9566baac37e1618c46a5236f9da28653464908205e1",
+  "records_sha256": "b2e413c5e2c69499fa6a28e5761df40438cec052c86f16cd7d0474c2078a168b",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
