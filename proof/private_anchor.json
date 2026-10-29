@@ -64,9 +64,9 @@
     "record_start": "2024-01-01",
     "schema": "ptp-paper-projection-v6"
   },
-  "record_end": "2026-10-27",
+  "record_end": "2026-10-28",
   "record_start": "2024-01-01",
-  "records_sha256": "7e40b64a264e9e15f05b3069c6f9dfbfbac3eb82a892db5dfdb766dd216c0c37",
+  "records_sha256": "e5062fbe727d71ffba59f64fe0eb4e53e3f7dcaa37019915bc35ffcebba2e25d",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
