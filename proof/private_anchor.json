@@ -1,19 +1,19 @@
 {
-  "canonical_record_end": "2026-10-28",
-  "canonical_record_set_sha256": "0e1a3eb3ff6b8dd8d728bda25fc70e66a5b1300f5482a74f12f4a128978c3c4d",
+  "canonical_record_end": "2026-10-29",
+  "canonical_record_set_sha256": "5c9d74e8ee6c8a181c904b9f7fd9186e8df9bf8603529eff96427c7d1fa6b89b",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_parent": {
-    "record_end": "2026-10-28",
+    "record_end": "2026-10-29",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "15281b01b659185eccbf6e7b7c24de2af5a889cd9626cafe1423786fada67e93",
-      "monthly.csv": "8d46c9c68fba017ddbdf4d6f79fd00ded2abf057fe93ee662d5c4b1cdf9c5bee",
-      "source_anchor.json": "cdd40713f7d1f1c9d7cd09e00b3af4b3d3e9e88d528a1a8cb8a1f10deaecddfb",
-      "summary.csv": "b63e2835475aef42480dac4c36de4c9f3ebccfac7cf0e8922552ccf284efd832",
-      "weekly.csv": "1528891e72d69c5cd35ac1c088b149b2b5d37aaf10c43773cf69e43a24b8e59d"
+      "daily.csv": "eb063f3c4f4c125952db2c9d55d330d26b9542e02e08f66a2c086bf7fffdf281",
+      "monthly.csv": "84a07b60f2aad7b713cf9273eb9cf705daa43e66a2ac4156ec806d9bccc83609",
+      "source_anchor.json": "77872e53bc05c897a1e61be59d6caec40f6d2680643a08f244eac3689e42f762",
+      "summary.csv": "4e13ffb7d57ba8643969b61c28a4f2cb123765c0b88cbd8acad4c9d7c09354ca",
+      "weekly.csv": "56c7881d0b5765a4a20a735e7af1838bf9c5aa21cf1da503f0b157f86a6f9de6"
     },
-    "source_package_sha256": "ffdd299038d7083b64058658c6e24cdc0348acd718bc29703583bf775536a84b"
+    "source_package_sha256": "00a1fa1b8f6a472cdbcfe1f70c15f52dd21dd8af4fe02d2403dbab54a3057c57"
   },
   "paper_projection": {
     "archive": {
@@ -64,9 +64,9 @@
     "record_start": "2024-01-01",
     "schema": "ptp-paper-projection-v6"
   },
-  "record_end": "2026-10-28",
+  "record_end": "2026-10-29",
   "record_start": "2024-01-01",
-  "records_sha256": "e5062fbe727d71ffba59f64fe0eb4e53e3f7dcaa37019915bc35ffcebba2e25d",
+  "records_sha256": "7c225100c9a62bfbaa67fb318f67c4658e716035d6408a21b27fe98fd9451085",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
