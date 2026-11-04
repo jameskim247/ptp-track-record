@@ -1,19 +1,19 @@
 {
-  "canonical_record_end": "2026-11-01",
-  "canonical_record_set_sha256": "b4f26361cca4828214904e068ca74d749e665e1a7b8da00536e761f7798564c1",
+  "canonical_record_end": "2026-11-03",
+  "canonical_record_set_sha256": "c4e1f35521f0dae16cca1c795ef9fe0404d7a2cc662d334e25ef47951abf013a",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_parent": {
     "record_end": "2026-11-01",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "9b6fd9edaa9dd58171ee042d71ed8ec0b9d77afa72db166774a34549b15fb188",
-      "monthly.csv": "e5e069ace2e056570967f6b7699ad8191204e042aacb3f4a2d22cbabc368aede",
-      "source_anchor.json": "cf0bab3c91264c9f9e8f45bdb4a4eff9fa969da6f2663115c48b7ab03319cdff",
-      "summary.csv": "5c32c6c6ba90f6f17584d2bbe2b05757e528ae2a5d0c30e3abb2d433103e0e61",
-      "weekly.csv": "9a9fdaa3735a55256324532f4f81647c885729c449b101cf866e22e9a959ec5c"
+      "daily.csv": "f5a8d282512c8f988a18881da4127934e98a8f16cb52b96edc384a1a6d0aefb7",
+      "monthly.csv": "96eb241209fd281ad7564c7573adf2ba303957f08e729c617a6dbcff3d45fe9a",
+      "source_anchor.json": "342ba610448ec55336478d0a11a09e4383d1c45b9242ccdbc66a3ab0bc629416",
+      "summary.csv": "590d3c7fcde5003fcc25c8798d4d19c38f1e4cb96989266f18f980ea4dabf4f8",
+      "weekly.csv": "351fb86421d8af43b352b2f034d342046194eafedb068b47a45ade260ffd0214"
     },
-    "source_package_sha256": "072a65b1a6b80be2af9f4ba7c01d48c7f070255228d8a4065116d997f4072f8c"
+    "source_package_sha256": "7f9a1eb47d73a88eb60d59f8a18e812cd4a4169d7dcfb73eeac41a019babed7c"
   },
   "paper_projection": {
     "archive": {
@@ -66,7 +66,7 @@
   },
   "record_end": "2026-10-31",
   "record_start": "2024-01-01",
-  "records_sha256": "908e8181831592179e28388e963de1c8ebb3d518fff74cb4e8a5ee5d3a5f4aa2",
+  "records_sha256": "93ed00aaf39cd5386675d86b6eaab4e10214dca2d974e55e70aa5193955a0069",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
