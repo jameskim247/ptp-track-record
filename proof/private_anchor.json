@@ -1,19 +1,19 @@
 {
   "canonical_record_end": "2026-11-03",
-  "canonical_record_set_sha256": "c4e1f35521f0dae16cca1c795ef9fe0404d7a2cc662d334e25ef47951abf013a",
+  "canonical_record_set_sha256": "077bb67c23fa226ae690d6ceb0c05ca401d611d169a538efb47018a315398c83",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_parent": {
-    "record_end": "2026-11-01",
+    "record_end": "2026-11-03",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "f5a8d282512c8f988a18881da4127934e98a8f16cb52b96edc384a1a6d0aefb7",
-      "monthly.csv": "96eb241209fd281ad7564c7573adf2ba303957f08e729c617a6dbcff3d45fe9a",
-      "source_anchor.json": "762e035ca5931b53c9f04dbd3cdaf0d1dfff449d8ce41de6612c46002d45ada5",
-      "summary.csv": "590d3c7fcde5003fcc25c8798d4d19c38f1e4cb96989266f18f980ea4dabf4f8",
-      "weekly.csv": "351fb86421d8af43b352b2f034d342046194eafedb068b47a45ade260ffd0214"
+      "daily.csv": "873aae709e0413c472b111ccd15818bc1ea8481432ffc029db2dd617a3fa997d",
+      "monthly.csv": "6c879c11abd7e3605b1b72ff8139069650cdad759d2e0e6e7f14773bea89a390",
+      "source_anchor.json": "3c330c01c4bb7b7bf938af293083d6615bb101106cdb94e83da517d501eec768",
+      "summary.csv": "59ec5900ba927d147532e31cab0cecd49abd78b73bae42450a09eddcacd4c4b7",
+      "weekly.csv": "423f264457c2e74be2542c6c72a2fc7a8352124ff75660c4f9b3437add96e000"
     },
-    "source_package_sha256": "7972e2412d17d0397015069d6c8ee92cd0cde8a623bd30d1043604c76e9d21f8"
+    "source_package_sha256": "24c9d0ee9348ee43bfa0aa27012be4994495f6c4f6d430605f1566f9e5e4d226"
   },
   "paper_projection": {
     "archive": {
