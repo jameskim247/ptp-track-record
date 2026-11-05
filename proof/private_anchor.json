@@ -1,6 +1,6 @@
 {
-  "canonical_record_end": "2026-11-03",
-  "canonical_record_set_sha256": "077bb67c23fa226ae690d6ceb0c05ca401d611d169a538efb47018a315398c83",
+  "canonical_record_end": "2026-11-04",
+  "canonical_record_set_sha256": "403bb93015957446ed1e415955b6b26ab8965b840d0532be2ab5c98f461261ba",
   "canonical_record_start": "2026-01-01",
   "generation": "programme-03",
   "paper_parent": {
@@ -66,7 +66,7 @@
   },
   "record_end": "2026-10-31",
   "record_start": "2024-01-01",
-  "records_sha256": "93ed00aaf39cd5386675d86b6eaab4e10214dca2d974e55e70aa5193955a0069",
+  "records_sha256": "a959cba58aa2abf5fb9a5fb020f6006a4fce9ef3ed0e5c9b91e590e23f19f152",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
