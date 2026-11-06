@@ -9,11 +9,11 @@
     "source_files_sha256": {
       "daily.csv": "7394ee5f2ffd875dc5da71bca535d301c206a5dfab941fcc1d0bf317c681c812",
       "monthly.csv": "041546673a6fe8a7b2ce4afd5e59d85c3db401fa7883318e6cfd23bc56efb855",
-      "source_anchor.json": "e79ce823f1bda288580b8efbc4719a00ab2f0fb71f209b8cd263a576eded9080",
+      "source_anchor.json": "6b7131c245160876f5ff555538a1cd8f2df3bfa410d879ba670694a4535cfc48",
       "summary.csv": "d9b864f6a1919db414bccf2969c2b4fd5e255472686c74c98e46c743e29151db",
       "weekly.csv": "1c79b7b4198d8a15a28ce02d494369cdc1e9dc57fd3178e331a326a0c50ea8fe"
     },
-    "source_package_sha256": "eed51afbabd18d37247e4a667dbc40e4264e1c16d8102a6164313a0382abd418"
+    "source_package_sha256": "3c7e0cbcf80ae9dab9c9e419ba3c511a6aaed084d71df841793bec80d50a07eb"
   },
   "paper_projection": {
     "archive": {
