@@ -1,31 +1,31 @@
 {
-  "development_through": "2026-10-19",
+  "development_through": "2026-11-09",
   "evidence_basis": {
-    "development": "2024-01-01 to 2026-10-19: retrospective development backtest; the rule was designed after these outcomes were seen, so they are not validation",
-    "prospective": "from 2026-10-20: prospective record of the rule frozen at 2026-10-18T12:00:14-05:00, rebuilt from the inputs each base decision recorded (recorded vintage)"
+    "development": "Retrospective development reconstruction; historical publication vintages and tradability are not fully certified.",
+    "prospective": "Paper continuation; no executed-trade or independent-validation claim."
   },
   "files_sha256": {
-    "daily.csv": "7905021ed4b186484e00fc679de0390f2b5569fa5d9722bf38f5911b0518df99",
-    "monthly.csv": "54ac540dbf98a1dbc9606005a2c2f7c0514951e562beafdb6cd46c342bdc0789",
-    "summary.csv": "7768619479f662b7a61017f23238717304564856f5ad481099fbdaa9d96d27da",
-    "weekly.csv": "a0f7699e701bcb9fa5a632111d32520adf646fc7cd94e71f7f6adb69604efb85"
+    "daily.csv": "681e13c55d546cc38e5404e8927d1aba911f601b4c934ebe69d2fe49f811ec78",
+    "monthly.csv": "037c9af0eecb29ee71e0e1e4c05ac50b078a5d2e7eae19e81146c7cfddde4d6a",
+    "summary.csv": "32923e443cf06764d3bfb70aa51e78a66a9f5d4315d6c2ebcdf5211a61e536f7",
+    "weekly.csv": "ff5c51ef043df53e4406e46898be3cf4b6f6d12d89574d4142d1f66117561934"
   },
   "kill_rule_breach": null,
   "pair_cap": 100,
-  "prospective_from": "2026-10-20",
-  "protocol_sha256": "8d89c954b9210d6078537b0dbac2881bdc6fa9ee8b76259b9158419def61898a",
+  "prospective_from": "",
+  "protocol_sha256": "4be885cef92eae12e0a867b2ecc99d5e625068392a1d8f898d8ef04a7778a9e0",
   "public_cost_per_placed_mwh": 0,
-  "record_end": "2026-10-31",
+  "record_end": "2026-11-09",
   "record_start": "2024-01-01",
   "rule": {
-    "first_prospective_cutoff": "2026-10-19T09:55:00-05:00",
-    "frozen_at": "2026-10-18T12:00:14-05:00",
-    "protocol_sha256": "8d89c954b9210d6078537b0dbac2881bdc6fa9ee8b76259b9158419def61898a"
+    "first_prospective_cutoff": "",
+    "frozen_at": "2026-11-10T17:55:00.286390+00:00",
+    "protocol_sha256": "4be885cef92eae12e0a867b2ecc99d5e625068392a1d8f898d8ef04a7778a9e0"
   },
-  "schema": "ptp-series-anchor-v6",
+  "schema": "ptp-series-anchor-s1-v1",
   "series": "pairs-100",
   "source_files_sha256": {
-    "daily.csv": "41023baf0e1cab2ada44893bd226ac42eb743104f48c0b792c449dc3c0afe269"
+    "daily.csv": "171c77ee18c5058d6fc22220455c2b4773f8ed36b5613c96512a15d58b43f2b7"
   },
-  "source_package_sha256": "e82552027e5941cecf53e7c0b3a8d4cf03bee334b289d07d755e66b67c63390b"
+  "source_package_sha256": "34f532b0998a01d1a29cd455aeb65922c11488a55fb17cf4040265327b88efed"
 }

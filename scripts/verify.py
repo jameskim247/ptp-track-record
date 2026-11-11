@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-import csv
-from datetime import date, datetime, timedelta
-import hashlib, io, json, math, statistics
+import csv,hashlib,io,json,math,statistics
+from datetime import date,datetime,timedelta
 from pathlib import Path
+AUXILIARY_FILES = {'.gitignore': '862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793'}
 START = '2024-01-01'
-NAMES = ('daily.csv', 'weekly.csv', 'monthly.csv', 'summary.csv', 'source_anchor.json', 'publication.json')
 PUBLIC_SERIES = ('pairs-100', 'pairs-50')
 PUBLIC_DAILY = ('date', 'signal_date', 'status', 'pnl', 'cumulative_pnl', 'pnl_drawdown', 'placed_mw', 'awarded_mw', 'fill_rate', 'pending_awarded_mw', 'pairs', 'pair_hours', 'submission_credit', 'eligibility_snapshot_id', 'decision_proof_id', 'settlement_proof_id', 'source_proof_id', 'proof_id')
+NAMES = ('daily.csv', 'weekly.csv', 'monthly.csv', 'summary.csv', 'source_anchor.json', 'publication.json')
 RISK = 'data/risk'
-PUBLIC_RISK_NAMES = ('stress.csv', 'source_anchor.json', 'publication.json')
-STORM_RISK_NAMES = ('stress.csv', 'stress_daily.csv', 'source_anchor.json', 'publication.json')
-STORM_CONTRACT = {'schema': 'ptp-historical-storm-anchor-v1', 'run_date': '2026-10-19', 'method': 'historical_strategy_replay', 'development_only': True, 'events': {'uri': ['2021-02-14', '2021-02-19'], 'elliott': ['2022-12-22', '2022-12-25']}, 'evidence_basis': 'retrospective diagnostic; not executed trades or independent validation', 'cost_basis': 'before costs; no market-impact model; current published quantities', 'assumptions': {'sizing': 'Cold start at the frozen risk prior at each event start; D-2 reference updates within the event. Not a continuous pre-storm sizing history.', 'nodes': 'Then-observed price universe and the latest 30 DAM disclosures published before D-1 09:55 America/Chicago; fixed logical-node exclusions.', 'grid': 'Same grid-score formula, causally refitted from archives beginning 2018; no modern topology peer map; unavailable node fits retain the existing zero fallback.', 'deenergized_lists': "Original operating-day lists unavailable. Existing in-money/no-awards restriction reconstructed from market bids and awards for auction outcomes only, not that day's order selection.", 'prices': 'First-published vintages for decisions and original DA clearing for awards. Final corrections affect settlement, never earlier decisions. Correction search ends 181 days after each event start.', 'settlement': 'Strict DA sink-minus-source spread < bid. P&L = MWh times (RT spread minus DA settlement spread). Four paired 15-minute RT intervals required; missing payouts are not zero.', 'coverage': 'Price coverage divides fully priced modeled awarded MWh by modeled awarded MWh. Award-node evidence requires both node/hour endpoints in actual market PTP awards; it is not actual awards to this strategy or exact directed-pair award coverage.'}, 'source_bindings': {'frozen_plan_sha256': '7227acf4478dc00d8677f0849e48639bc2983d51f390f90b6d4170563121b70b', 'replay_code_sha256': '5e843a2c066c042e2b659914fd8a182bc5b7f294e917642979102fd03595aba2', 'audit_results_sha256': 'b05a1538696cb957b76df5bea68f9835184c0e77f45e84c7ca3a63298105aeb0', 'uri_order_records_sha256': '10263e2036c3d29fece16847f6801d5f6d953d92bdaf740bf4e949e825de6927', 'elliott_order_records_sha256': '5ea809889e1068b9566a271bd4d8cc92226d47cfa2c35a052374516327e8b9c0'}}
-STORM_SNAPSHOT_SHA256 = '43e7d9fe086c2c2702c24b69c6c292d31a65358d644ee4010d212144d7093078'
-STORM_FILE_HASHES = {'stress.csv': 'ee767a49018a09992b6703b6da3d073dff2b9d1469c3cf3a94dacf5841e23c8c', 'stress_daily.csv': '2ce416b123a5fbc05a7562fca00ecdffa675d236affce23c240c3ff4deb479e2'}
-STRESS = ('series', 'book_date', 'scenario', 'scenario_date', 'method', 'pnl', 'covered_share')
-SCENARIOS = ('uri_2021', 'elliott_2022')
 PUBLIC_DOCS = ('data/docs/submission-credit.md', 'data/docs/stress.md')
-PUBLIC_PROJECTION = 'ptp-paper-projection-v6'
-RULE_PROSPECTIVE = '2026-10-20'
-RULE_CONTINUATION = '2026-09-30'
-RULE_CUTOFF = '2026-10-19T09:55:00-05:00'
-RULE_PROTOCOL_SHA256 = '8d89c954b9210d6078537b0dbac2881bdc6fa9ee8b76259b9158419def61898a'
-RULE_FROZEN_AT = '2026-10-18T12:00:14-05:00'
-ARCHIVE = 'archive'
-RETIRED = ('ptp-paper', 'pairs-500', 'pairs-100', 'pairs-50', 'risk')
-
+STORM_RISK_NAMES = ('stress.csv', 'stress_daily.csv', 'source_anchor.json', 'publication.json')
+RULE_CONTINUATION = '9999-12-31'
+RULE_PROTOCOL = '4be885cef92eae12e0a867b2ecc99d5e625068392a1d8f898d8ef04a7778a9e0'
+RULE = {'protocol_sha256': '4be885cef92eae12e0a867b2ecc99d5e625068392a1d8f898d8ef04a7778a9e0', 'frozen_at': '2026-11-10T17:55:00.286390+00:00', 'first_prospective_cutoff': ''}
+EVIDENCE = {'development': 'Retrospective development reconstruction; historical publication vintages and tradability are not fully certified.', 'prospective': 'Paper continuation; no executed-trade or independent-validation claim.'}
+ANCHOR_FIELDS = ['development_through', 'evidence_basis', 'files_sha256', 'kill_rule_breach', 'pair_cap', 'prospective_from', 'protocol_sha256', 'public_cost_per_placed_mwh', 'record_end', 'record_start', 'rule', 'schema', 'series', 'source_files_sha256', 'source_package_sha256']
+ROOT_FIELDS = ['canonical_record_end', 'canonical_record_set_sha256', 'canonical_record_start', 'generation', 'paper_parent', 'paper_projection', 'record_end', 'record_start', 'records_sha256', 'registry_sha256', 'schema', 'series_ids']
+PROJECTION_FIELDS = ['archive', 'documents', 'folders', 'prospective_from', 'record_start', 'schema']
+PARENT_FIELDS = ['record_end', 'schema', 'source_files_sha256', 'source_package_sha256']
+ARCHIVE_CONTRACT = {'files_sha256': {'archive/pairs-100/daily.csv': '7b4fc57dd7f5cb651da415364f553555f8d46dcb8aa995831b9bbaf8aed0279f', 'archive/pairs-100/monthly.csv': '9f7d23d1b1e46f9a3acade90b4c62b1440aaad70351103cce126ec854741ca57', 'archive/pairs-100/publication.json': 'de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e', 'archive/pairs-100/source_anchor.json': 'e5b1bfab1637d8edd64db599cc303883d126a2d6b16643850a0a4053d24b2fd8', 'archive/pairs-100/summary.csv': '57be47b75171a9c39b3e395651f4d07e9a5be555fc08ba91c75e7b3f974d3a7c', 'archive/pairs-100/weekly.csv': 'e13c63f1dc7945c9c01c9ffb5b864879ee0e2b6d9fd8b8c9d1ae93903a35fde2', 'archive/pairs-50/daily.csv': '95dc55a06da519c43e2fb1b1a7ec1d3c725238bbff88fc534b3e3e9920fd64e7', 'archive/pairs-50/monthly.csv': '7d4d758a1e14bda7c579a7d034693a4e20c175d10b3321eb22d0a38741ba03a8', 'archive/pairs-50/publication.json': 'de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e', 'archive/pairs-50/source_anchor.json': '94e3fdd0bb74bf13d4b7476f5982303c1399394c083821b6874d8a0978dc26e7', 'archive/pairs-50/summary.csv': '7cac5abba2de4fa9edb05e30f64ae710c8bc9b459f25a4b6987615398a216faa', 'archive/pairs-50/weekly.csv': 'a5366af3630175cb116bdcfdcbcbc0bdca8a813df5fdad2dc7d2fa131e8d2dc0', 'archive/pairs-500/daily.csv': '44a39472351463ae2c67efc79e5bc8f8d986d4bd9b4fcfa2d0b52b47cdbee7b8', 'archive/pairs-500/monthly.csv': '42dff4e6efac7bb2d8bf7c26ad2acb3fb7e571cbf0cf98d7b4cf6867c3b9a794', 'archive/pairs-500/publication.json': 'de1e70eeffd2dc052b9bb043790356eaac3c152d9f754459705a2c7f434b363e', 'archive/pairs-500/source_anchor.json': '1ea6be5c5ed8ccc1c39962f78a6f5634901ca63fbe0d886d6df66ceecc77d399', 'archive/pairs-500/summary.csv': '436575f82ceb2281b00455965a0dfbe497997f511424fd5583a217919201aff4', 'archive/pairs-500/weekly.csv': '2a4ce3bc5e52975b678aded7726006f366eaa343dc5b7545848d9f330776e488', 'archive/ptp-paper/daily.csv': 'c8b379aabc7d4fd5eaa4d0a7339686ed3fab66008272e0c1ffe080f61079b04c', 'archive/ptp-paper/monthly.csv': '6f557e6262e12ea728f125c1be56ad965b39f9eb428ae2b282243bc21695ddbd', 'archive/ptp-paper/publication.json': '81767aab27d0848dcb430a42032a06d07105a4fb3c7a970e2d6f15460571f608', 'archive/ptp-paper/source_anchor.json': 'afff003aaf3f4d82625c450f3613217e059a62d8ddbb0a3847236bb0539e16cd', 'archive/ptp-paper/summary.csv': 'a29e7c6b083c38f8d2bb04b3e2a4266ad71f6ac59853fe739833d77225630381', 'archive/ptp-paper/weekly.csv': 'e7f82a1a58204e06564a25cc80f4f9581ee7650390ba4bd1a7802dd671c6777a'}, 'last_published_day': '2026-10-17', 'retired_series': ['ptp-paper', 'pairs-500', 'pairs-100', 'pairs-50']}
+STORM_CONTRACT = {'assumptions': {'coverage': 'Price coverage divides fully priced modeled awarded MWh by modeled awarded MWh. Award-node evidence requires both node/hour endpoints in actual market PTP awards; it is not actual awards to this strategy or exact directed-pair award coverage.', 'deenergized_lists': 'Frozen S1 outcome-only restriction; not reused as pre-deadline node-selection information.', 'grid': 'S1 causal monthly empirical DA ridge and frozen connected-basket cash model; not a physical network simulation.', 'nodes': 'Frozen S1 incumbent plus capped C/G additions. Historical operating-day eligibility is not fully certified; endpoint evidence is not proof of strategy execution.', 'prices': 'Frozen S1 pda/prt quote-bank contract; individual historical publication vintages remain incompletely certified.', 'settlement': 'Round-six-decimal price-taking DA spread <= bid; explicit outcome-only restriction. Unvalued awarded exposure is retained.', 'sizing': 'Continuous S1 history from 2021-01-01; no event-start reset. RAW_FULL cash and uniform-warning histories remain separate.'}, 'cost_basis': 'before costs; no market-impact model; current published quantities', 'development_only': True, 'events': {'uri': ['2021-02-14', '2021-02-19'], 'elliott': ['2022-12-22', '2022-12-25']}, 'evidence_basis': 'retrospective diagnostic; not executed trades or independent validation', 'method': 'historical_strategy_replay', 'run_date': '2026-11-10', 'schema': 'ptp-historical-storm-anchor-v1', 'source_bindings': {'audit_results_sha256': 'bffb7ccba5bad94a9ba9eb67f8bae4770e19e854ee5f1ba60c8fef34b0103635', 'elliott_order_records_sha256': 'b742afc6d57de69a017554d42532c1e3fd1ade136b01b2ca1c60f0a46b46b5d5', 'frozen_plan_sha256': '37f9a2a94b77511f826419beb926884edbd781284350fa053a3d8fef7d7ca749', 'replay_code_sha256': 'a1e990705f512cdfd8d6d444e38c2fba414cb3382c13ed53b19209c21983d01f', 'uri_order_records_sha256': 'c65b04e3476e3b7a22afc94672729ce37cc3d2e655b6a5892f58bcc8c5467354'}}
+STORM_SNAPSHOT_SHA256 = '0fd627c116f149b9bac78fbecc9a43af3be18f2b4dc2546721ee8ea432e4bad4'
+STORM_FILE_HASHES = {'stress.csv': 'bb6709e818220b6280cf55431218a837da1b634a87c68e657627fb16abe76c47', 'stress_daily.csv': '824b572cc81db323ccda7704d5a4622fddad6eba88cecde034dd4d80ce153c86'}
 def digest(body):
     return hashlib.sha256(body).hexdigest()
 
@@ -87,7 +84,9 @@ def ratio(values):
 def summary(basis, rows, *, include_counts=False):
     pnl = [r["pnl"] for r in rows]
     total = math.fsum(pnl)
-    split = {}
+    # v6 public rows carry no gross column: P&L has no fees or costs, so there is nothing to split.
+    split = ({"gross_pnl": round(math.fsum(r["gross_pnl"] for r in rows), 4),
+              "costs": round(math.fsum(r["gross_pnl"] for r in rows) - total, 4)} if "gross_pnl" in rows[0] else {})
     equity = peak = drawdown = 0.0
     for value in pnl:
         equity += value
@@ -149,28 +148,10 @@ def tables(daily, *, include_counts=False):
     return result
 
 
-def evidence_tables(daily):
-    """tables() with the evidence split: summary rows for the development backtest (to the day before
-    RULE_PROSPECTIVE) and the prospective record (from it); calendar rows spanning both are marked _incl_development."""
-    result = tables(daily)
-    rows = []
-    for row in result["summary.csv"]:
-        body = {k: v for k, v in row.items() if k != "proof_id"}
-        if body["start_date"] < RULE_PROSPECTIVE <= body["end_date"]:
-            body["basis"] += "_incl_development"
-        rows.append(proved(body))
-    development = [r for r in daily if r["date"] < RULE_PROSPECTIVE]
-    prospective = [r for r in daily if r["date"] >= RULE_PROSPECTIVE]
-    evidence = [summary("development_backtest", development)] if development else []
-    evidence += [summary("prospective_record", prospective)] if prospective else []
-    result["summary.csv"] = evidence + rows
-    return result
-
-
 def unavailable_row(row, first):
-    """A day published as unavailable: from `first` on, no orders, zero P&L and no eligibility snapshot."""
+    """A SEVU day published as unavailable: from `first` on, no orders, zero P&L and no eligibility snapshot."""
     return (row["status"] == "unavailable" and first is not None and row["date"] >= first
-            and row["eligibility_snapshot_id"] == "" and row["pnl"] == 0
+            and row["eligibility_snapshot_id"] == "" and row["pnl"] == row.get("gross_pnl", 0) == 0
             and row["placed_mw"] == row["awarded_mw"] == row["pending_awarded_mw"] == 0
             and row["pairs"] == row["pair_hours"] == 0 and row["submission_credit"] == 0)
 
@@ -181,26 +162,6 @@ def check_receipt(receipt, end):
             or receipt.get("status") != ("current" if missing == 0 else "stale")
             or receipt.get("state") not in ("verified_source", "retained_verified_source")):
         raise ValueError("paper publication freshness mismatch")
-
-
-def frozen_before_cutoff():
-    try:
-        return datetime.fromisoformat(RULE_FROZEN_AT) < datetime.fromisoformat(RULE_CUTOFF)
-    except ValueError:
-        return False
-
-
-def evidence_basis():
-    development = (date.fromisoformat(RULE_PROSPECTIVE) - timedelta(days=1)).isoformat()
-    return {"development": START + " to " + development + ": retrospective development backtest; the rule was "
-                           "designed after these outcomes were seen, so they are not validation",
-            "prospective": "from " + RULE_PROSPECTIVE + ": prospective record of the rule frozen at " + RULE_FROZEN_AT
-                           + ", rebuilt from the inputs each base decision recorded (recorded vintage)"}
-
-
-def public_rule():
-    return {"protocol_sha256": RULE_PROTOCOL_SHA256, "frozen_at": RULE_FROZEN_AT,
-            "first_prospective_cutoff": RULE_CUTOFF}
 
 
 def check_public_daily(daily, end, cap):
@@ -231,38 +192,6 @@ def check_public_daily(daily, end, cap):
             raise ValueError("paper daily arithmetic mismatch")
 
 
-def check_public_folder(root, folder, record_end):
-    """One projection v6 series: provenance, binding, calendar, arithmetic and freshness."""
-    name = folder.split("/", 1)[1]
-    cap = int(name.split("-", 1)[1])
-    anchor = json.loads((root / folder / "source_anchor.json").read_bytes())
-    receipt = json.loads((root / folder / "publication.json").read_bytes())
-    package = str(anchor.get("source_package_sha256", ""))
-    development = (date.fromisoformat(RULE_PROSPECTIVE) - timedelta(days=1)).isoformat()
-    if (set(anchor) != {"schema", "series", "pair_cap", "record_start", "record_end", "development_through",
-                        "prospective_from", "evidence_basis", "public_cost_per_placed_mwh", "source_package_sha256",
-                        "source_files_sha256", "protocol_sha256", "rule", "kill_rule_breach", "files_sha256"}
-            or anchor.get("schema") != "ptp-series-anchor-v6" or anchor.get("series") != name
-            or anchor.get("protocol_sha256") != RULE_PROTOCOL_SHA256
-            or anchor.get("pair_cap") != cap or anchor.get("record_start") != START
-            or str(anchor.get("record_end", "")) != record_end or anchor.get("development_through") != development
-            or anchor.get("prospective_from") != RULE_PROSPECTIVE or anchor.get("evidence_basis") != evidence_basis()
-            or anchor.get("rule") != public_rule() or anchor.get("public_cost_per_placed_mwh") != 0
-            or receipt.get("record_start") != START or receipt.get("record_end") != record_end
-            or len(package) != 64 or any(c not in "0123456789abcdef" for c in package)
-            or receipt.get("source_package_sha256") != package):
-        raise ValueError("series provenance contract mismatch: " + name)
-    hashes = {n: digest((root / folder / n).read_bytes()) for n in NAMES if n.endswith(".csv")}
-    if anchor.get("files_sha256") != hashes:
-        raise ValueError("series file binding mismatch: " + name)
-    data = {n: read_rows((root / folder / n).read_bytes()) for n in hashes}
-    check_public_daily(data["daily.csv"], record_end, cap)
-    expected = evidence_tables(data["daily.csv"])
-    if any(data[n] != expected[n] for n in ("weekly.csv", "monthly.csv", "summary.csv")):
-        raise ValueError("series aggregate arithmetic mismatch: " + name)
-    check_receipt(receipt, record_end)
-
-
 def storm_summary(daily):
     """Event totals recomputed from daily rows; coverage is MWh-weighted, not an average of rates."""
     result = []
@@ -290,11 +219,6 @@ def storm_summary(daily):
                 "award_node_evidence_coverage": values["award_node_evidence_mwh"] / awarded if awarded else 0.0,
                 "exact_pair_award_coverage": values["exact_pair_award_mwh"] / awarded if awarded else 0.0}))
     return result
-
-
-def public_risk_names(root):
-    anchor = json.loads((Path(root) / RISK / "source_anchor.json").read_bytes())
-    return STORM_RISK_NAMES if anchor.get("schema") == STORM_CONTRACT["schema"] else PUBLIC_RISK_NAMES
 
 
 def check_historical_storm_risk(root):
@@ -334,120 +258,65 @@ def check_historical_storm_risk(root):
         raise ValueError("storm event totals disagree with daily rows")
 
 
-def check_public_risk(root, record_end):
-    """Projection v6 stress table: binding, bounds and freshness."""
-    anchor = json.loads((root / RISK / "source_anchor.json").read_bytes())
-    if anchor.get("schema") == STORM_CONTRACT["schema"]:
-        return check_historical_storm_risk(root)
-    receipt = json.loads((root / RISK / "publication.json").read_bytes())
-    package = str(anchor.get("source_package_sha256", ""))
-    end = str(anchor.get("record_end", ""))
-    if (set(anchor) != {"schema", "record_start", "record_end", "book_date", "development_only", "evidence_basis",
-                        "source_package_sha256", "definitions", "files_sha256"}
-            or anchor.get("schema") != "ptp-stress-anchor-v6" or anchor.get("record_start") != START
-            or anchor.get("development_only") is not True or end > record_end or anchor.get("book_date") != end
-            or receipt.get("record_start") != START or receipt.get("record_end") != end
-            or len(package) != 64 or any(c not in "0123456789abcdef" for c in package)
-            or receipt.get("source_package_sha256") != package):
-        raise ValueError("stress provenance contract mismatch")
-    if anchor.get("files_sha256") != {"stress.csv": digest((root / RISK / "stress.csv").read_bytes())}:
-        raise ValueError("stress file binding mismatch")
-    named = {s + suffix for s in SCENARIOS for suffix in ("", "_total")}
-    ranked = {"in_sample_worst_" + str(k) for k in range(1, 6)} | {"in_sample_p01", "in_sample_p05", "in_sample_median"}
-    for row in read_rows((root / RISK / "stress.csv").read_bytes()):
-        if (list(row) != [*STRESS, "proof_id"] or row["series"] not in PUBLIC_SERIES or row["book_date"] != end
-                or row["method"] not in ("rt_shock", "replay") or row["scenario"] not in named | ranked
-                or not isinstance(row["pnl"], float) or not 0 <= row["covered_share"] <= 1
-                or (row["scenario_date"] == "") != (row["scenario"].endswith("_total")
-                                                    or row["scenario"].startswith("in_sample_p")
-                                                    or row["scenario"] == "in_sample_median")):
-            raise ValueError("stress row mismatch")
-    check_receipt(receipt, end)
+def evidence_tables(daily):
+    result=tables(daily)
+    result['summary.csv']=[summary('development_backtest',daily)]+result['summary.csv']
+    return result
 
 
-def verify_public(root, identity, projection):
-    """Projection v6: two series, the stress table, two notes and the unchanged archive (without its README)."""
-    archive = projection.get("archive")
-    folders = ["data/" + s for s in PUBLIC_SERIES]
-    if (set(projection) != {"schema", "record_start", "folders", "documents", "prospective_from", "archive"}
-            or projection["record_start"] != START or projection["prospective_from"] != RULE_PROSPECTIVE
-            or projection["folders"] != [*folders, RISK] or projection["documents"] != list(PUBLIC_DOCS)
-            or not isinstance(archive, dict) or set(archive) != {"retired_series", "last_published_day", "files_sha256"}
-            or any(not path.startswith(ARCHIVE + "/") for path in archive["files_sha256"])
-            or ARCHIVE + "/README.md" in archive["files_sha256"]
-            or ARCHIVE + "/ptp-paper/daily.csv" not in archive["files_sha256"]
-            or archive["retired_series"] != [s for s in RETIRED if any(
-                path.startswith(ARCHIVE + "/" + s + "/") for path in archive["files_sha256"])]):
-        raise ValueError("unsupported paper projection")
-    if not frozen_before_cutoff():
-        raise ValueError("protocol was not frozen before the first prospective bid deadline")
-    parent = identity.get("paper_parent")
-    if (not isinstance(parent, dict) or set(parent) != {"schema", "source_package_sha256", "record_end",
-                                                         "source_files_sha256"}
-            or parent["schema"] != "ptp-paper-parent-v1" or len(str(parent["source_package_sha256"])) != 64
-            or str(parent["record_end"]) < str(identity.get("record_end"))):
-        raise ValueError("paper parent binding mismatch")
-    manifest = (root / "proof/records.sha256").read_bytes()
-    if digest(manifest) != identity.get("records_sha256"):
-        raise ValueError("paper manifest hash mismatch")
-    entries = [line.split("  ", 1) for line in manifest.decode().splitlines()]
-    published = {folder + "/" + name for folder in folders for name in NAMES}
-    published |= {RISK + "/" + name for name in public_risk_names(root)} | set(PUBLIC_DOCS)
-    archived = set(archive["files_sha256"])
-    required = {"README.md", "STATUS.md", "scripts/verify.py", ".gitattributes", *published, *archived}
-    if len(entries) != len(required) or {entry[1] for entry in entries} != required:
-        raise ValueError("paper manifest inventory mismatch")
-    for expected, relative in entries:
-        if digest((root / relative).read_bytes()) != expected:
-            raise ValueError("paper file hash mismatch: " + relative)
-        if relative in archived and archive["files_sha256"][relative] != expected:
-            raise ValueError("archived file changed: " + relative)
-    for directory, expected in (("data", published), ("scripts", {"scripts/verify.py"}), (ARCHIVE, archived)):
-        if {p.relative_to(root).as_posix() for p in (root / directory).rglob("*") if p.is_file()} != expected:
-            raise ValueError("paper folder inventory mismatch: " + directory)
-    if identity.get("series_ids") != list(PUBLIC_SERIES) or identity.get("record_start") != START:
-        raise ValueError("public identity mismatch")
-    status = (root / "STATUS.md").read_text(encoding="utf-8")
-    for folder in folders:
-        check_public_folder(root, folder, identity["record_end"])
-        breach = json.loads((root / folder / "source_anchor.json").read_bytes()).get("kill_rule_breach")
-        if breach is not None and "Kill rule breached for " + folder.split("/", 1)[1] + " on " + breach not in status:
-            raise ValueError("kill-rule breach is not disclosed")
-    check_public_risk(root, identity["record_end"])
-    return []
+def check_folder(root,folder,end):
+    name=folder.split('/')[1];cap=int(name.split('-')[1]);anchor=json.loads((root/folder/'source_anchor.json').read_bytes());receipt=json.loads((root/folder/'publication.json').read_bytes())
+    if set(anchor)!=set(ANCHOR_FIELDS) or anchor['schema']!='ptp-series-anchor-s1-v1' or anchor['series']!=name or anchor['pair_cap']!=cap:raise ValueError('Series schema mismatch')
+    if anchor['record_start']!=START or anchor['record_end']!=end or anchor['development_through']!=end or anchor['prospective_from']!='':raise ValueError('Series evidence calendar mismatch')
+    if anchor['protocol_sha256']!=RULE_PROTOCOL or anchor['rule']!=RULE or anchor['evidence_basis']!=EVIDENCE or anchor['public_cost_per_placed_mwh']!=0:raise ValueError('Series rule binding mismatch')
+    package=anchor['source_package_sha256']
+    if len(package)!=64 or any(c not in '0123456789abcdef' for c in package) or receipt['source_package_sha256']!=package:raise ValueError('Series source package mismatch')
+    if set(anchor['source_files_sha256'])!={'daily.csv'} or len(anchor['source_files_sha256']['daily.csv'])!=64:raise ValueError('Source daily binding missing')
+    hashes={n:digest((root/folder/n).read_bytes()) for n in NAMES if n.endswith('.csv')}
+    if hashes!=anchor['files_sha256']:raise ValueError('Series file hash mismatch')
+    data={n:read_rows((root/folder/n).read_bytes()) for n in hashes};check_public_daily(data['daily.csv'],end,cap);expected=evidence_tables(data['daily.csv'])
+    if any(data[n]!=expected[n] for n in ['weekly.csv','monthly.csv','summary.csv']):raise ValueError('Series aggregate arithmetic mismatch')
+    if receipt['record_start']!=START or receipt['record_end']!=end:raise ValueError('Series receipt calendar mismatch')
+    check_receipt(receipt,end)
 
 
-def public_verify(root):
-    """The public record's standalone check (scripts/verify.py of projection v6)."""
-    root = Path(root)
-    try:
-        identity = json.loads((root / "proof/private_anchor.json").read_bytes())
-        projection = identity.get("paper_projection")
-        if not isinstance(projection, dict) or projection.get("schema") != PUBLIC_PROJECTION:
-            raise ValueError("unsupported paper projection")
-        return verify_public(root, identity, projection)
-    except (OSError, ValueError, KeyError, TypeError, csv.Error) as exc:
-        return [str(exc)]
+def verify_record(root):
+    root=Path(root);identity=json.loads((root/'proof/private_anchor.json').read_bytes());projection=identity['paper_projection']
+    if set(identity)!=set(ROOT_FIELDS) or set(projection)!=set(PROJECTION_FIELDS) or projection['schema']!='ptp-paper-projection-s1-v1':raise ValueError('Public root schema mismatch')
+    if identity['series_ids']!=list(PUBLIC_SERIES) or identity['record_start']!=START or projection['record_start']!=START or projection['prospective_from']!='':raise ValueError('Public record identity mismatch')
+    if projection['folders']!=['data/'+b for b in PUBLIC_SERIES]+[RISK] or projection['documents']!=list(PUBLIC_DOCS):raise ValueError('Public folder structure mismatch')
+    if projection['archive']!=ARCHIVE_CONTRACT:raise ValueError('Original archive binding changed')
+    parent=identity['paper_parent'];end=identity['record_end']
+    if set(parent)!=set(PARENT_FIELDS) or parent['schema']!='ptp-paper-parent-v1' or parent['record_end']!=end or len(parent['source_package_sha256'])!=64:raise ValueError('Source parent mismatch')
+    manifest=(root/'proof/records.sha256').read_bytes()
+    if digest(manifest)!=identity['records_sha256']:raise ValueError('Manifest hash mismatch')
+    entries=[line.split('  ',1) for line in manifest.decode().splitlines()];paths=[r[1] for r in entries]
+    required={'README.md','STATUS.md','scripts/verify.py','.gitattributes',*ARCHIVE_CONTRACT['files_sha256'],*PUBLIC_DOCS,*('data/'+b+'/'+n for b in PUBLIC_SERIES for n in NAMES),*(RISK+'/'+n for n in STORM_RISK_NAMES)}
+    required|=set(AUXILIARY_FILES)
+    if len(paths)!=len(required) or set(paths)!=required:raise ValueError('Public inventory mismatch')
+    for expected,path in entries:
+        if digest((root/path).read_bytes())!=expected:raise ValueError('Public file hash mismatch: '+path)
+        if path in AUXILIARY_FILES and expected!=AUXILIARY_FILES[path]:raise ValueError('Preserved root file changed')
+        if path in ARCHIVE_CONTRACT['files_sha256'] and expected!=ARCHIVE_CONTRACT['files_sha256'][path]:raise ValueError('Original archive bytes changed')
+    for directory in ['data','scripts','archive']:
+        actual={p.relative_to(root).as_posix() for p in (root/directory).rglob('*') if p.is_file()}
+        if actual!={p for p in required if p.startswith(directory+'/')}:raise ValueError('Extra/missing public files: '+directory)
+    for b in PUBLIC_SERIES:
+        check_folder(root,'data/'+b,end)
+        if json.loads((root/'data'/b/'source_anchor.json').read_bytes())['source_package_sha256']!=parent['source_package_sha256']:raise ValueError('Book/source parent binding differs')
+    check_historical_storm_risk(root)
+    return identity
 
 
-def public_main():
+def main():
     import argparse
     from zoneinfo import ZoneInfo
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--require-current", action="store_true")
-    parser.add_argument("--timezone", default="America/Chicago")
-    parser.add_argument("--not-before", default="08:30")
-    args = parser.parse_args()
-    root = Path(__file__).resolve().parents[1]
-    errors = public_verify(root)
-    if args.require_current and not errors:
-        now = datetime.now(ZoneInfo(args.timezone))
-        end = json.loads((root / "proof/private_anchor.json").read_bytes())["record_end"]
-        if now.strftime("%H:%M") >= args.not_before and end < (now.date() - timedelta(days=1)).isoformat():
-            errors.append("stale display-through date: " + end)
-    print(json.dumps({"status": "failed" if errors else "verified", "errors": errors}))
-    return int(bool(errors))
+    parser=argparse.ArgumentParser();parser.add_argument('--require-current',action='store_true');parser.add_argument('--timezone',default='America/Chicago');parser.add_argument('--not-before',default='08:30');args=parser.parse_args()
+    try:
+        identity=verify_record(Path(__file__).resolve().parents[1]);now=datetime.now(ZoneInfo(args.timezone))
+        if args.require_current and now.strftime('%H:%M')>=args.not_before and identity['record_end']<(now.date()-timedelta(days=1)).isoformat():raise ValueError('Stale display-through date: '+identity['record_end'])
+        result={'status':'verified','errors':[]}
+    except (OSError,ValueError,KeyError,TypeError,csv.Error) as exc:result={'status':'failed','errors':[str(exc)]}
+    print(json.dumps(result));return int(bool(result['errors']))
 
-
-if __name__ == '__main__':
-    raise SystemExit(public_main())
+if __name__=='__main__':raise SystemExit(main())
