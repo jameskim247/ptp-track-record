@@ -1,21 +1,21 @@
 {
-  "development_through": "2026-11-09",
+  "development_through": "2026-11-10",
   "evidence_basis": {
     "development": "Retrospective development reconstruction; historical publication vintages and tradability are not fully certified.",
     "prospective": "Paper continuation; no executed-trade or independent-validation claim."
   },
   "files_sha256": {
-    "daily.csv": "681e13c55d546cc38e5404e8927d1aba911f601b4c934ebe69d2fe49f811ec78",
-    "monthly.csv": "037c9af0eecb29ee71e0e1e4c05ac50b078a5d2e7eae19e81146c7cfddde4d6a",
-    "summary.csv": "32923e443cf06764d3bfb70aa51e78a66a9f5d4315d6c2ebcdf5211a61e536f7",
-    "weekly.csv": "ff5c51ef043df53e4406e46898be3cf4b6f6d12d89574d4142d1f66117561934"
+    "daily.csv": "deb36e41333084fb4d5f6ee8b7fbe6a78b83c613be65d52a00f21a4de83a9fef",
+    "monthly.csv": "829de7a94d3a358deebce3f22849bf828ebe9cb02a1ce982de08658791f06414",
+    "summary.csv": "913980458df3c0e634e39c358d6d2c92e14bf13631b31886bdd0bd5afece3e34",
+    "weekly.csv": "3ceeec00a27fc85b896243499c8eed07e8ac813cae0cbc6e494bbbf29c60b910"
   },
   "kill_rule_breach": null,
   "pair_cap": 100,
   "prospective_from": "",
   "protocol_sha256": "4be885cef92eae12e0a867b2ecc99d5e625068392a1d8f898d8ef04a7778a9e0",
   "public_cost_per_placed_mwh": 0,
-  "record_end": "2026-11-09",
+  "record_end": "2026-11-10",
   "record_start": "2024-01-01",
   "rule": {
     "first_prospective_cutoff": "",
@@ -25,7 +25,7 @@
   "schema": "ptp-series-anchor-s1-v1",
   "series": "pairs-100",
   "source_files_sha256": {
-    "daily.csv": "171c77ee18c5058d6fc22220455c2b4773f8ed36b5613c96512a15d58b43f2b7"
+    "daily.csv": "78514934b733bc8c874f41f99831eb8c8551c8a8b39fdc1563d50f809bb4f61b"
   },
-  "source_package_sha256": "34f532b0998a01d1a29cd455aeb65922c11488a55fb17cf4040265327b88efed"
+  "source_package_sha256": "1beb07604dbc8bbb75a1acdba2bcb19e71b87176c35310ce803dfd98dc1a07e7"
 }
