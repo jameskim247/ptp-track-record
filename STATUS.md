@@ -1,3 +1,3 @@
 # Status
 
-Results through 2026-11-12. Publication: current.
+Results through 2026-11-13. Publication: current.
