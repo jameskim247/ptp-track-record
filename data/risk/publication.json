@@ -1,0 +1,7 @@
+{
+  "run_date": "2026-11-10",
+  "schema": "ptp-historical-storm-publication-v1",
+  "state": "verified_historical_diagnostic",
+  "status": "fixed_historical_study",
+  "study_sha256": "e2cd5238e86223ebf202a8cde47520bd5655a641f0401ce924085398f9721365"
+}
