@@ -7,13 +7,13 @@
     "record_end": "2026-11-17",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "6e4b4c49f89803fb86fb3c7327862be851f5a4fa98525e81a768b3971ff5fe80",
+      "daily.csv": "6e2621a807351bfa9a18d31ca4aef017dd27325b3b5991583eb4e6b05aad7456",
       "monthly.csv": "ae6342bcafe3281466682e2cc195e1bae90fd3123c256c40999518c9fa31deb5",
-      "source_anchor.json": "fb0f2e524b140d1425c2191e5428b450fea3b986f54ef3ec33e66741a690cb3c",
+      "source_anchor.json": "05a580cc1f2ad564f7e9dc60b4da7afca6da950865ad3f485f91e71bdbac9a4a",
       "summary.csv": "851502190edcae8ad2a18df6c43ddaa8bbb6e571ffa137b3bd94790c069b7064",
       "weekly.csv": "5ab60532b3324b8110aa67e34f51c694d406e4feec2c4fe153cc9eb2ad55b0fa"
     },
-    "source_package_sha256": "37496633f163e5ac4362c38ad0307994028f968cd74eeacd3557b624978cd768"
+    "source_package_sha256": "72197dff612a5db493fab17646ac31149d208d0a82c8fb9b24081e6091491e59"
   },
   "paper_projection": {
     "archive": {
@@ -53,9 +53,8 @@
     },
     "documents": [
       "data/docs/submission-credit.md",
-      "data/docs/stress.md",
-      "data/docs/evidence.md",
-      "data/docs/execution-risk.md"
+      "data/risk/stress.md",
+      "data/docs/evidence.md"
     ],
     "folders": [
       "data/pairs-100",
@@ -68,7 +67,7 @@
   },
   "record_end": "2026-11-17",
   "record_start": "2024-01-01",
-  "records_sha256": "b386f8a990759ffacbeda9a77047dcecf905ec937d7032b0899db6636951711f",
+  "records_sha256": "6f7e3a41de751aa9cf76e381fce9057d39abbe7fe282b2aacfcdc6de5ea80627",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [

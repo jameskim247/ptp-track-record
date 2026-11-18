@@ -17,6 +17,6 @@ December 23 drove Elliott’s losses. The real-time leg lost $207,031 for pairs-
 
 The strategy is replayed continuously from 2021-01-01 using its declared historical inputs and outcome-only restrictions. Zero exposure in a storm does not establish survival with awarded obligations. Statistical grid estimates are not physical network sensitivities. Historical input publication vintages and complete tradability remain incompletely certified.
 
-[Event totals](../risk/stress.csv) · [Daily detail](../risk/stress_daily.csv). Award-node evidence identifies both node/hour endpoints in actual market awards; it does not establish an award to this strategy. Stopping new bids does not cancel awarded obligations.
+[Event totals](stress.csv) · [Daily detail](stress_daily.csv). Award-node evidence identifies both node/hour endpoints in actual market awards; it does not establish an award to this strategy. Stopping new bids does not cancel awarded obligations.
 
 The source-binding hashes identify the original audited storm plan, replay and order records. The derivative study hash binds the doubled rows to the active quantity protocol.
