@@ -1,6 +1,6 @@
 # Evidence guide
 
-The displayed quantities are twice the final source S1 order quantities. Historical rows are retrospective development evidence. The source record and its decision and settlement evidence are preserved privately.
+The displayed quantities are twice the final source order quantities. Historical rows are retrospective development evidence. The source record and its decision and settlement evidence are preserved privately.
 
 Retired records are preserved privately; their original hashes remain in the public anchor. The public verifier does not check private archive bytes.
 
