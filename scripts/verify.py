@@ -2,7 +2,7 @@
 import csv,hashlib,io,json,math,statistics
 from datetime import date,datetime,timedelta
 from pathlib import Path
-AUXILIARY_FILES = {'.gitignore': '862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793', 'data/docs/currentiq-ercot-investor-brief.pdf': '1e38e53b4c6aba45424b66695cb005284fd84c60024f6296e54ff517c7e66540', 'data/docs/ercot-investor-overview.md': '7abab6d009b18ef7009e5f2977e43ad32fd7d3ddb37307f9ef6262387d6374a2', 'data/docs/assets/ercot-historical-performance.png': '5b5cc970b6e869a4e5cc4a02d6e82bbbb1836c2ec5f632ea6d9788976d0ee3e3', 'data/docs/assets/ercot-historical-performance-data.csv': '78a8c220d1e4877e8c77b290e7a6ff1ac294efbac0810f39f7dbe4ea9ab6d4fa'}
+AUXILIARY_FILES = {'.gitignore': '862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793', 'data/docs/currentiq-ercot-investor-brief.pdf': 'acbaf0fed006c73bd75671569f3a703fa7f3fddb0c95bbb03be1aed52f385636', 'data/docs/ercot-investor-overview.md': 'e192c6b84238b0495906a4d761cfbe30e6324124489448ba4988fa913affa492', 'data/docs/assets/ercot-historical-performance.png': '5b5cc970b6e869a4e5cc4a02d6e82bbbb1836c2ec5f632ea6d9788976d0ee3e3', 'data/docs/assets/ercot-historical-performance-data.csv': '78a8c220d1e4877e8c77b290e7a6ff1ac294efbac0810f39f7dbe4ea9ab6d4fa'}
 SEVU_ARCHIVE = {'archive/sevu-2026-10/pairs-50.csv': 'a7ad93487da9821fa04067b763393f9c3c63b765e58550cedf55183f813d3d27', 'archive/sevu-2026-10/pairs-100.csv': '5fdb96f5ec95eb9b0fac17032c0a3f92d416188ad3c8b88117b4833961d3f48d'}
 START = '2024-01-01'
 PUBLIC_SERIES = ('pairs-100', 'pairs-50')

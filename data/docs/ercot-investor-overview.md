@@ -107,22 +107,7 @@ For Elliott, December 22 produced **+$44,348**, followed by **−$122,776 on Dec
 
 These cases define questions for the live mandate: how much adverse spread exposure can the desk carry, what happens before a lagged stress flag reacts, and how are already-awarded obligations managed? Zero exposure during Uri does not demonstrate survival with positions already held. Stopping new submissions does not cancel existing awards. Historical input vintages and complete tradability remain incompletely certified. [5]
 
-## Evidence status and verification
-
-| Question | Status in the November 15 snapshot |
-| --- | --- |
-| Is the displayed calendar current through November 14? | Yes: 1,049 rows and zero missing result days |
-| Is the full history completely valued? | No: 13 dates retain unpriced awards |
-| Is the displayed period development or forward evidence? | All 1,049 days are classified as retrospective development |
-| Has a public prospective start been set? | No: the prospective start and first prospective cutoff are blank |
-| Does the record establish qualified independent witnessing? | No such qualification or independently witnessed forward series is established by the public materials |
-| Does it contain executed trading results? | No: modeled paper awards and settlement values |
-
-The public verifier checks row and file bindings, calendar coverage, aggregations and storm evidence. A successful check supports the consistency of the published package. It does not independently reproduce the private signal, establish historical information availability, verify live submissions or fills, or prove decision timing from a hash alone. [2, 3, 8]
-
-The independent observer, protected first-receipt ledger and settlement process should be qualified through the actual operating arrangement before the forward record is relied upon. Engineering rehearsals and publication freshness do not substitute for pre-cutoff evidence received by an independently controlled observer.
-
-### Reading record versions
+## Reading record versions
 
 The headline figures in this document refer only to the pinned current sizing: twice the source-order quantities. The increase in displayed P&L, losses and submission credit follows that scaling. It does not establish new predictive performance or executable capacity. Earlier archived research and any earlier prospective samples should remain separate; they are not used as forward evidence for the current displayed book. [2, 3, 8]
 

@@ -17,7 +17,7 @@ January 1, 2024–November 18, 2026 · 1,053 calendar days
 
 The 50-path limit retains approximately **81%** of the broader portfolio’s reported historical P&L, making it a practical starting point for partner evaluation.
 
-**Basis:** Retrospective development research with modeled price-taking awards at twice the source-order quantities. No executed trades. Costs and market impact are excluded. P&L and drawdown reflect priced awards; unresolved awards can change the reported results. [Evidence and assumptions](data/docs/ercot-investor-overview.md#evidence-status-and-verification).
+**Basis:** Retrospective development research with modeled price-taking awards at twice the source-order quantities. No executed trades. Costs and market impact are excluded. P&L and drawdown reflect priced awards; unresolved awards can change the reported results. [Evidence and assumptions](data/docs/evidence.md).
 
 ## Explore a partnership
 
