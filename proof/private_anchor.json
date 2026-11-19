@@ -7,13 +7,13 @@
     "record_end": "2026-11-18",
     "schema": "ptp-paper-parent-v1",
     "source_files_sha256": {
-      "daily.csv": "3e7e76c09802ef6b0d32c3108b1142f4bc5f693f8710803dcfe0a833adc9f5f4",
+      "daily.csv": "798583bea9fe7f5654dffaf815fc7ee6e05470cc2099eede5bcf632def6d3c5f",
       "monthly.csv": "b31342b6cae59a117a678e1b354f73b9982f0c22d87784622230cb0d37ed9154",
-      "source_anchor.json": "5a945c39f9a7f0e8f43a2056fa26162e715bf6b805e5cc4b8814db44839c4924",
+      "source_anchor.json": "8860cc9b3e2fbe09e1025993e02e64a77f9c17d8ed287c62b62e4525be98076d",
       "summary.csv": "02491775abaadff71af925ccb27236ce0bb643f14bd4f4d4c3f311bc01535bde",
       "weekly.csv": "be8a2171c2a523bf7c321220f187cb6dcc4c8bfdcb6e4c1c74c60c86167001e4"
     },
-    "source_package_sha256": "82176383d7e70b1fa3ab1484b2f907673a55fbb6d7a13ade6d29183c39e626ab"
+    "source_package_sha256": "dd7cddbf00b14b8ca0aa3e6122cf6caed8f2076c1d6bd0118d2df674e6396f02"
   },
   "paper_projection": {
     "archive": {
@@ -67,7 +67,7 @@
   },
   "record_end": "2026-11-18",
   "record_start": "2024-01-01",
-  "records_sha256": "c6a78ab0945f8644a8d2b9df629f2085a2879335e121a695ad8e215b9686501c",
+  "records_sha256": "0591e7227cd753ec4446c730a231aaf0659c5d972de615c38119dd2827e481cb",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [

@@ -23,7 +23,7 @@
   "evidence_basis": "retrospective diagnostic; not executed trades or independent validation",
   "files_sha256": {
     "stress.csv": "eb8f22bf5e7894dc5dc49cee0e31315d4887f4099edc563df3057036d8493246",
-    "stress_daily.csv": "97b66fe6f589465cfa26c8c0f204c0a75c3424e9780127a65b9830cda7df444b"
+    "stress_daily.csv": "211f1752d60aa00379a3b78ea266e57abc178eea2c7f4519aa6803684a41f667"
   },
   "method": "historical_strategy_replay",
   "run_date": "2026-11-10",
@@ -35,5 +35,5 @@
     "replay_code_sha256": "a1e990705f512cdfd8d6d444e38c2fba414cb3382c13ed53b19209c21983d01f",
     "uri_order_records_sha256": "c65b04e3476e3b7a22afc94672729ce37cc3d2e655b6a5892f58bcc8c5467354"
   },
-  "study_sha256": "9a768ee7d8fb78211681524bac7eff36845ea37a105b1e601833eb72ccc549b1"
+  "study_sha256": "b15d95a51c61bbf401c1bca420f29b80302fbca2a9836cba6f6566ecb28492ed"
 }

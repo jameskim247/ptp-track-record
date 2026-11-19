@@ -3,5 +3,5 @@
   "schema": "ptp-historical-storm-publication-v1",
   "state": "verified_historical_diagnostic",
   "status": "fixed_historical_study",
-  "study_sha256": "9a768ee7d8fb78211681524bac7eff36845ea37a105b1e601833eb72ccc549b1"
+  "study_sha256": "b15d95a51c61bbf401c1bca420f29b80302fbca2a9836cba6f6566ecb28492ed"
 }

@@ -12,7 +12,7 @@ The proposed starting point is a portfolio limited to **50 directed source-to-si
 
 [Download the investor brief](currentiq-ercot-investor-brief.pdf)
 
-![Cumulative modeled historical P&L before costs, marking dates with unpriced awards, with a drawdown panel](assets/ercot-historical-performance.png)
+![Cumulative modeled historical P&L before costs, with a drawdown panel](assets/ercot-historical-performance.png)
 
 *The chart includes the reported priced portion of every day, including dates that still contain unpriced awards. It is not a fully valued investment-return series or a lower bound on final P&L. Source: daily ledger; derived [chart data](assets/ercot-historical-performance-data.csv). [1]*
 
