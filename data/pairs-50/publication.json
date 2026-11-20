@@ -1,9 +1,9 @@
 {
-  "checked_through": "2026-11-18",
+  "checked_through": "2026-11-19",
   "missing_result_days": 0,
-  "record_end": "2026-11-18",
+  "record_end": "2026-11-19",
   "record_start": "2024-01-01",
-  "source_package_sha256": "b2cc79df4ac94e1842704be6cf9d2eab66f573d659ebe1a4c341fbfc3323ee1b",
+  "source_package_sha256": "299eb1fc86d9aaae7bab22e22766928831f88dfc90ff5623bdf357acc086eb20",
   "state": "verified_source",
   "status": "current"
 }
