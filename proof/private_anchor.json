@@ -13,7 +13,7 @@
       "summary.csv": "e9f7037f0695732c1342f2cb89cbc4f2c18dc8676a47e88e7c425af66612fd77",
       "weekly.csv": "f08df39ff61f8dd6f35b93bb9d0acc48639d746ee822ea7593d39d0f68fadfdf"
     },
-    "source_package_sha256": "299eb1fc86d9aaae7bab22e22766928831f88dfc90ff5623bdf357acc086eb20"
+    "source_package_sha256": "2884c8e346819ce1fb4ced9b0442afe145f2bf3ef7d0ce1f05ade10c2754f58b"
   },
   "paper_projection": {
     "archive": {
@@ -67,7 +67,7 @@
   },
   "record_end": "2026-11-19",
   "record_start": "2024-01-01",
-  "records_sha256": "811112e20b52499e75c73f46089bdb002e3deab6086de8051afcca899af06bc1",
+  "records_sha256": "07198ca67a340c35ff4d692e0f4c3d95b7a53ce25ff812a967c8e9a9f078370e",
   "registry_sha256": "01117f407098fb2ca2f0310eb97c5e523d6dbca49ba8216567cf13484ff26e23",
   "schema": "ptp-neutral-registry-anchor-v2",
   "series_ids": [
