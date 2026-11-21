@@ -5,10 +5,10 @@
     "prospective": "Paper continuation; no executed-trade or independent-validation claim."
   },
   "files_sha256": {
-    "daily.csv": "9e972ae6310a21720bb69ec5883c1ee1d6536a8b539494bf03e05e2eb131f57e",
-    "monthly.csv": "6eac660ba7720effe3bb79638ff0f1fac84806db6b835e990fb6765d5c0f2634",
-    "summary.csv": "b2df3e4d96f7ef2d8b0236fa7ea44b439ca892bd6877542e71548f7f21d996cd",
-    "weekly.csv": "aa7b3404278a44b67314f665e8d0a12647fb292651c8c39e322cad19302880a0"
+    "daily.csv": "9ad7a76c9bf7f9eae82f6ae7bb4fc330cf18d1525a1a2045e6721d3ddb8b69be",
+    "monthly.csv": "e3f9f12b715a7710b0dfe36869695edc21036b9685c8abbe62cc8eb945fc1e62",
+    "summary.csv": "94f7cd24e325dfe74f09f9584fa3e70f77c9adea8e6b5aa9de0b9a149c13065c",
+    "weekly.csv": "203efb74dd058a49c256381b378e411c40cca86e5ea39e3192de9a274c87dd1a"
   },
   "kill_rule_breach": null,
   "pair_cap": 50,
@@ -25,7 +25,7 @@
   "schema": "ptp-series-anchor-s1-v1",
   "series": "pairs-50",
   "source_files_sha256": {
-    "daily.csv": "292e9ca3c86cade5776be818332ebc61806fa0cf34f51b4942c46c944c620e72"
+    "daily.csv": "a9899aca8198f4cc2fe629d21abaca21a2bb74e4e95495f61d587f021fcc8ce2"
   },
-  "source_package_sha256": "3cfdc5b6abb77209256ebb02088a990f705636148606485dc32a27ccb37c2b1e"
+  "source_package_sha256": "9c6d6ca7abecbd8ff3a45bb6744b0867931744988ec2b0ca548a9753493f98c3"
 }
