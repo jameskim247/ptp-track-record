@@ -12,8 +12,8 @@ January 1, 2024–November 21, 2026 · 1,056 calendar days
 
 | Daily directed-path limit | Modeled P&L before costs | Maximum modeled drawdown |
 | ---: | ---: | ---: |
-| **50** | **$5,384,077** | **$177,139** |
-| 100 | $6,625,724 | $221,863 |
+| **50** | **$5,408,329** | **$177,139** |
+| 100 | $6,656,126 | $221,863 |
 
 The 50-path limit retains approximately **81%** of the broader portfolio’s reported historical P&L, making it a practical starting point for partner evaluation.
 
