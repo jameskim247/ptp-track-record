@@ -8,7 +8,7 @@ CurrentIQ develops proprietary research and proposed daily portfolios for ERCOT 
 
 ## Historical paper results
 
-January 1, 2024–November 25, 2026 · 1,060 calendar days
+January 1, 2024–November 26, 2026 · 1,061 calendar days
 
 | Daily directed-path limit | Modeled P&L before costs | Maximum modeled drawdown |
 | ---: | ---: | ---: |
