@@ -8,12 +8,12 @@ CurrentIQ develops proprietary research and proposed daily portfolios for ERCOT 
 
 ## Historical paper results
 
-January 1, 2024–November 26, 2026 · 1,061 calendar days
+January 1, 2024–November 27, 2026 · 1,062 calendar days
 
 | Daily directed-path limit | Modeled P&L before costs | Maximum modeled drawdown |
 | ---: | ---: | ---: |
-| **50** | **$5,441,891** | **$177,139** |
-| 100 | $6,701,116 | $221,863 |
+| **50** | **$5,442,458** | **$177,139** |
+| 100 | $6,701,891 | $221,863 |
 
 The 50-path limit retains approximately **81%** of the broader portfolio’s reported historical P&L, making it a practical starting point for partner evaluation.
 
